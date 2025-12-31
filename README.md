@@ -133,7 +133,7 @@ graph TB
     DataPipelines -->|Pulls Images| ECR
     AIServices -->|Pulls Images| ECR
     
-    EKS Cluster -->|Logs| CloudWatch
+    EKSCluster -->|Logs| CloudWatch
 
     classDef infrastructure fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
     classDef platform fill:#fff4e1,stroke:#ff9900,stroke-width:2px
