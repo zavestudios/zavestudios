@@ -37,27 +37,27 @@ ZaveStudios is not a static portfolio project—it's a living platform that runs
 
 ```mermaid
 graph TB
-    subgraph "External Services"
+    subgraph ExternalServices["External Services"]
         GitLab[GitLab SaaS<br/>gitlab.com]
         DNS[Route53/DNS]
         Users[End Users]
     end
 
-    subgraph "AWS Account - us-east-1"
-        subgraph "State Management"
+    subgraph AWSAccount["AWS Account - us-east-1"]
+        subgraph StateManagement["State Management"]
             S3[S3 Bucket<br/>Terraform State]
             DynamoDB[DynamoDB<br/>State Locking]
         end
 
-        subgraph "Network Infrastructure"
+        subgraph NetworkInfrastructure["Network Infrastructure"]
             VPC[VPC]
             Subnets[Subnets<br/>Single AZ]
             NAT[NAT Gateway]
             NLB[Network Load Balancer]
         end
 
-        subgraph "EKS Cluster"
-            subgraph "Platform Layer - Managed by Flux"
+        subgraph EKSCluster["EKS Cluster"]
+            subgraph PlatformLayer["Platform Layer - Managed by Flux"]
                 Flux[Flux GitOps<br/>Platform Services]
                 BigBang[Big Bang<br/>Helm Chart of Charts]
                 GitLabRunner[GitLab<br/>Self-Hosted CI/CD]
@@ -67,19 +67,19 @@ graph TB
                 Istio[Istio Service Mesh]
             end
 
-            subgraph "Application Layer - Managed by ArgoCD"
+            subgraph ApplicationLayer["Application Layer - Managed by ArgoCD"]
                 WebApps[Web Applications<br/>xavierlopez.me, etc]
                 DataPipelines[Data Engineering<br/>Pipelines & Jobs]
                 AIServices[AI Services<br/>ML Model Serving]
             end
 
-            subgraph "Compute"
+            subgraph Compute["Compute"]
                 SpotNodes[Spot Instances<br/>t3a.medium]
                 Karpenter[Karpenter<br/>Autoscaling]
             end
         end
 
-        subgraph "AWS Services"
+        subgraph AWSServices["AWS Services"]
             ECR[ECR<br/>Container Registry]
             CloudWatch[CloudWatch<br/>Logs & Metrics]
             RDS[RDS<br/>Databases - Optional]
@@ -87,7 +87,7 @@ graph TB
         end
     end
 
-    subgraph "Terraform Organization"
+    subgraph TerraformOrganization["Terraform Organization"]
         TFModules[terraform-modules/<br/>Reusable AWS Resources]
         TFEnvs[terraform-environments/<br/>Network, EKS, etc]
         TFPipelines[terraform-pipelines/<br/>Shared CI/CD Code]
@@ -118,7 +118,7 @@ graph TB
     TFEnvs -->|Uses Modules| TFModules
     TFEnvs -->|References| TFPipelines
     TFEnvs -->|Provisions| VPC
-    TFEnvs -->|Provisions| EKS Cluster
+    TFEnvs -->|Provisions| EKSCluster
     TFEnvs -->|State Backend| S3
     TFEnvs -->|State Locking| DynamoDB
     
