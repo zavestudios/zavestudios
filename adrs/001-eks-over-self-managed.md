@@ -1,7 +1,7 @@
 # ADR-001: EKS Over Self-Managed Kubernetes
 
 **Status:** Accepted  
-**Date:** 2024-12-31  
+**Date:** 2025-12-31  
 **Author:** Xavier Lopez  
 **Tags:** infrastructure, kubernetes, aws, cost
 
@@ -152,4 +152,4 @@ The cluster will be configured with:
 
 | Date | Change | Author |
 |------|--------|--------|
-| 2024-12-31 | Initial version | Xavier Lopez |
+| 2025-12-31 | Initial version | Xavier Lopez |

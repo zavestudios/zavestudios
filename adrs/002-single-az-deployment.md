@@ -1,7 +1,7 @@
 # ADR-002: Single-AZ Deployment
 
 **Status:** Accepted  
-**Date:** 2024-12-31  
+**Date:** 2025-12-31  
 **Author:** Xavier Lopez  
 **Tags:** infrastructure, cost, availability, aws
 
@@ -179,4 +179,4 @@ VPC: 10.0.0.0/16
 
 | Date | Change | Author |
 |------|--------|--------|
-| 2024-12-31 | Initial version | Xavier Lopez |
+| 2025-12-31 | Initial version | Xavier Lopez |

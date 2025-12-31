@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🎯 Purpose
+## Purpose
 
 ZaveStudios is not a static portfolio project—it's a living platform that runs 24/7/365, performing real work and evolving continuously. This repository documents the architecture, design decisions, and implementation details of the entire platform.
 
@@ -14,7 +14,7 @@ ZaveStudios is not a static portfolio project—it's a living platform that runs
 - Enable rapid prototyping and integration of new technologies and patterns
 - Deliver quantifiable business value through cost efficiency and operational excellence
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ### Technology Stack
 
@@ -33,7 +33,7 @@ ZaveStudios is not a static portfolio project—it's a living platform that runs
 - **Separation of Concerns** - Clear boundaries between infrastructure, platform, and applications
 - **Composability** - New capabilities can be added without disrupting existing showcase components
 
-## 📊 High-Level System Architecture
+## High-Level System Architecture
 
 ```mermaid
 graph TB
@@ -150,39 +150,39 @@ graph TB
 
 ### Architecture Layers
 
-#### 🔵 Infrastructure Layer
+#### Infrastructure Layer
 AWS foundational resources managed by Terraform:
 - VPC and networking components
 - EKS cluster and node groups
 - State management (S3/DynamoDB)
 - Load balancers and gateways
 
-#### 🟡 Platform Layer
+#### Platform Layer
 Core platform services deployed via Big Bang and managed by Flux:
 - GitOps controllers (Flux, ArgoCD)
 - CI/CD infrastructure (GitLab)
 - Observability stack (Prometheus/Grafana)
 - Service mesh (Istio)
 
-#### 🟢 Application Layer
+#### Application Layer
 User-facing workloads managed by ArgoCD:
 - Web applications and APIs
 - Data engineering pipelines
 - AI/ML services
 
-#### 🟣 External Dependencies
+#### External Dependencies
 Services outside the AWS account:
 - GitLab SaaS (git repository hosting)
 - End users accessing applications
 - DNS management
 
-#### 🔴 Terraform Organization
+#### Terraform Organization
 Infrastructure as Code structure:
 - Reusable modules for AWS resources
 - Environment-specific configurations
 - Shared pipeline code
 
-## 🚀 Bootstrap Sequence
+## Bootstrap Sequence
 
 ```mermaid
 sequenceDiagram
@@ -241,7 +241,7 @@ sequenceDiagram
 9. Feature branches: `tfsec` + `terraform plan`
 10. Main branch: `tfsec` + `terraform plan` + `terraform apply`
 
-## 💰 Cost Model
+## Cost Model
 
 **Target Monthly Budget: $150-200**
 
@@ -263,7 +263,7 @@ sequenceDiagram
 - **Shared resources** - Single NLB for all ingress traffic
 - **Self-hosted observability** - Avoid managed Prometheus/Grafana costs
 
-## 📁 Repository Organization
+## Repository Organization
 
 ### GitHub Repositories
 - **[zavestudios](https://github.com/eckslopez/zavestudios)** (this repo) - Architecture documentation and design decisions
@@ -276,7 +276,7 @@ sequenceDiagram
 - **terraform-pipelines** - Shared CI/CD pipeline definitions
 - **operational-repos** - Private operational configurations
 
-## 📚 Documentation
+## Documentation
 
 - [Architecture Overview](docs/architecture/overview.md) - Detailed system architecture
 - [Component Details](docs/architecture/component-details.md) - Deep dives on each component
@@ -284,7 +284,7 @@ sequenceDiagram
 - [Cost Analysis](docs/architecture/cost-model.md) - Budget breakdown and optimization strategies
 - [Architecture Decision Records](docs/adrs/) - Key architectural decisions with rationale
 
-## 🔑 Key Design Decisions
+## Key Design Decisions
 
 ### EKS Over Self-Managed Kubernetes
 - **Decision:** Use AWS EKS instead of self-managed k3s
@@ -304,7 +304,7 @@ sequenceDiagram
 - **Trade-offs:** Added complexity vs. clear operational boundaries
 - **ADR:** [003-flux-and-argocd-separation.md](docs/adrs/003-flux-and-argocd-separation.md)
 
-## 🛠️ Technology Choices
+## Technology Choices
 
 ### Why Big Bang?
 - DoD-proven DevSecOps reference architecture
@@ -324,7 +324,7 @@ sequenceDiagram
 - Easy rollback and disaster recovery
 - Prevents configuration drift
 
-## 🎯 Success Metrics
+## Success Metrics
 
 ### Platform Reliability
 - Uptime: >99% (excluding planned maintenance)
@@ -346,18 +346,18 @@ sequenceDiagram
 - Architecture discussions: Documented
 - Peer feedback: Collected and incorporated
 
-## 🤝 Contributing
+## Contributing
 
 This is a personal portfolio project, but feedback and suggestions are welcome! Feel free to:
 - Open issues for questions or suggestions
 - Suggest improvements to architecture or documentation
 - Share ideas for new capabilities or demonstrations
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🔗 Links
+## Links
 
 - **Portfolio:** [xavierlopez.me](https://xavierlopez.me)
 - **LinkedIn:** [linkedin.com/in/zavelopez](https://linkedin.com/in/zavelopez)

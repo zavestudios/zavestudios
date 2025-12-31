@@ -1,7 +1,7 @@
 # ADR-003: Flux and ArgoCD Separation
 
 **Status:** Accepted  
-**Date:** 2024-12-31  
+**Date:** 2025-12-31  
 **Author:** Xavier Lopez  
 **Tags:** platform, gitops, kubernetes, operations
 
@@ -200,4 +200,4 @@ Namespaces:
 
 | Date | Change | Author |
 |------|--------|--------|
-| 2024-12-31 | Initial version | Xavier Lopez |
+| 2025-12-31 | Initial version | Xavier Lopez |
