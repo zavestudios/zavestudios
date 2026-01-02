@@ -1,4 +1,9 @@
-# ZaveStudios Platform Architecture
+# ZaveStudios Portfolio and Reference Platform
+
+**Status:** Phase I - Foundation & Bootstrap  
+**Completion:** ~15% (Documentation complete, infrastructure in progress)  
+**Timeline:** Phase I target Q1 2026, Phase II target Q2 2026  
+**Current Focus:** AWS EKS deployment with Big Bang DevSecOps baseline
 
 **A live, continuously operating platform engineering showcase demonstrating production-grade cloud-native architecture, infrastructure automation, and platform engineering capabilities.**
 
@@ -6,7 +11,7 @@
 
 ## Purpose
 
-ZaveStudios is not a static portfolio project—it's a living platform that runs 24/7/365, performing real work and evolving continuously. This repository documents the architecture, design decisions, and implementation details of the entire platform.
+ZaveStudios will be a production-grade, continuously operating AWS EKS deployment, performing real work and evolving continuously. This repository documents the architecture, design decisions, and implementation details of the entire platform.
 
 **Primary Objectives:**
 - Demonstrate Senior Platform Engineer/Architect capabilities to technical leadership and collaborators
