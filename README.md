@@ -246,6 +246,46 @@ sequenceDiagram
 9. Feature branches: `tfsec` + `terraform plan`
 10. Main branch: `tfsec` + `terraform plan` + `terraform apply`
 
+## Platform Evolution Roadmap
+
+### Phase I: Foundation & Bootstrap (Q1 2026)
+**Status:** In Progress (~15% complete)
+
+Core infrastructure deployment:
+- AWS EKS cluster with Big Bang DevSecOps baseline
+- GitOps automation (Flux + ArgoCD)
+- Self-hosted CI/CD (GitLab)
+- Observability stack (Prometheus/Grafana)
+- Architecture designed for multi-tenancy and revenue workloads
+
+### Phase II: Data & AI Platform (Q2 2026)
+**Status:** Planning
+
+Data engineering and AI capabilities:
+- **Data Pipeline Infrastructure**
+  - Workflow orchestration (Airflow or Prefect)
+  - ETL/ELT processing capabilities
+  - Data quality and observability
+- **AI/ML Workloads**
+  - Self-hosted LLM deployment (Ollama, LocalAI, or vLLM)
+  - Model serving and inference APIs
+  - GPU scheduling and cost optimization
+  - Vector databases for RAG systems
+- **Revenue Model Validation**
+  - Automated data processing services
+  - API gateway and customer authentication
+  - Usage tracking and billing instrumentation
+  - Target: First $1 of profit to prove mechanism
+
+### Phase III: Scale & Optimization (Q3+ 2026)
+**Status:** Future
+
+Production scaling and business model refinement:
+- Customer acquisition automation
+- Advanced AI workloads and fine-tuned models
+- Cost optimization at scale
+- Path to platform self-funding ($150-200/month revenue target)
+
 ## Cost Model
 
 **Target Monthly Budget: $150-200**
