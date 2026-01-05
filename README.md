@@ -238,10 +238,12 @@ sequenceDiagram
 5. Configure Flux to sync Big Bang repository
 
 **Phase 2: Platform Self-Deployment** (Automated via Flux)
+
 6. Flux deploys Big Bang helm chart
 7. Big Bang deploys all platform services (GitLab, ArgoCD, observability, service mesh)
 
 **Phase 3: Self-Managing Infrastructure** (GitLab CI/CD)
+
 8. All infrastructure changes flow through GitLab pipelines
 9. Feature branches: `tfsec` + `terraform plan`
 10. Main branch: `tfsec` + `terraform plan` + `terraform apply`
@@ -417,5 +419,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Last Updated:** January 4, 2025
+**Last Updated:** January 4, 2026
 **Status:** Architecture design phase - Implementation in progress
