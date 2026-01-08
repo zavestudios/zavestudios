@@ -3,79 +3,217 @@
 **Status:** Phase I - Foundation & Bootstrap  
 **Completion:** ~15% (Documentation complete, infrastructure in progress)  
 **Timeline:** Phase I target Q1 2026, Phase II target Q2 2026  
-**Current Focus:** AWS EKS deployment with Big Bang DevSecOps baseline
-
-**A live, continuously operating platform engineering showcase demonstrating production-grade cloud-native architecture, infrastructure automation, and platform engineering capabilities.**
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+**Current Focus:** Home lab k3s deployment with Big Bang DevSecOps baseline
 
 ## Purpose
 
-ZaveStudios will be a production-grade, continuously operating AWS EKS deployment, performing real work and evolving continuously. This repository documents the architecture, design decisions, and implementation details of the entire platform.
+ZaveStudios is not a static portfolio project—it's a living platform that runs 24/7/365, performing real work and evolving continuously. The platform demonstrates hybrid cloud architecture: **production operations run on a home lab k3s cluster at zero cost**, while **AWS-ready Terraform infrastructure** enables on-demand cloud deployment for demonstrations and interviews.
 
 **Primary Objectives:**
 - Demonstrate Senior Platform Engineer/Architect capabilities to technical leadership and collaborators
 - Provide tangible evidence of architectural decision-making, cost optimization, and security architecture
+- Prove infrastructure portability through multi-environment support (home lab + AWS)
 - Enable rapid prototyping and integration of new technologies and patterns
 - Deliver quantifiable business value through cost efficiency and operational excellence
 
+**Architecture Philosophy:** Cloud-ready, not cloud-dependent. Built for portability, optimized for cost.
+
+See [ADR-004: Hybrid Home Lab + AWS Architecture](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for the complete rationale.
+
 ## Architecture Overview
+
+### Multi-Environment Strategy
+
+ZaveStudios runs in two environments with complete parity:
+
+**🏠 Home Lab (Primary - Always Running):**
+- Production operations at zero cost
+- Daily development and testing
+- 24/7 application availability
+- Continuous learning and experimentation
+
+**☁️ AWS (On-Demand - Demonstrations):**
+- Deploy for interviews and testing
+- Validate cloud-native patterns
+- Prove AWS architecture skills
+- ~$10-20 per weekend deployment
 
 ### Technology Stack
 
-- **Infrastructure:** AWS EKS (us-east-1, single-AZ, cost-optimized with spot instances)
+**Primary Platform (Home Lab):**
+- **Infrastructure:** k3s cluster on QEMU/libvirt (3 VMs)
 - **Platform Foundation:** Big Bang (DoD DevSecOps reference architecture)
 - **GitOps:** Flux (platform services) + ArgoCD (application workloads)
 - **CI/CD:** Self-hosted GitLab with automated Terraform pipelines
-- **IaC:** Terraform (reusable modules + environment overlays)
-- **Observability:** Prometheus/Grafana (self-hosted) + AWS CloudWatch
+- **Observability:** Prometheus/Grafana (self-hosted)
+- **Networking:** Cloudflare Tunnel (secure external access, no port forwarding)
+- **Storage:** Local storage provisioner / NFS
+
+**AWS Deployment (On-Demand):**
+- **Infrastructure:** EKS (us-east-1, single-AZ, spot instances with Karpenter)
+- **IaC:** Complete Terraform codebase (modules + environments)
+- **Services:** ECR, CloudWatch, VPC endpoints
+- **Same Manifests:** Applications deploy identically in both environments
 
 ### Key Design Principles
 
-- **Cost Discipline as Feature** - Operating within ~$150-200/month AWS budget demonstrates FinOps expertise
-- **Production-Grade Thinking** - Real workloads, real automation, real operational concerns
-- **GitOps Native** - All changes via Git, full audit trail, infrastructure as code
+- **Infrastructure Portability** - Same GitOps workflows and manifests work in home lab and AWS
+- **Cost Discipline** - $0/month operations (saves $600-1200 during job search vs. AWS 24/7)
+- **Cloud-Ready Architecture** - Can deploy to AWS in ~20 minutes for demonstrations
+- **Production-Grade Operations** - Real workloads, monitoring, GitOps, 24/7 uptime targets
+- **Hybrid Cloud Thinking** - Demonstrates multi-environment patterns common in enterprises
+- **GitOps Native** - All changes via Git, complete audit trail
 - **Separation of Concerns** - Clear boundaries between infrastructure, platform, and applications
-- **Composability** - New capabilities can be added without disrupting existing showcase components
+
 
 ## High-Level System Architecture
 
+### Production Environment (Home Lab)
+
 ```mermaid
 graph TB
-    subgraph ExternalServices["External Services"]
-        GitLab[GitLab SaaS<br/>gitlab.com]
-        DNS[Route53/DNS]
+    subgraph External["External Access"]
         Users[End Users]
+        CFTunnel[Cloudflare Tunnel<br/>Secure Access]
+        GitLabSaaS[GitLab SaaS<br/>gitlab.com]
     end
 
-    subgraph AWSAccount["AWS Account - us-east-1"]
-        subgraph StateManagement["State Management"]
-            S3[S3 Bucket<br/>Terraform State]
-            DynamoDB[DynamoDB<br/>State Locking]
-        end
-
-        subgraph NetworkInfrastructure["Network Infrastructure"]
-            VPC[VPC]
-            Subnets[Subnets<br/>Single AZ]
-            NAT[NAT Gateway]
-            NLB[Network Load Balancer]
-        end
-
-        subgraph EKSCluster["EKS Cluster"]
-            subgraph PlatformLayer["Platform Layer - Managed by Flux"]
-                Flux[Flux GitOps<br/>Platform Services]
-                BigBang[Big Bang<br/>Helm Chart of Charts]
-                GitLabRunner[GitLab<br/>Self-Hosted CI/CD]
-                ArgoCD[ArgoCD<br/>App Deployments]
+    subgraph HomeLab["Home Lab - QEMU/libvirt"]
+        subgraph K3sCluster["k3s Cluster (3 VMs)"]
+            subgraph PlatformServices["Platform Services - Managed by Flux"]
+                Flux[Flux GitOps]
+                BigBang[Big Bang<br/>Chart of Charts]
+                GitLabSH[GitLab<br/>Self-Hosted]
+                ArgoCD[ArgoCD]
                 Prometheus[Prometheus]
                 Grafana[Grafana]
                 Istio[Istio Service Mesh]
             end
 
-            subgraph ApplicationLayer["Application Layer - Managed by ArgoCD"]
-                WebApps[Web Applications<br/>xavierlopez.me, etc]
-                DataPipelines[Data Engineering<br/>Pipelines & Jobs]
-                AIServices[AI Services<br/>ML Model Serving]
+            subgraph Applications["Applications - Managed by ArgoCD"]
+                Portfolio[xavierlopez.me<br/>Portfolio Site]
+                DataPipes[Data Pipelines<br/>ETL Jobs]
+                AIServices[AI/ML Services<br/>Model Inference]
+            end
+        end
+
+        subgraph Storage["Local Storage"]
+            Registry[Container Registry<br/>Local]
+            PersistentVols[Persistent Storage<br/>NFS/Local-Path]
+        end
+    end
+
+    subgraph TerraformCode["Terraform Organization (AWS-Ready)"]
+        Modules[terraform-modules/<br/>VPC, EKS, RDS, etc]
+        Environments[terraform-environments/<br/>aws-demo]
+        Pipelines[terraform-pipelines/<br/>CI/CD Code]
+    end
+
+    %% User Flow
+    Users -->|HTTPS| CFTunnel
+    CFTunnel -->|Secure Tunnel| Istio
+    Istio --> Portfolio
+    Istio --> AIServices
+    
+    %% GitOps Flow
+    GitLabSaaS -->|Git Sync| Flux
+    GitLabSaaS -->|Git Sync| ArgoCD
+    GitLabSaaS -->|Webhooks| GitLabSH
+    
+    %% Platform Deployment
+    Flux --> BigBang
+    BigBang --> GitLabSH
+    BigBang --> ArgoCD
+    BigBang --> Prometheus
+    BigBang --> Grafana
+    BigBang --> Istio
+    
+    %% Application Deployment
+    ArgoCD --> Portfolio
+    ArgoCD --> DataPipes
+    ArgoCD --> AIServices
+    
+    %% CI/CD
+    GitLabSH -->|Terraform Plan| Environments
+    Environments -->|References| Modules
+    Environments -->|Uses| Pipelines
+    
+    %% Monitoring
+    Prometheus -->|Scrapes| Portfolio
+    Prometheus -->|Scrapes| DataPipes
+    Prometheus -->|Scrapes| AIServices
+    Grafana -->|Queries| Prometheus
+    
+    %% Registry
+    Portfolio -->|Pull Images| Registry
+    DataPipes -->|Pull Images| Registry
+    AIServices -->|Pull Images| Registry
+    
+    %% Storage
+    Portfolio -.->|Uses| PersistentVols
+    DataPipes -.->|Uses| PersistentVols
+
+    classDef homelab fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    classDef platform fill:#fff4e1,stroke:#ff9900,stroke-width:2px
+    classDef apps fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
+    classDef external fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    classDef terraform fill:#fce4ec,stroke:#e91e63,stroke-width:2px
+    
+    class K3sCluster,Storage homelab
+    class Flux,BigBang,GitLabSH,ArgoCD,Prometheus,Grafana,Istio platform
+    class Portfolio,DataPipes,AIServices apps
+    class Users,CFTunnel,GitLabSaaS external
+    class Modules,Environments,Pipelines terraform
+```
+
+### Description - Home Lab Architecture
+
+**Cost:** $0/month
+
+**Key Features:**
+- Runs 24/7 on existing home lab hardware
+- Cloudflare Tunnel provides secure external access (no port forwarding)
+- Self-hosted GitLab for CI/CD automation
+- Complete platform services via Big Bang
+- Local container registry for image storage
+- Same GitOps workflows as cloud deployment
+---
+
+## AWS On-Demand Deployment
+
+```mermaid
+graph TB
+    subgraph External["External Access"]
+        Users[End Users]
+        GitLabSaaS[GitLab SaaS<br/>gitlab.com]
+    end
+
+    subgraph AWSRegion["AWS us-east-1 (On-Demand)"]
+        subgraph State["State Backend"]
+            S3[S3 Bucket<br/>Terraform State]
+            DynamoDB[DynamoDB<br/>State Locking]
+        end
+
+        subgraph Network["Network (Single-AZ)"]
+            VPC[VPC<br/>10.0.0.0/16]
+            Subnets[Public/Private<br/>Subnets]
+            NAT[NAT Gateway]
+            NLB[Network Load<br/>Balancer]
+        end
+
+        subgraph EKS["EKS Cluster"]
+            subgraph PlatformAWS["Platform - Same as Home Lab"]
+                FluxAWS[Flux GitOps]
+                BigBangAWS[Big Bang]
+                ArgoAWS[ArgoCD]
+                MonitoringAWS[Prometheus/<br/>Grafana]
+                IstioAWS[Istio]
+            end
+
+            subgraph AppsAWS["Applications - Same Manifests"]
+                PortfolioAWS[Portfolio Site]
+                PipelinesAWS[Data Pipelines]
+                AIAWS[AI Services]
             end
 
             subgraph Compute["Compute"]
@@ -84,75 +222,94 @@ graph TB
             end
         end
 
-        subgraph AWSServices["AWS Services"]
+        subgraph Services["AWS Services"]
             ECR[ECR<br/>Container Registry]
             CloudWatch[CloudWatch<br/>Logs & Metrics]
-            RDS[RDS<br/>Databases - Optional]
-            Lambda[Lambda<br/>Serverless Functions]
         end
     end
 
-    subgraph TerraformOrganization["Terraform Organization"]
-        TFModules[terraform-modules/<br/>Reusable AWS Resources]
-        TFEnvs[terraform-environments/<br/>Network, EKS, etc]
-        TFPipelines[terraform-pipelines/<br/>Shared CI/CD Code]
+    subgraph TFCode["Terraform Code"]
+        TFModules[terraform-modules/<br/>Reusable Resources]
+        TFEnv[terraform-environments/<br/>aws-demo]
     end
 
-    %% Relationships
+    %% User Access
     Users -->|HTTPS| NLB
-    NLB --> Istio
-    Istio --> WebApps
-    Istio --> AIServices
+    NLB --> IstioAWS
+    IstioAWS --> PortfolioAWS
+    IstioAWS --> AIAWS
     
-    GitLab -->|Git Sync| Flux
-    GitLab -->|Git Sync| ArgoCD
-    GitLab -->|Webhooks| GitLabRunner
+    %% Infrastructure Provisioning
+    TFEnv -->|Uses| TFModules
+    TFEnv -->|Creates| State
+    TFEnv -->|Provisions| Network
+    TFEnv -->|Provisions| EKS
     
-    Flux --> BigBang
-    BigBang --> GitLabRunner
-    BigBang --> ArgoCD
-    BigBang --> Prometheus
-    BigBang --> Grafana
-    BigBang --> Istio
+    %% GitOps
+    GitLabSaaS -->|Git Sync| FluxAWS
+    GitLabSaaS -->|Git Sync| ArgoAWS
     
-    ArgoCD --> WebApps
-    ArgoCD --> DataPipelines
-    ArgoCD --> AIServices
+    %% Platform Services
+    FluxAWS --> BigBangAWS
+    BigBangAWS --> ArgoAWS
+    BigBangAWS --> MonitoringAWS
+    BigBangAWS --> IstioAWS
     
-    GitLabRunner -->|Terraform Apply| TFEnvs
-    TFEnvs -->|Uses Modules| TFModules
-    TFEnvs -->|References| TFPipelines
-    TFEnvs -->|Provisions| VPC
-    TFEnvs -->|Provisions| EKSCluster
-    TFEnvs -->|State Backend| S3
-    TFEnvs -->|State Locking| DynamoDB
+    %% Applications
+    ArgoAWS --> PortfolioAWS
+    ArgoAWS --> PipelinesAWS
+    ArgoAWS --> AIAWS
     
+    %% Compute
     Karpenter -->|Manages| SpotNodes
     
-    Prometheus -->|Scrapes| WebApps
-    Prometheus -->|Scrapes| DataPipelines
-    Prometheus -->|Scrapes| AIServices
-    Grafana -->|Queries| Prometheus
+    %% Container Images
+    PortfolioAWS -->|Pull Images| ECR
+    PipelinesAWS -->|Pull Images| ECR
+    AIAWS -->|Pull Images| ECR
     
-    WebApps -->|Pulls Images| ECR
-    DataPipelines -->|Pulls Images| ECR
-    AIServices -->|Pulls Images| ECR
-    
-    EKSCluster -->|Logs| CloudWatch
+    %% Logging
+    EKS -.->|Logs| CloudWatch
 
     classDef infrastructure fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
     classDef platform fill:#fff4e1,stroke:#ff9900,stroke-width:2px
-    classDef applications fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
+    classDef apps fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
     classDef external fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
     classDef terraform fill:#fce4ec,stroke:#e91e63,stroke-width:2px
     
-    class VPC,Subnets,NAT,NLB,S3,DynamoDB infrastructure
-    class Flux,BigBang,GitLabRunner,ArgoCD,Prometheus,Grafana,Istio platform
-    class WebApps,DataPipelines,AIServices applications
-    class GitLab,DNS,Users external
-    class TFModules,TFEnvs,TFPipelines terraform
+    class VPC,Subnets,NAT,NLB,S3,DynamoDB,SpotNodes infrastructure
+    class FluxAWS,BigBangAWS,ArgoAWS,MonitoringAWS,IstioAWS platform
+    class PortfolioAWS,PipelinesAWS,AIAWS apps
+    class Users,GitLabSaaS external
+    class TFModules,TFEnv terraform
 ```
 
+### Description - AWS Deployment
+
+**Cost:** ~$10-20 per weekend deployment
+
+**Deployment Time:** ~20 minutes from `terraform apply` to operational platform
+
+**Use Cases:**
+- Technical interviews and demonstrations
+- AWS skill validation
+- Cloud-native pattern testing
+- Certification practice (AWS SA Pro)
+
+**Lifecycle:**
+- **Deploy:** Friday evening
+- **Demo/Test:** Saturday
+- **Destroy:** Sunday afternoon
+- **Cost stops:** Immediately after destroy
+
+**Key Features:**
+- Identical platform services as home lab
+- Same application manifests
+- Spot instances + Karpenter for cost optimization
+- Single-AZ deployment (cost vs availability trade-off)
+- Complete Infrastructure as Code
+
+---
 ### Architecture Layers
 
 #### Infrastructure Layer
@@ -187,46 +344,102 @@ Infrastructure as Code structure:
 - Environment-specific configurations
 - Shared pipeline code
 
-## Bootstrap Sequence
+## Diagram 3: Bootstrap Sequence (Home Lab)
 
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
-    participant TF as Terraform (Local)
-    participant AWS as AWS
-    participant K8s as EKS Cluster
+    participant QEMU as QEMU/libvirt
+    participant VMs as Virtual Machines
+    participant k3s as k3s Cluster
     participant Flux as Flux
     participant BB as Big Bang
-    participant GL as GitLab
+    participant Apps as Applications
 
-    Note over Dev,GL: Phase 1: Manual Bootstrap
+    Note over Dev,Apps: One-Time Home Lab Setup
+    
+    Dev->>QEMU: Provision 3 VMs (k3s nodes)
+    QEMU->>VMs: Create VMs with specs
+    
+    Dev->>VMs: Install k3s on all nodes
+    VMs->>k3s: Form k3s cluster
+    
+    Dev->>k3s: Configure local storage
+    Dev->>k3s: Set up local registry
+    Dev->>k3s: Configure Cloudflare Tunnel
+    
+    Dev->>k3s: Run Flux bootstrap script
+    k3s->>Flux: Install Flux controllers
+    
+    Dev->>Flux: Apply BigBang GitRepository CR
+    Dev->>Flux: Apply BigBang Kustomization CR
+    
+    Note over Flux,Apps: Platform Self-Deployment
+    
+    Flux->>BB: Sync and deploy Big Bang
+    BB->>k3s: Deploy GitLab
+    BB->>k3s: Deploy ArgoCD
+    BB->>k3s: Deploy Prometheus/Grafana
+    BB->>k3s: Deploy Istio
+    
+    Note over Flux,Apps: Continuous Operations
+    
+    Flux->>BB: Monitor for changes
+    BB->>k3s: Update platform services
+    ArgoCD->>Apps: Deploy applications
+    Apps->>k3s: Run 24/7
+```
+
+---
+
+## Diagram 4: Bootstrap Sequence (AWS On-Demand)
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant TF as Terraform
+    participant AWS as AWS
+    participant EKS as EKS Cluster
+    participant Flux as Flux
+    participant BB as Big Bang
+    participant Apps as Applications
+
+    Note over Dev,Apps: On-Demand Deployment (20 min)
+    
     Dev->>TF: terraform apply (bootstrap)
     TF->>AWS: Create S3 + DynamoDB
     
     Dev->>TF: terraform apply (network)
     TF->>AWS: Create VPC, Subnets, NAT
+    Note over TF,AWS: ~5 minutes
     
     Dev->>TF: terraform apply (eks-cluster)
     TF->>AWS: Create EKS Control Plane
-    TF->>AWS: Create Node Groups
+    TF->>AWS: Provision Spot Node Groups
+    TF->>AWS: Configure Karpenter
+    Note over TF,AWS: ~15 minutes
     
-    Dev->>K8s: install_flux.sh
-    K8s->>Flux: Deploy Flux Controllers
+    Dev->>EKS: Run Flux bootstrap script
+    EKS->>Flux: Install Flux controllers
     
-    Dev->>Flux: kubectl apply flux-sync-bigbang.yaml
+    Dev->>Flux: Apply same BigBang config as home lab
     
-    Note over Dev,GL: Phase 2: Platform Self-Deployment
+    Note over Flux,Apps: Platform Deployment (Same as Home Lab)
+    
     Flux->>BB: Deploy Big Bang
-    BB->>GL: Deploy GitLab + Runners
-    BB->>K8s: Deploy ArgoCD
-    BB->>K8s: Deploy Prometheus/Grafana
-    BB->>K8s: Deploy Istio
+    BB->>Apps: Deploy platform + applications
     
-    Note over Dev,GL: Phase 3: Self-Managing
-    Dev->>GL: git push (infrastructure change)
-    GL->>TF: Run CI Pipeline
-    TF->>AWS: terraform apply
+    Note over Dev,Apps: Ready for Demo
+    
+    Dev->>Apps: Use for interviews/testing
+    
+    Note over Dev,Apps: Cleanup
+    
+    Dev->>TF: terraform destroy (all environments)
+    TF->>AWS: Remove all resources
+    Note over TF,AWS: Cost stops immediately
 ```
+
 
 ### Deployment Phases
 
@@ -290,25 +503,70 @@ Production scaling and business model refinement:
 
 ## Cost Model
 
-**Target Monthly Budget: $150-200**
+### Home Lab Operations (Primary Platform)
 
-### Fixed Costs
-- EKS Control Plane: ~$73/month
-- NAT Gateway: ~$32/month
-- Network Load Balancer: ~$16/month
+**Monthly Cost: $0**
 
-### Variable Costs (Optimized)
-- Compute (spot instances): ~$20-40/month
-- Storage (EBS): ~$10-15/month
-- Data transfer: ~$5-10/month
-- S3/DynamoDB: <$5/month
+- Infrastructure: Existing QEMU/libvirt hardware (no incremental cost)
+- Electricity: ~$10-20/month (absorbed in existing home lab operations)
+- Internet: No additional bandwidth cost
+- **Net incremental cost: $0/month**
 
-### Optimization Strategies
-- **Spot instances with Karpenter** - 70-90% cost reduction on compute
-- **Single AZ deployment** - Eliminates cross-AZ data transfer costs
-- **Aggressive autoscaling** - Scale to minimum during low activity
-- **Shared resources** - Single NLB for all ingress traffic
-- **Self-hosted observability** - Avoid managed Prometheus/Grafana costs
+**What's Included:**
+- 24/7 k3s cluster operations
+- All platform services (GitLab, ArgoCD, Prometheus, Grafana, Istio)
+- Application hosting (portfolio sites, data pipelines, AI services)
+- Continuous integration and deployment
+- Full observability and monitoring
+
+### AWS On-Demand Deployments
+
+**Per-Deployment Cost: $10-20**
+
+Typical deployment pattern:
+- Deploy: Friday evening (~20 minutes)
+- Demo/Test: Saturday (full day available)
+- Destroy: Sunday afternoon
+- Duration: ~36-48 hours
+
+**Cost Breakdown (weekend deployment):**
+- EKS control plane: ~$3 (36 hours × $0.10/hour)
+- EC2 spot instances: ~$2-3 (t3a.medium spot pricing)
+- NAT Gateway: ~$1.50
+- Network Load Balancer: ~$0.75
+- Data transfer: ~$1-2
+- S3/DynamoDB: <$0.50
+- **Total: ~$10-20 per deployment**
+
+**Job Search Period (4-6 months):**
+- Estimated AWS demos: 3-5 deployments
+- Total AWS cost: $30-100
+- **Compare to 24/7 AWS: $900-1200**
+- **Savings: $800-1100**
+
+### Cost Optimization Strategies
+
+**Home Lab Advantages:**
+- Zero cloud provider costs
+- No surprise bills or cost overruns
+- Unlimited experimentation within hardware limits
+- Learning without financial pressure
+
+**AWS Deployment Efficiency:**
+- Spot instances (70-90% savings vs on-demand)
+- Single-AZ deployment (eliminates cross-AZ transfer costs)
+- Automated destroy procedures (no forgotten resources)
+- Infrastructure as Code (reproducible deployments)
+- Karpenter autoscaling (right-sized compute)
+
+**Financial Discipline Demonstrated:**
+- FinOps thinking from day one
+- Cost-conscious architecture decisions
+- Resource optimization strategies
+- Can scale to production AWS when budget allows
+
+See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed cost analysis and decision rationale.
+
 
 ## Repository Organization
 
@@ -318,10 +576,12 @@ Production scaling and business model refinement:
 - **application-repos** - Web applications and demonstration projects
 
 ### GitLab Repositories
-- **bigbang** - Big Bang platform configuration and customization
-- **terraform-environments** - Environment-specific infrastructure configurations
+- **bigbang** - Big Bang platform configuration and customization (works in both environments)
+- **terraform-environments** - Environment-specific infrastructure configurations (home-lab and aws-demo)
 - **terraform-pipelines** - Shared CI/CD pipeline definitions
 - **operational-repos** - Private operational configurations
+
+**Note:** Terraform modules and environments are AWS-ready but deployed on-demand. Home lab operations use k3s without Terraform.
 
 ## Documentation
 
@@ -351,6 +611,12 @@ Production scaling and business model refinement:
 - **Trade-offs:** Added complexity vs. clear operational boundaries
 - **ADR:** [003-flux-and-argocd-separation.md](docs/adrs/003-flux-and-argocd-separation.md)
 
+### Hybrid Home Lab + AWS Architecture
+- **Decision:** Run primary platform on home lab k3s, maintain AWS-ready Terraform
+- **Rationale:** Zero-cost operations during job search, AWS skills demonstrated via IaC, infrastructure portability
+- **Trade-offs:** No live AWS operations vs. $600-1200 savings, stronger hybrid cloud story
+- **ADR:** [004-hybrid-home-lab-aws-architecture.md](docs/adrs/004-hybrid-home-lab-aws-architecture.md)
+
 ## Technology Choices
 
 ### Why Big Bang?
@@ -379,9 +645,11 @@ Production scaling and business model refinement:
 - Automated deployments: 100% via GitOps
 
 ### Cost Efficiency
-- Monthly AWS spend: <$200
-- Cost per application deployed: Tracked and optimized
-- Infrastructure utilization: >70% during active hours
+- **Home lab operations:** $0/month ongoing
+- **AWS on-demand demos:** <$20 per deployment
+- **Total job search period:** <$100 vs $900-1200 (88% savings)
+- **Infrastructure utilization:** >70% during active hours
+- **Can demonstrate cloud skills without cloud costs**
 
 ### Operational Excellence
 - Deployment frequency: Multiple times per week
@@ -393,11 +661,46 @@ Production scaling and business model refinement:
 - Architecture discussions: Documented
 - Peer feedback: Collected and incorporated
 
-### Revenue & Business Value
-- First $1 profit milestone: Target Q2 2026
-- Monthly revenue: Track path to $150-200 (cost recovery)
-- Cost per customer: Tracked and optimized
-- Customer satisfaction: Measured via API usage patterns
+## Hybrid Cloud Strategy
+
+### Why Home Lab + AWS?
+
+**During Job Search:**
+- Zero monthly costs while demonstrating platform engineering
+- Can deploy to AWS on-demand for interviews
+- Saves $800-1100 over 6-month period
+- Invests savings in certifications instead
+
+**Technical Benefits:**
+- Proves infrastructure portability (not cloud-locked)
+- Demonstrates hybrid cloud patterns (common in enterprises)
+- Forces environment-agnostic design
+- Tests true Infrastructure as Code
+
+**Interview Story:**
+> "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I'd approach platform engineering: develop locally, deploy to cloud when needed."
+
+### Environment Parity
+
+**What's the Same:**
+- GitOps workflows (Flux + ArgoCD)
+- Platform services (Big Bang packages)
+- Application manifests
+- Monitoring and observability
+- CI/CD pipelines
+
+**What's Different:**
+- k3s vs EKS control plane
+- Local storage vs EBS
+- NodePort vs LoadBalancer services
+- Local registry vs ECR
+- Cloudflare Tunnel vs AWS NLB
+
+**Deployment Time:**
+- Home lab: Runs continuously
+- AWS: ~20 minutes to full operational platform
+
+See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for complete rationale and implementation details.
 
 ## Contributing
 
@@ -419,5 +722,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Last Updated:** January 4, 2026
+**Last Updated:** January 7, 2026
 **Status:** Architecture design phase - Implementation in progress
