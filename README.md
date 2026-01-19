@@ -3,7 +3,7 @@
 **Status:** Phase I - Foundation & Bootstrap  
 **Completion:** ~15% (Documentation complete, infrastructure in progress)  
 **Timeline:** Phase I target Q1 2026, Phase II target Q2 2026  
-**Current Focus:** Home lab k3s deployment with Big Bang DevSecOps baseline
+**Current Focus:** Home lab k3s deployment with [Big Bang](https://repo1.dso.mil/big-bang) DevSecOps baseline
 
 ## Purpose
 
@@ -26,13 +26,13 @@ See [ADR-004: Hybrid Home Lab + AWS Architecture](docs/adrs/004-hybrid-home-lab-
 
 ZaveStudios runs in two environments with complete parity:
 
-**🏠 Home Lab (Primary - Always Running):**
+**Home Lab (Primary - Always Running):**
 - Production operations at zero cost
 - Daily development and testing
 - 24/7 application availability
 - Continuous learning and experimentation
 
-**☁️ AWS (On-Demand - Demonstrations):**
+**AWS (On-Demand - Demonstrations):**
 - Deploy for interviews and testing
 - Validate cloud-native patterns
 - Prove AWS architecture skills
@@ -58,7 +58,7 @@ ZaveStudios runs in two environments with complete parity:
 ### Key Design Principles
 
 - **Infrastructure Portability** - Same GitOps workflows and manifests work in home lab and AWS
-- **Cost Discipline** - $0/month operations (saves $600-1200 during job search vs. AWS 24/7)
+- **Cost Discipline** - $0/month operations (saves $150-200 monthly vs. AWS 24/7)
 - **Cloud-Ready Architecture** - Can deploy to AWS in ~20 minutes for demonstrations
 - **Production-Grade Operations** - Real workloads, monitoring, GitOps, 24/7 uptime targets
 - **Hybrid Cloud Thinking** - Demonstrates multi-environment patterns common in enterprises
@@ -486,20 +486,13 @@ Data engineering and AI capabilities:
   - Model serving and inference APIs
   - GPU scheduling and cost optimization
   - Vector databases for RAG systems
-- **Revenue Model Validation**
-  - Automated data processing services
-  - API gateway and customer authentication
-  - Usage tracking and billing instrumentation
-  - Target: First $1 of profit to prove mechanism
 
 ### Phase III: Scale & Optimization (Q3+ 2026)
 **Status:** Future
 
 Production scaling and business model refinement:
-- Customer acquisition automation
 - Advanced AI workloads and fine-tuned models
 - Cost optimization at scale
-- Path to platform self-funding ($150-200/month revenue target)
 
 ## Cost Model
 
@@ -537,12 +530,6 @@ Typical deployment pattern:
 - Data transfer: ~$1-2
 - S3/DynamoDB: <$0.50
 - **Total: ~$10-20 per deployment**
-
-**Job Search Period (4-6 months):**
-- Estimated AWS demos: 3-5 deployments
-- Total AWS cost: $30-100
-- **Compare to 24/7 AWS: $900-1200**
-- **Savings: $800-1100**
 
 ### Cost Optimization Strategies
 
@@ -647,7 +634,6 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 ### Cost Efficiency
 - **Home lab operations:** $0/month ongoing
 - **AWS on-demand demos:** <$20 per deployment
-- **Total job search period:** <$100 vs $900-1200 (88% savings)
 - **Infrastructure utilization:** >70% during active hours
 - **Can demonstrate cloud skills without cloud costs**
 
@@ -665,12 +651,6 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 
 ### Why Home Lab + AWS?
 
-**During Job Search:**
-- Zero monthly costs while demonstrating platform engineering
-- Can deploy to AWS on-demand for interviews
-- Saves $800-1100 over 6-month period
-- Invests savings in certifications instead
-
 **Technical Benefits:**
 - Proves infrastructure portability (not cloud-locked)
 - Demonstrates hybrid cloud patterns (common in enterprises)
@@ -678,7 +658,7 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 - Tests true Infrastructure as Code
 
 **Interview Story:**
-> "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I'd approach platform engineering: develop locally, deploy to cloud when needed."
+> "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I approach platform engineering: develop locally, deploy to cloud when needed."
 
 ### Environment Parity
 
@@ -722,5 +702,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Last Updated:** January 7, 2026
+**Last Updated:** January 19, 2026
 **Status:** Architecture design phase - Implementation in progress

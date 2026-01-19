@@ -73,7 +73,7 @@ The EKS control plane remains multi-AZ by default (managed by AWS).
 - Still significant cost: +$50-70/month
 - Doesn't provide full 3-AZ resilience
 - Adds complexity without full benefit
-- Two AZs insufficient for some quorum-based systems
+- Two AZs insufficient for some quorum-based systems (?)
 
 **Why not chosen:** Provides minimal additional value over single-AZ while still incurring substantial cost. Neither fish nor fowl.
 
@@ -109,7 +109,7 @@ The EKS control plane remains multi-AZ by default (managed by AWS).
 - **Recovery complexity:** No automatic failover mechanisms
 
 ### Neutral
-- **EKS control plane:** Remains multi-AZ regardless (managed by AWS)
+- **EKS control plane:** Remains multi-AZ regardless (managed by AWS) (?)
 - **Regional scope:** Still operates across entire us-east-1 region conceptually
 - **Future expansion:** Can migrate to multi-AZ if budget allows
 

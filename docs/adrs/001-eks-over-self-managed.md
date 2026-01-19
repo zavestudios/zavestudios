@@ -1,9 +1,12 @@
 # ADR-001: EKS Over Self-Managed Kubernetes
 
-**Status:** Accepted  
-**Date:** 2025-12-31  
+**Status:** Superseded by [ADR-004: Hybrid Home Lab + AWS Architecture](004-hybrid-home-lab-aws-architecture.md)  
+**Date:** 2024-12-31  
+**Superseded Date:** 2024-12-31  
 **Author:** Xavier Lopez  
-**Tags:** infrastructure, kubernetes, aws, cost
+**Tags:** infrastructure, aws, eks, kubernetes, *superseded*
+
+**Note:** This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (home lab k3s + AWS on-demand). See [ADR-004](004-hybrid-home-lab-aws-architecture.md) for the current architecture rationale.
 
 ## Context
 
@@ -12,7 +15,7 @@ ZaveStudios requires a Kubernetes cluster to run the Big Bang platform and appli
 - Monthly infrastructure costs
 - Demonstration of AWS-native architecture skills
 - Control plane reliability and availability
-- Portfolio appeal to potential employers
+- Portfolio appeal to interested observers
 
 The platform targets a $150-200/month AWS budget while showcasing production-grade architecture patterns.
 
