@@ -7,7 +7,7 @@
 
 ## Context
 
-ZaveStudios was initially designed as an AWS-only platform running 24/7 on EKS. However, during career coaching with Dagan, a critical realization emerged: paying $150-200/month for AWS infrastructure during a 3-6 month job search ($600-1200 total) is unnecessary when:
+ZaveStudios was initially designed as an AWS-only platform running 24/7 on EKS. However, during career coaching with [Dagan](https://github.com/dagan), a critical realization emerged: paying $150-200/month for AWS infrastructure is unnecessary when:
 1. A home lab with QEMU/libvirt already exists and has capacity
 2. AWS expertise can be demonstrated through Infrastructure as Code without live deployment
 3. The platform can be deployed to AWS on-demand for interviews and demonstrations
@@ -37,8 +37,8 @@ We will implement a **hybrid architecture** with two deployment targets:
 ### Pros
 
 **Financial:**
-- **Saves $600-1200 during job search** (4-6 months × $150-200/month)
-- Zero ongoing AWS costs until employed
+- **Saves $150-200/month**
+- Zero ongoing AWS costs
 - Can deploy to AWS for $10-20 for a weekend demo
 - Demonstrates financial discipline and cost awareness
 
@@ -94,11 +94,11 @@ We will implement a **hybrid architecture** with two deployment targets:
 - Industry-standard production environment
 
 **Cons:**
-- $150-200/month cost during job search ($600-1200 total)
+- $150-200/month
 - Same AWS skills can be demonstrated via IaC
 - No cost advantage during unemployment
 
-**Why not chosen:** Financial burden without employment doesn't justify marginal benefit of live AWS ops. IaC proves AWS competency equally well.
+**Why not chosen:** Financial burden. IaC proves AWS competency equally well.
 
 ### Option 2: Home Lab Only, No AWS IaC
 **Description:** Run on home lab, don't create AWS Terraform
@@ -150,10 +150,10 @@ We will implement a **hybrid architecture** with two deployment targets:
 ### Positive
 
 **Financial Discipline Demonstrated:**
-- Zero monthly infrastructure cost during job search
+- Zero monthly infrastructure
 - Can deploy to AWS for <$20 when needed
 - Shows FinOps thinking and cost awareness
-- $600-1200 saved for other career investments
+- Money saved for other career investments
 
 **Stronger Portfolio Story:**
 - "Cloud-ready, not cloud-dependent" architecture
@@ -399,26 +399,6 @@ GitLab:
 - AWS SA Pro: "Demonstrated via Terraform, deployed on-demand"
 - CKAD: "Daily hands-on with k3s cluster"
 
-## Interview Talking Points
-
-**Opening:**
-> "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost - but I architected everything with Terraform so I can deploy to AWS EKS for production scenarios."
-
-**Infrastructure Automation Story:**
-> "I use the same tooling for both environments. Packer builds hardened base images - QEMU builder for home lab, Amazon EBS builder for AWS. The provisioning scripts are identical, only the builder changes. Then Terraform provisions infrastructure - libvirt provider for my VMs, AWS provider for EKS. Same patterns, different providers. That's what true infrastructure portability looks like."
-
-**When Asked About AWS Experience:**
-> "I have complete Terraform modules for EKS, VPC, and supporting services. Want to see it running in AWS? I can deploy right now - takes about 20 minutes to spin up the full stack. Then I'll destroy it after to avoid unnecessary spend."
-
-**Cost Awareness:**
-> "I'm preparing for my AWS Solutions Architect Professional certification, so I designed this platform with FinOps principles from day one. Running on home lab during job search saves $600-1200, which I can invest in certifications instead."
-
-**Hybrid Cloud:**
-> "Most enterprises run hybrid environments - on-prem data centers plus cloud. This architecture demonstrates that thinking: develop locally, deploy to cloud when needed, maintain environment parity through IaC."
-
-**Technical Depth - IaC Mastery:**
-> "At Raft, I migrated from Packer to AWS Image Builder for AWS-specific benefits like integrated OSCAP scanning. For ZaveStudios, I chose Packer because it supports both home lab and AWS from the same template. When portability matters, Packer. When you're AWS-only and want managed services, Image Builder. I know when to use each."
-
 ## Success Criteria
 
 ### Home Lab Platform:
@@ -456,11 +436,6 @@ GitLab:
 - [ADR-003: Flux and ArgoCD Separation](003-flux-and-argocd-separation.md) - Unchanged
 
 ## Future Considerations
-
-**After Employment:**
-- Evaluate moving to AWS full-time if employer provides cloud credits
-- Consider keeping home lab as dev environment with AWS as production
-- Multi-region AWS deployment becomes more feasible with employment
 
 **Home Lab Expansion:**
 - Add physical machines for true HA if needed
