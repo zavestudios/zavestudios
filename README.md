@@ -1,5 +1,7 @@
 # ZaveStudios Portfolio and Reference Platform
 
+> **Note:** This repository is the **architectural documentation hub**. It contains design decisions, ADRs, and system architecture. The actual infrastructure code lives in separate implementation repositories - see [Repository Organization](#repository-organization) below.
+
 **Status:** Phase I - Foundation & Bootstrap  
 **Completion:** ~15% (Documentation complete, infrastructure in progress)  
 **Timeline:** Phase I target Q1 2026, Phase II target Q2 2026  
@@ -7,10 +9,10 @@
 
 ## Purpose
 
-ZaveStudios is not a static portfolio project—it's a living platform that runs 24/7/365, performing real work and evolving continuously. The platform demonstrates hybrid cloud architecture: **production operations run on a home lab k3s cluster at zero cost**, while **AWS-ready Terraform infrastructure** enables on-demand cloud deployment for demonstrations and interviews.
+ZaveStudios is not a static portfolio projectâ€”it's a living platform that runs 24/7/365, performing real work and evolving continuously. The platform demonstrates hybrid cloud architecture: **production operations run on a home lab k3s cluster at zero cost**, while **AWS-ready Terraform infrastructure** enables on-demand cloud deployment for interested observers.
 
 **Primary Objectives:**
-- Demonstrate Senior Platform Engineer/Architect capabilities to technical leadership and collaborators
+- Demonstrate Senior Platform Engineer/Architect capabilities to interested observers.
 - Provide tangible evidence of architectural decision-making, cost optimization, and security architecture
 - Prove infrastructure portability through multi-environment support (home lab + AWS)
 - Enable rapid prototyping and integration of new technologies and patterns
@@ -33,7 +35,7 @@ ZaveStudios runs in two environments with complete parity:
 - Continuous learning and experimentation
 
 **AWS (On-Demand - Demonstrations):**
-- Deploy for interviews and testing
+- Deploy for interested observers
 - Validate cloud-native patterns
 - Prove AWS architecture skills
 - ~$10-20 per weekend deployment
@@ -291,7 +293,7 @@ graph TB
 **Deployment Time:** ~20 minutes from `terraform apply` to operational platform
 
 **Use Cases:**
-- Technical interviews and demonstrations
+- Technical demonstrations and architecture reviews
 - AWS skill validation
 - Cloud-native pattern testing
 - Certification practice (AWS SA Pro)
@@ -431,7 +433,7 @@ sequenceDiagram
     
     Note over Dev,Apps: Ready for Demo
     
-    Dev->>Apps: Use for interviews/testing
+    Dev->>Apps: Use for technical demonstrations and architecture reviews
     
     Note over Dev,Apps: Cleanup
     
@@ -523,7 +525,7 @@ Typical deployment pattern:
 - Duration: ~36-48 hours
 
 **Cost Breakdown (weekend deployment):**
-- EKS control plane: ~$3 (36 hours × $0.10/hour)
+- EKS control plane: ~$3 (36 hours Ã— $0.10/hour)
 - EC2 spot instances: ~$2-3 (t3a.medium spot pricing)
 - NAT Gateway: ~$1.50
 - Network Load Balancer: ~$0.75
@@ -557,18 +559,89 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 
 ## Repository Organization
 
-### GitHub Repositories
-- **[zavestudios](https://github.com/eckslopez/zavestudios)** (this repo) - Architecture documentation and design decisions
-- **terraform-modules** - Reusable Terraform modules for AWS resources
-- **application-repos** - Web applications and demonstration projects
+**ZaveStudios is the architectural documentation hub** - it contains design decisions, architecture documentation, and ADRs. The actual infrastructure code and applications live in separate, focused repositories.
 
-### GitLab Repositories
-- **bigbang** - Big Bang platform configuration and customization (works in both environments)
-- **terraform-environments** - Environment-specific infrastructure configurations (home-lab and aws-demo)
-- **terraform-pipelines** - Shared CI/CD pipeline definitions
-- **operational-repos** - Private operational configurations
+### Why Separate Repositories?
 
-**Note:** Terraform modules and environments are AWS-ready but deployed on-demand. Home lab operations use k3s without Terraform.
+- **Reusability** - Each repo is a standalone tool others can use
+- **Clean History** - Focused git history per component
+- **Portfolio Value** - Multiple repos demonstrate breadth of skills
+- **Clear Boundaries** - Infrastructure vs platform vs applications
+
+### Implementation Repositories
+
+**Infrastructure:**
+- **[k3s-homelab](https://github.com/eckslopez/k3s-homelab)** - Home lab k3s cluster deployment (Packer + Terraform libvirt)
+- **terraform-modules** *(coming soon)* - Reusable AWS infrastructure modules (VPC, EKS, RDS, etc.)
+- **terraform-environments** *(private GitLab)* - Environment-specific configs (aws-demo, production)
+- **terraform-pipelines** *(private GitLab)* - CI/CD pipeline code for infrastructure automation
+
+**Platform Services:**
+- **bigbang-config** *(coming soon)* - Big Bang platform customization and configuration
+- **flux-config** *(coming soon)* - Flux GitOps repository structures and Kustomizations
+- **argocd-apps** *(coming soon)* - ArgoCD Application manifests
+
+**Applications:**
+- **portfolio-site** *(coming soon)* - xavierlopez.me source code and deployment
+- **data-pipelines** *(Phase II)* - Data engineering workloads and ETL jobs
+- **ai-services** *(Phase II)* - AI/ML model serving and inference APIs
+
+### How They Connect
+
+```mermaid
+graph TB
+    subgraph Documentation["📚 Documentation Hub"]
+        ZS[zavestudios<br/>Architecture & ADRs<br/>YOU ARE HERE]
+    end
+    
+    subgraph Infrastructure["🏗️ Infrastructure Repositories"]
+        K3S[k3s-homelab<br/>Home Lab Deployment]
+        TFM[terraform-modules<br/>AWS Resources]
+        TFE[terraform-environments<br/>Configs - Private]
+    end
+    
+    subgraph Platform["⚙️ Platform Services"]
+        BB[bigbang-config<br/>DevSecOps Platform]
+        FLUX[flux-config<br/>GitOps]
+        ARGO[argocd-apps<br/>Applications]
+    end
+    
+    subgraph Applications["🚀 Applications"]
+        PORT[portfolio-site<br/>xavierlopez.me]
+        DATA[data-pipelines<br/>Phase II]
+        AI[ai-services<br/>Phase II]
+    end
+    
+    ZS -->|Links & Documents| K3S
+    ZS -->|Links & Documents| TFM
+    ZS -->|Links & Documents| BB
+    ZS -->|Links & Documents| PORT
+    
+    K3S -->|Deploys| BB
+    BB -->|Contains| FLUX
+    BB -->|Contains| ARGO
+    
+    FLUX -->|Manages| BB
+    ARGO -->|Deploys| PORT
+    ARGO -->|Deploys| DATA
+    ARGO -->|Deploys| AI
+    
+    TFE -->|Uses| TFM
+    
+    classDef docs fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    classDef infra fill:#fff4e1,stroke:#ff9900,stroke-width:2px
+    classDef platform fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    classDef apps fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
+    
+    class ZS docs
+    class K3S,TFM,TFE infra
+    class BB,FLUX,ARGO platform
+    class PORT,DATA,AI apps
+```
+
+**For technical leadership:** Start here to understand architectural thinking, then explore implementation repos to see execution.
+
+**For engineers:** Use individual repos directly for specific tools (e.g., k3s-homelab for home lab setup).
 
 ## Documentation
 
@@ -600,7 +673,7 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 
 ### Hybrid Home Lab + AWS Architecture
 - **Decision:** Run primary platform on home lab k3s, maintain AWS-ready Terraform
-- **Rationale:** Zero-cost operations during job search, AWS skills demonstrated via IaC, infrastructure portability
+- **Rationale:** Zero-cost operations, AWS skills demonstrated via IaC, infrastructure portability
 - **Trade-offs:** No live AWS operations vs. $600-1200 savings, stronger hybrid cloud story
 - **ADR:** [004-hybrid-home-lab-aws-architecture.md](docs/adrs/004-hybrid-home-lab-aws-architecture.md)
 
@@ -643,7 +716,7 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 - Change failure rate: <5%
 
 ### Portfolio Impact
-- Technical interviews scheduled: Tracked
+- Technical demonstrations scheduled: Tracked
 - Architecture discussions: Documented
 - Peer feedback: Collected and incorporated
 
@@ -657,7 +730,7 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 - Forces environment-agnostic design
 - Tests true Infrastructure as Code
 
-**Interview Story:**
+**Showcase Story:**
 > "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I approach platform engineering: develop locally, deploy to cloud when needed."
 
 ### Environment Parity
