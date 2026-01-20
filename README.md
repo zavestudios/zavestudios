@@ -645,11 +645,11 @@ graph TB
 
 ## Documentation
 
-- [Architecture Overview](docs/architecture/overview.md) - Detailed system architecture
-- [Component Details](docs/architecture/component-details.md) - Deep dives on each component
-- [Bootstrap Guide](docs/architecture/bootstrap-sequence.md) - Step-by-step deployment process
-- [Cost Analysis](docs/architecture/cost-model.md) - Budget breakdown and optimization strategies
-- [Architecture Decision Records](docs/adrs/) - Key architectural decisions with rationale
+- #TODO [Architecture Overview](docs/architecture/overview.md) - Detailed system architecture
+- #TODO [Component Details](docs/architecture/component-details.md) - Deep dives on each component
+- #TODO [Bootstrap Guide](docs/architecture/bootstrap-sequence.md) - Step-by-step deployment process
+- #TODO [Cost Analysis](docs/architecture/cost-model.md) - Budget breakdown and optimization strategies
+- #TODO [Architecture Decision Records](docs/adrs/) - Key architectural decisions with rationale
 
 ## Key Design Decisions
 
