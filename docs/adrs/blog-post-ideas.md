@@ -324,5 +324,43 @@ _No posts published yet_
 
 ---
 
+## Editorial Voice & Principles
+
+**Core principle:** Confidence through demonstration, not declaration.
+
+**The voice:**
+- "Here's what I built. Here's how it works. Here's the tradeoffs I considered."
+- Show, don't argue
+- Let the quality of work speak for itself
+- Respect the reader's intelligence
+
+**What this sounds like:**
+- ✅ "I built a platform that runs on KVM/libvirt with AWS deployment capability"
+- ✅ "Here's the cost calculation: $0/month vs $150-200/month"
+- ✅ "This pattern might make sense if your organization has spare capacity"
+- ❌ "Enterprises should stop putting everything in the cloud"
+- ❌ "You're wasting money if you don't do this"
+- ❌ "This is the best way to build platforms"
+
+**Why this matters:**
+- Demonstrates actual experience, not just opinions
+- Shows ability to think through tradeoffs
+- Signals engineering maturity (no silver bullets)
+- Avoids becoming a target for fact-checking
+- Builds trust through honesty about limitations
+
+**Occasional provocation:**
+- Sometimes we'll take a strong position
+- Must be deliberate, not accidental
+- Must be grounded in deep experience
+- Still framed as "here's what I've seen" not "universal truth"
+
+**For hiring managers, this signals:**
+- Won't overpromise on projects
+- Thinks through consequences before building
+- Can articulate tradeoffs clearly
+- Confident enough to show limitations, not just wins
+---
+
 **Last Updated:** January 7, 2025  
 **Next Review:** Weekly (update status, add new ideas)
