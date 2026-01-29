@@ -28,3 +28,6 @@ secrets/
 dist/
 build/
 *.log
+
+# Internal operating doctrine (not for public consumption)
+README.internal.md

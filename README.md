@@ -773,6 +773,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **GitHub:** [github.com/eckslopez](https://github.com/eckslopez)
 - **GitLab:** [gitlab.com/platformystical](https://gitlab.com/platformystical)
 
+## Objective Statement
+
+ZaveStudios follows an internal operating objective focused on architectural judgment, leverage, and restraint.
+
 ---
 
 **Last Updated:** January 19, 2026
