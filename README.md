@@ -2,25 +2,25 @@
 
 > **Note:** This repository is the **architectural documentation hub**. It contains design decisions, ADRs, and system architecture. The actual infrastructure code lives in separate implementation repositories - see [Repository Organization](#repository-organization) below.
 
-**Status:** Phase I - Foundation & Bootstrap  
-**Completion:** ~15% (Documentation complete, infrastructure in progress)  
-**Timeline:** Phase I target Q1 2026, Phase II target Q2 2026  
-**Current Focus:** Home lab k3s deployment with [Big Bang](https://repo1.dso.mil/big-bang) DevSecOps baseline
+**Status:** Phase I - Foundation & Bootstrap
+**Completion:** ~15% (Documentation complete, infrastructure in progress)
+**Timeline:** Phase I target Q1 2026, Phase II target Q2 2026
+**Current Focus:** Sandbox k3s deployment with [Big Bang](https://repo1.dso.mil/big-bang) DevSecOps baseline
 
 ## Purpose
 
-ZaveStudios is not a static portfolio projectâ€”it's a living platform that runs 24/7/365, performing real work and evolving continuously. The platform demonstrates hybrid cloud architecture: **production operations run on a home lab k3s cluster at zero cost**, while **AWS-ready Terraform infrastructure** enables on-demand cloud deployment for interested observers.
+ZaveStudios is not a static portfolio projectâ€"it's a living platform that runs 24/7/365, performing real work and evolving continuously. The platform demonstrates hybrid cloud architecture: **production operations run on a sandbox k3s cluster at zero cost**, while **AWS-ready Terraform infrastructure** enables on-demand cloud deployment for interested observers.
 
 **Primary Objectives:**
 - Demonstrate Senior Platform Engineer/Architect capabilities to interested observers.
 - Provide tangible evidence of architectural decision-making, cost optimization, and security architecture
-- Prove infrastructure portability through multi-environment support (home lab + AWS)
+- Prove infrastructure portability through multi-environment support (sandbox + AWS)
 - Enable rapid prototyping and integration of new technologies and patterns
 - Deliver quantifiable business value through cost efficiency and operational excellence
 
 **Architecture Philosophy:** Cloud-ready, not cloud-dependent. Built for portability, optimized for cost.
 
-See [ADR-004: Hybrid Home Lab + AWS Architecture](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for the complete rationale.
+See [ADR-004: Hybrid Sandbox + AWS Architecture](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for the complete rationale.
 
 ## Architecture Overview
 
@@ -28,7 +28,7 @@ See [ADR-004: Hybrid Home Lab + AWS Architecture](docs/adrs/004-hybrid-home-lab-
 
 ZaveStudios runs in two environments with complete parity:
 
-**Home Lab (Primary - Always Running):**
+**Sandbox (Primary - Always Running):**
 - Production operations at zero cost
 - Daily development and testing
 - 24/7 application availability
@@ -42,7 +42,7 @@ ZaveStudios runs in two environments with complete parity:
 
 ### Technology Stack
 
-**Primary Platform (Home Lab):**
+**Primary Platform (Sandbox):**
 - **Infrastructure:** k3s cluster on QEMU/libvirt (3 VMs)
 - **Platform Foundation:** Big Bang (DoD DevSecOps reference architecture)
 - **GitOps:** Flux (platform services) + ArgoCD (application workloads)
@@ -59,7 +59,7 @@ ZaveStudios runs in two environments with complete parity:
 
 ### Key Design Principles
 
-- **Infrastructure Portability** - Same GitOps workflows and manifests work in home lab and AWS
+- **Infrastructure Portability** - Same GitOps workflows and manifests work in sandbox and AWS
 - **Cost Discipline** - $0/month operations (saves $150-200 monthly vs. AWS 24/7)
 - **Cloud-Ready Architecture** - Can deploy to AWS in ~20 minutes for demonstrations
 - **Production-Grade Operations** - Real workloads, monitoring, GitOps, 24/7 uptime targets
@@ -70,7 +70,7 @@ ZaveStudios runs in two environments with complete parity:
 
 ## High-Level System Architecture
 
-### Production Environment (Home Lab)
+### Production Environment (Sandbox)
 
 ```mermaid
 graph TB
@@ -80,7 +80,7 @@ graph TB
         GitLabSaaS[GitLab SaaS<br/>gitlab.com]
     end
 
-    subgraph HomeLab["Home Lab - QEMU/libvirt"]
+    subgraph Sandbox["Sandbox - QEMU/libvirt"]
         subgraph K3sCluster["k3s Cluster (3 VMs)"]
             subgraph PlatformServices["Platform Services - Managed by Flux"]
                 Flux[Flux GitOps]
@@ -168,12 +168,12 @@ graph TB
     class Modules,Environments,Pipelines terraform
 ```
 
-### Description - Home Lab Architecture
+### Description - Sandbox Architecture
 
 **Cost:** $0/month
 
 **Key Features:**
-- Runs 24/7 on existing home lab hardware
+- Runs 24/7 on existing sandbox hardware
 - Cloudflare Tunnel provides secure external access (no port forwarding)
 - Self-hosted GitLab for CI/CD automation
 - Complete platform services via Big Bang
@@ -204,7 +204,7 @@ graph TB
         end
 
         subgraph EKS["EKS Cluster"]
-            subgraph PlatformAWS["Platform - Same as Home Lab"]
+            subgraph PlatformAWS["Platform - Same as Sandbox"]
                 FluxAWS[Flux GitOps]
                 BigBangAWS[Big Bang]
                 ArgoAWS[ArgoCD]
@@ -305,7 +305,7 @@ graph TB
 - **Cost stops:** Immediately after destroy
 
 **Key Features:**
-- Identical platform services as home lab
+- Identical platform services as sandbox
 - Same application manifests
 - Spot instances + Karpenter for cost optimization
 - Single-AZ deployment (cost vs availability trade-off)
@@ -346,7 +346,7 @@ Infrastructure as Code structure:
 - Environment-specific configurations
 - Shared pipeline code
 
-## Diagram 3: Bootstrap Sequence (Home Lab)
+## Diagram 3: Bootstrap Sequence (Sandbox)
 
 ```mermaid
 sequenceDiagram
@@ -358,7 +358,7 @@ sequenceDiagram
     participant BB as Big Bang
     participant Apps as Applications
 
-    Note over Dev,Apps: One-Time Home Lab Setup
+    Note over Dev,Apps: One-Time Sandbox Setup
     
     Dev->>QEMU: Provision 3 VMs (k3s nodes)
     QEMU->>VMs: Create VMs with specs
@@ -424,9 +424,9 @@ sequenceDiagram
     Dev->>EKS: Run Flux bootstrap script
     EKS->>Flux: Install Flux controllers
     
-    Dev->>Flux: Apply same BigBang config as home lab
+    Dev->>Flux: Apply same BigBang config as sandbox
     
-    Note over Flux,Apps: Platform Deployment (Same as Home Lab)
+    Note over Flux,Apps: Platform Deployment (Same as Sandbox)
     
     Flux->>BB: Deploy Big Bang
     BB->>Apps: Deploy platform + applications
@@ -498,12 +498,12 @@ Production scaling and business model refinement:
 
 ## Cost Model
 
-### Home Lab Operations (Primary Platform)
+### Sandbox Operations (Primary Platform)
 
 **Monthly Cost: $0**
 
 - Infrastructure: Existing QEMU/libvirt hardware (no incremental cost)
-- Electricity: ~$10-20/month (absorbed in existing home lab operations)
+- Electricity: ~$10-20/month (absorbed in existing sandbox operations)
 - Internet: No additional bandwidth cost
 - **Net incremental cost: $0/month**
 
@@ -535,7 +535,7 @@ Typical deployment pattern:
 
 ### Cost Optimization Strategies
 
-**Home Lab Advantages:**
+**Sandbox Advantages:**
 - Zero cloud provider costs
 - No surprise bills or cost overruns
 - Unlimited experimentation within hardware limits
@@ -571,7 +571,7 @@ See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed co
 ### Implementation Repositories
 
 **Infrastructure:**
-- **[k3s-homelab](https://github.com/eckslopez/k3s-homelab)** - Home lab k3s cluster deployment (Packer + Terraform libvirt)
+- **[kubernetes-platform-infrastructure](https://github.com/eckslopez/kubernetes-platform-infrastructure)** - Home lab k3s cluster deployment (Packer + Terraform libvirt)
 - **terraform-modules** *(coming soon)* - Reusable AWS infrastructure modules (VPC, EKS, RDS, etc.)
 - **terraform-environments** *(private GitLab)* - Environment-specific configs (aws-demo, production)
 - **terraform-pipelines** *(private GitLab)* - CI/CD pipeline code for infrastructure automation
@@ -595,7 +595,7 @@ graph TB
     end
     
     subgraph Infrastructure["🏗️ Infrastructure Repositories"]
-        K3S[k3s-homelab<br/>Home Lab Deployment]
+        K3S[kubernetes-platform-infrastructure<br/>Sandbox Deployment]
         TFM[terraform-modules<br/>AWS Resources]
         TFE[terraform-environments<br/>Configs - Private]
     end
@@ -641,7 +641,7 @@ graph TB
 
 **For technical leadership:** Start here to understand architectural thinking, then explore implementation repos to see execution.
 
-**For engineers:** Use individual repos directly for specific tools (e.g., k3s-homelab for home lab setup).
+**For engineers:** Use individual repos directly for specific tools (e.g., kubernetes-platform-infrastructure for sandbox setup).
 
 ## Documentation
 
@@ -671,8 +671,8 @@ graph TB
 - **Trade-offs:** Added complexity vs. clear operational boundaries
 - **ADR:** [003-flux-and-argocd-separation.md](docs/adrs/003-flux-and-argocd-separation.md)
 
-### Hybrid Home Lab + AWS Architecture
-- **Decision:** Run primary platform on home lab k3s, maintain AWS-ready Terraform
+### Hybrid Sandbox + AWS Architecture
+- **Decision:** Run primary platform on sandbox k3s, maintain AWS-ready Terraform
 - **Rationale:** Zero-cost operations, AWS skills demonstrated via IaC, infrastructure portability
 - **Trade-offs:** No live AWS operations vs. $600-1200 savings, stronger hybrid cloud story
 - **ADR:** [004-hybrid-home-lab-aws-architecture.md](docs/adrs/004-hybrid-home-lab-aws-architecture.md)
@@ -722,7 +722,7 @@ graph TB
 
 ## Hybrid Cloud Strategy
 
-### Why Home Lab + AWS?
+### Why Sandbox + AWS?
 
 **Technical Benefits:**
 - Proves infrastructure portability (not cloud-locked)
@@ -731,7 +731,7 @@ graph TB
 - Tests true Infrastructure as Code
 
 **Showcase Story:**
-> "I designed ZaveStudios to run anywhere. Daily, it runs on my home lab at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I approach platform engineering: develop locally, deploy to cloud when needed."
+> "I designed ZaveStudios to run anywhere. Daily, it runs on my sandbox at zero cost. But I architected everything with Terraform so I can deploy to AWS EKS for demonstrations. Want to see? I can spin it up right now - takes about 20 minutes. Then I'll destroy it after to avoid unnecessary spend. That's exactly how I approach platform engineering: develop locally, deploy to cloud when needed."
 
 ### Environment Parity
 
