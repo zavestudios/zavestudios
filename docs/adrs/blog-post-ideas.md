@@ -8,7 +8,7 @@
 
 ## Queued (Ready to Write)
 
-### 1. Why I'm Running My Platform on a Home Lab (And Why That's Better)
+### 1. Why I'm Running My Platform on Spare Capacity
 
 **Status:** Ready to write  
 **Target Date:** Week of January 6, 2025  
@@ -24,11 +24,11 @@
 - Better interview story than "I built it all in AWS"
 
 **Source Material:**
-- [ADR-004: Hybrid Home Lab + AWS Architecture](adrs/004-hybrid-home-lab-aws-architecture.md)
+- [ADR-004: Hybrid Home Lab + AWS Architecture](adrs/004-hybrid-sandbox-aws-architecture.md)
 - README.md - Hybrid Cloud Strategy section
 - Cost model documentation
 
-**Keywords:** platform engineering portfolio, home lab, DevOps career, cloud native, cost optimization, hybrid cloud
+**Keywords:** platform engineering portfolio, sandbox, DevOps career, cloud native, cost optimization, hybrid cloud
 
 **Target Audience:** Platform engineers, DevOps professionals, job seekers, career changers
 
@@ -91,7 +91,7 @@
 - Terraform + certification study integration
 
 **Source Material:**
-- [ADR-004](adrs/004-hybrid-home-lab-aws-architecture.md)
+- [ADR-004](adrs/004-hybrid-sandbox-aws-architecture.md)
 - [AWS SA Pro Mapping](certifications/aws-sa-pro-mapping.md)
 - Cost model documentation
 - Interview preparation notes

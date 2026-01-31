@@ -1,4 +1,4 @@
-# ADR-004: Hybrid Home Lab + AWS Cloud-Ready Architecture
+# ADR-004: Hybrid Sandbox + AWS Cloud-Ready Architecture
 
 **Status:** Accepted  
 **Date:** 2024-12-31  
@@ -8,17 +8,17 @@
 ## Context
 
 ZaveStudios was initially designed as an AWS-only platform running 24/7 on EKS. However, during career coaching with [Dagan](https://github.com/dagan), a critical realization emerged: paying $150-200/month for AWS infrastructure is unnecessary when:
-1. A home lab with QEMU/libvirt already exists and has capacity
+1. A sandbox with QEMU/libvirt already exists and has capacity
 2. AWS expertise can be demonstrated through Infrastructure as Code without live deployment
 3. The platform can be deployed to AWS on-demand for interviews and demonstrations
 
-This ADR documents the decision to run the primary platform in a home lab while maintaining AWS-ready Terraform code.
+This ADR documents the decision to run the primary platform in a sandbox while maintaining AWS-ready Terraform code.
 
 ## Decision
 
 We will implement a **hybrid architecture** with two deployment targets:
 
-**Primary Deployment (Home Lab):**
+**Primary Deployment (Sandbox):**
 - k3s cluster running on QEMU/libvirt virtual machines
 - Runs 24/7 at zero cost
 - Hosts all platform services and applications
@@ -76,7 +76,7 @@ We will implement a **hybrid architecture** with two deployment targets:
 
 **Mitigation:** Cloudflare Tunnel provides secure access without port forwarding. Service mesh (Istio) provides defense in depth.
 
-**Home Lab Reliability:**
+**Sandbox Reliability:**
 - Single point of failure (home infrastructure)
 - No HA across physical machines
 - Power/network outages affect platform
@@ -100,8 +100,8 @@ We will implement a **hybrid architecture** with two deployment targets:
 
 **Why not chosen:** Financial burden. IaC proves AWS competency equally well.
 
-### Option 2: Home Lab Only, No AWS IaC
-**Description:** Run on home lab, don't create AWS Terraform
+### Option 2: Sandbox Only, No AWS IaC
+**Description:** Run on sandbox, don't create AWS Terraform
 
 **Pros:**
 - Zero cost
@@ -195,9 +195,9 @@ We will implement a **hybrid architecture** with two deployment targets:
 - Home lab might seem less professional
 - No live AWS resources to show
 
-**Mitigation:** Strong interview narrative: "I architected for portability. Daily ops on home lab, but cloud-ready via Terraform. Want to see AWS deployment? I can spin it up right now."
+**Mitigation:** Strong interview narrative: "I architected for portability. Daily ops on sandbox, but cloud-ready via Terraform. Want to see AWS deployment? I can spin it up right now."
 
-**Home Lab Limitations:**
+**Sandbox Limitations:**
 - Single AZ by nature (no multi-AZ HA)
 - Limited by home hardware resources
 - Dependent on home power/internet
@@ -225,7 +225,7 @@ We will implement a **hybrid architecture** with two deployment targets:
 
 ## Implementation
 
-### Home Lab Setup
+### Sandbox Setup
 
 **Infrastructure Automation:**
 - **Image Building:** Packer with QEMU builder for custom hardened base images
@@ -343,7 +343,7 @@ GitLab:
 - **Terraform libvirt provider:** Same IaC tool as AWS, different provider
 - **Packer multi-builder:** Single template builds both QEMU and AMI images
 - **Complete portability:** Image build → Infrastructure → Configuration all reproducible
-- **Portfolio story:** "I use Terraform everywhere - libvirt for home lab, AWS for cloud"
+- **Portfolio story:** "I use Terraform everywhere - libvirt for sandbox, AWS for cloud"
 
 ### AWS Terraform Modules
 
@@ -372,9 +372,9 @@ GitLab:
 
 ### Cost Tracking
 
-**Home Lab:**
+**Sandbox:**
 - $0/month infrastructure cost
-- Electricity cost absorbed by existing home lab
+- Electricity cost absorbed by existing sandbox
 - Internet bandwidth sufficient
 
 **AWS:**
@@ -390,7 +390,7 @@ GitLab:
 - **ADR-003:** Flux/ArgoCD separation remains unchanged
 
 ### Architecture Docs:
-- Update diagrams showing both home lab and AWS
+- Update diagrams showing both sandbox and AWS
 - Document environment parity strategy
 - Cloudflare Tunnel configuration
 - Bootstrap procedures for both environments
@@ -401,7 +401,7 @@ GitLab:
 
 ## Success Criteria
 
-### Home Lab Platform:
+### Sandbox Platform:
 - [ ] k3s cluster operational 24/7
 - [ ] All platform services deployed
 - [ ] Applications running and accessible
@@ -437,7 +437,7 @@ GitLab:
 
 ## Future Considerations
 
-**Home Lab Expansion:**
+**Sandbox Expansion:**
 - Add physical machines for true HA if needed
 - Implement bare-metal load balancing (MetalLB)
 - Expand storage with NAS integration

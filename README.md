@@ -20,7 +20,7 @@ ZaveStudios is not a static portfolio projectâ€"it's a living platform that r
 
 **Architecture Philosophy:** Cloud-ready, not cloud-dependent. Built for portability, optimized for cost.
 
-See [ADR-004: Hybrid Sandbox + AWS Architecture](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for the complete rationale.
+See [ADR-004: Hybrid Sandbox + AWS Architecture](docs/adrs/004-hybrid-sandbox-aws-architecture.md) for the complete rationale.
 
 ## Architecture Overview
 
@@ -554,7 +554,7 @@ Typical deployment pattern:
 - Resource optimization strategies
 - Can scale to production AWS when budget allows
 
-See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for detailed cost analysis and decision rationale.
+See [ADR-004](docs/adrs/004-hybrid-sandbox-aws-architecture.md) for detailed cost analysis and decision rationale.
 
 
 ## Repository Organization
@@ -675,7 +675,7 @@ graph TB
 - **Decision:** Run primary platform on sandbox k3s, maintain AWS-ready Terraform
 - **Rationale:** Zero-cost operations, AWS skills demonstrated via IaC, infrastructure portability
 - **Trade-offs:** No live AWS operations vs. $600-1200 savings, stronger hybrid cloud story
-- **ADR:** [004-hybrid-home-lab-aws-architecture.md](docs/adrs/004-hybrid-home-lab-aws-architecture.md)
+- **ADR:** [004-hybrid-sandbox-aws-architecture.md](docs/adrs/004-hybrid-sandbox-aws-architecture.md)
 
 ## Technology Choices
 
@@ -753,7 +753,7 @@ graph TB
 - Home lab: Runs continuously
 - AWS: ~20 minutes to full operational platform
 
-See [ADR-004](docs/adrs/004-hybrid-home-lab-aws-architecture.md) for complete rationale and implementation details.
+See [ADR-004](docs/adrs/004-hybrid-sandbox-aws-architecture.md) for complete rationale and implementation details.
 
 ## Contributing
 

@@ -1,12 +1,12 @@
 # ADR-001: EKS Over Self-Managed Kubernetes
 
-**Status:** Superseded by [ADR-004: Hybrid Home Lab + AWS Architecture](004-hybrid-home-lab-aws-architecture.md)  
+**Status:** Superseded by [ADR-004: Hybrid Sandbox + AWS Architecture](004-hybrid-sandbox-aws-architecture.md)  
 **Date:** 2024-12-31  
 **Superseded Date:** 2024-12-31  
 **Author:** Xavier Lopez  
 **Tags:** infrastructure, aws, eks, kubernetes, *superseded*
 
-**Note:** This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (home lab k3s + AWS on-demand). See [ADR-004](004-hybrid-home-lab-aws-architecture.md) for the current architecture rationale.
+**Note:** This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s + AWS on-demand). See [ADR-004](004-hybrid-sandbox-aws-architecture.md) for the current architecture rationale.
 
 ## Context
 
@@ -66,8 +66,8 @@ The cluster will be configured with:
 
 **Why not chosen:** The operational burden and reduced career relevance outweigh the cost savings. Time is better spent on platform-level capabilities than cluster operations.
 
-### Option 2: Self-Managed k3s at Home Lab
-**Description:** Run k3s on home hardware (QEMU/libvirt), expose via Cloudflare Tunnel
+### Option 2: Self-Managed k3s in Sandbox
+**Description:** Run k3s on sandbox hardware (QEMU/libvirt), expose via Cloudflare Tunnel
 
 **Pros:**
 - Zero AWS compute costs
