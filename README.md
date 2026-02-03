@@ -141,10 +141,10 @@ This site pulls documentation from other repositories via Hugo Modules.
 Prerequisites for local builds:
 - Git access to all module repos (SSH keys or HTTPS token).
 - `GOPRIVATE` / `GONOSUMDB` set for private modules, for example:
-  - `GOPRIVATE=github.com/eckslopez/*,repo1.dso.mil/*`
-  - `GONOSUMDB=github.com/eckslopez/*,repo1.dso.mil/*`
+  - `GOPRIVATE=github.com/eckslopez/*,gitlab.com/platformystical/*`
+  - `GONOSUMDB=github.com/eckslopez/*,gitlab.com/platformystical/*`
 
-CI must also provide credentials to fetch private repos and `repo1.dso.mil`.
+CI must also provide credentials to fetch private repos when applicable.
 
 ---
 
