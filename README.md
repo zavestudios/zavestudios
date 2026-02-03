@@ -134,6 +134,18 @@ See [tenant onboarding guide](link) for details. (TODO)
 - [Cost Analysis](link to kpi cost docs)
 - [Blog Posts](https://xavierlopez.me) - Technical writing about platform decisions
 
+### Hugo Modules (External Docs)
+
+This site pulls documentation from other repositories via Hugo Modules.
+
+Prerequisites for local builds:
+- Git access to all module repos (SSH keys or HTTPS token).
+- `GOPRIVATE` / `GONOSUMDB` set for private modules, for example:
+  - `GOPRIVATE=github.com/eckslopez/*,repo1.dso.mil/*`
+  - `GONOSUMDB=github.com/eckslopez/*,repo1.dso.mil/*`
+
+CI must also provide credentials to fetch private repos and `repo1.dso.mil`.
+
 ---
 
 **Maintainer:** Xavier Lopez  
