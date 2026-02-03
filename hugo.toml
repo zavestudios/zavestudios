@@ -44,7 +44,7 @@ theme = "hugo-theme-relearn"
       source = "docs"
       target = "content/infra/kubernetes-platform-infrastructure"
   [[module.imports]]
-    path = "repo1.dso.mil/big-bang/bigbang"
+    path = "gitlab.com/platformystical/bigbang"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/infra/bigbang"
