@@ -6,3 +6,45 @@ theme = "hugo-theme-relearn"
 
 [params]
   themeVariant = "auto"
+
+[module]
+  [[module.imports]]
+    path = "github.com/eckslopez/panchito"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/tenants/panchito"
+  [[module.imports]]
+    path = "github.com/eckslopez/rigoberta"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/tenants/rigoberta"
+  [[module.imports]]
+    path = "github.com/eckslopez/thehouseguy"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/tenants/thehouseguy"
+  [[module.imports]]
+    path = "github.com/eckslopez/xavierlopez.me"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/tenants/xavierlopez.me"
+  [[module.imports]]
+    path = "github.com/eckslopez/platform-pipelines"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/ci-cd/platform-pipelines"
+  [[module.imports]]
+    path = "github.com/eckslopez/pg"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/experiments/pg"
+  [[module.imports]]
+    path = "github.com/eckslopez/kubernetes-platform-infrastructure"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/infra/kubernetes-platform-infrastructure"
+  [[module.imports]]
+    path = "repo1.dso.mil/big-bang/bigbang"
+    [[module.imports.mounts]]
+      source = "docs"
+      target = "content/infra/bigbang"
