@@ -16,3 +16,5 @@ github.com/eckslopez/xavierlopez.me v0.0.0-20260203200106-0fe94f79921d h1:HnzjjC
 github.com/eckslopez/xavierlopez.me v0.0.0-20260203200106-0fe94f79921d/go.mod h1:cZVzYU0rqVhcAdHFbsrVnlVSi1dX3ZPmNLlyEQw4vUE=
 gitlab.com/platformystical/bigbang v0.0.0-20260119213059-5453000d6acb h1:CPZsO0EtE22sdYaFA5eu0VuuuexKtUoXBinq/KU0vr4=
 gitlab.com/platformystical/bigbang v0.0.0-20260119213059-5453000d6acb/go.mod h1:wwh6BtHWSIqxMBItydt3oyvcw9hKD3ClJSsI881XO5E=
+gitlab.com/platformystical/bigbang v0.0.0-20260203203938-31490543f6ea h1:i1LAbn5f4U58qV4qjHYBq0kzUN2WVDkNBudgROq6Klc=
+gitlab.com/platformystical/bigbang v0.0.0-20260203203938-31490543f6ea/go.mod h1:JpQA6MpKBEJqaWORM6xA2iOOv+KpUm3FbdpU6i8MPBs=

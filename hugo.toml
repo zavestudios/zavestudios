@@ -6,9 +6,8 @@ theme = "hugo-theme-relearn"
 
 [params]
   themeVariant = "auto"
-
-[params.logo]
-  src = "images/logo.png"
+  [params.logo]
+    src = "static/images/logo.png"
 
 [module]
   [[module.imports]]
