@@ -1,0 +1,8 @@
+baseURL = "https://zavestudios.com/"
+languageCode = "en-us"
+title = "ZaveStudios"
+contentDir = "docs"
+theme = "hugo-theme-relearn"
+
+[params]
+  themeVariant = "auto"

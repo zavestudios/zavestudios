@@ -28,6 +28,9 @@ secrets/
 dist/
 build/
 *.log
+public/
+resources/
+.hugo_build.lock
 
 # Internal operating doctrine (not for public consumption)
 README.internal.md

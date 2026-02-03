@@ -1,4 +1,7 @@
-# Blog Post Ideas & Content Pipeline
+---
+title: "Blog Post Ideas"
+weight: 20
+---
 
 **Purpose:** Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.
 

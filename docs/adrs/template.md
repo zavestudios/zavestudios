@@ -1,4 +1,7 @@
-# ADR-XXX: [Short Title]
+---
+title: "ADR Template"
+weight: 30
+---
 
 **Status:** [Proposed | Accepted | Deprecated | Superseded]  
 **Date:** YYYY-MM-DD  
