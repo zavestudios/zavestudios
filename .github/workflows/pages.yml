@@ -32,6 +32,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build
         env:
+          GOPRIVATE: github.com/eckslopez/*,repo1.dso.mil/*
+          GONOSUMDB: github.com/eckslopez/*,repo1.dso.mil/*
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}"
