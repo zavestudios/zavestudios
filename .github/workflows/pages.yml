@@ -15,40 +15,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: "latest"
-          extended: true
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-      - name: Build
-        env:
-          GOPRIVATE: github.com/eckslopez/*,repo1.dso.mil/*
-          GONOSUMDB: github.com/eckslopez/*,repo1.dso.mil/*
-          HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
-        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}"
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+    name: Deploy Hugo Site
+    uses: eckslopez/platform-pipelines/.github/workflows/hugo-deploy.yml@main
+    with:
+      goprivate: github.com/eckslopez/*,gitlab.com/platformystical/*
+      gonosumdb: github.com/eckslopez/*,gitlab.com/platformystical/*
