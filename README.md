@@ -15,9 +15,9 @@ runs on spare capacity with AWS deployment capability.
 ## Architecture Layers
 
 ### Infrastructure Layer
-- **[kubernetes-platform-infrastructure](link)**: 3-node k3s cluster, automated deployment
-- **[pg-multitenant](link)**: PostgreSQL multi-tenant data layer with security isolation
-- **[platform-pipelines](link)**: Reusable CI/CD workflows
+- **[kubernetes-platform-infrastructure](https://github.com/eckslopez/kubernetes-platform-infrastructure)**: 3-node k3s cluster, automated deployment
+- **[pg-multitenant](https://github.com/eckslopez/pg)**: PostgreSQL multi-tenant data layer with security isolation
+- **[platform-pipelines](https://github.com/eckslopez/platform-pipelines)**: Reusable CI/CD workflows
 
 ### Platform Services Layer
 - **GitOps**: Flux (platform services) + ArgoCD (applications)
@@ -31,10 +31,10 @@ and database tenants:
 
 | Application | Technology | Database Tenant | Purpose |
 |-------------|------------|-----------------|---------|
-| [xavierlopez.me](link) | Jekyll (static) | N/A | Portfolio and technical blog |
-| [panchito](link) | Python/Flask/Celery | db_panchito | Real estate data ETL service |
-| [thehouseguy](link) | Ruby on Rails | db_thehouseguy | Real estate listing application |
-| [rigoberta](link) | Ruby on Rails | db_rigoberta | Reference Rails template |
+| [xavierlopez.me](https://xavierlopez.me) | Jekyll (static) | N/A | Portfolio and technical blog |
+| [panchito](https://github.com/eckslopez/panchito) | Python/Flask/Celery | db_panchito | Real estate data ETL service |
+| [thehouseguy](https://github.com/eckslopez/thehouseguy) | Ruby on Rails | db_thehouseguy | Real estate listing application |
+| [rigoberta](https://github.com/eckslopez/rigoberta) | Ruby on Rails | db_rigoberta | Reference Rails template |
 
 Each tenant application:
 - Deploys to isolated Kubernetes namespace
@@ -60,14 +60,14 @@ PostgreSQL Instance (pg-multitenant)
 └── db_rigoberta (reference data)
 ```
 
-See [pg-multitenant documentation](link) for security model details.
+See [pg-multitenant documentation](https://github.com/pg/docs) for security model details.
 
 ## Cost Model
 
 **Sandbox Environment (Primary):**
 - Infrastructure: $0/month (runs on spare capacity)
 - Serves all tenant applications continuously
-- See [kpi cost analysis](link) for details
+- See [kpi cost analysis](https://) for details
 
 **AWS On-Demand (Demonstrations):**
 - Deploy: ~20 minutes to operational platform
@@ -79,15 +79,15 @@ See [pg-multitenant documentation](link) for security model details.
 ## Repository Organization
 
 ### Infrastructure & Platform
-- [kubernetes-platform-infrastructure](link) - k3s cluster, deployment automation
-- [pg-multitenant](link) - Multi-tenant PostgreSQL with security isolation
-- [platform-pipelines](link) - Reusable CI/CD workflows for all projects
+- [kubernetes-platform-infrastructure](https://github.com/eckslopez/kubernetes-platform-infrastructure) - k3s cluster, deployment automation
+- [pg-multitenant](https://github.com/eckslopez/pg) - Multi-tenant PostgreSQL with security isolation
+- [platform-pipelines](https://github.com/eckslopez/platform-pipelines) - Reusable CI/CD workflows for all projects
 
 ### Tenant Applications  
-- [xavierlopez.me](link) - Portfolio and blog site (Jekyll)
-- [panchito](link) - Real estate ETL service (Python/Flask/Celery)
-- [thehouseguy](link) - Real estate application (Rails)
-- [rigoberta](link) - Rails reference template
+- [xavierlopez.me](xavierlopez.me) - Portfolio and blog site (Jekyll)
+- [panchito](https://github.com/eckslopez/panchito) - Real estate ETL service (Python/Flask/Celery)
+- [thehouseguy](https://github.com/eckslopez/thehouseguy) - Real estate application (Rails)
+- [rigoberta](https://github.com/eckslopez/rigoberta) - Rails reference template
 
 ## Current Status
 
@@ -110,7 +110,7 @@ See [pg-multitenant documentation](link) for security model details.
 ## Key Design Decisions
 
 Platform-level architecture decisions are documented here. 
-Infrastructure-specific decisions are in [kpi/docs/adrs](link).
+Infrastructure-specific decisions are in [kpi/docs/adrs](https://github.com/eckslopez/kubernetes-platform-infrastructure/docs/adrs).
 
 - Multi-tenancy model: Namespace + database isolation
 - GitOps separation: Flux (platform) + ArgoCD (apps)
