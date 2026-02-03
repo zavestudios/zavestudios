@@ -21,17 +21,24 @@ terraform.tfvars
 *.pem
 *.key
 secrets/
-.env
-.env.*
 
 # Build artifacts
 dist/
 build/
 *.log
-public/
-resources/
-.hugo_build.lock
+
+# Hugo output
+/public/
+/resources/_gen/
 hugo_stats.json
+
+# Hugo build cache
+/.hugo_build.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
 
 # Internal operating doctrine (not for public consumption)
 README.internal.md
