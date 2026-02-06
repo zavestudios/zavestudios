@@ -17,7 +17,7 @@ concurrency:
 jobs:
   deploy:
     name: Deploy Hugo Site
-    uses: eckslopez/platform-pipelines/.github/workflows/hugo-deploy.yml@main
+    uses: zavestudios/platform-pipelines/.github/workflows/hugo-deploy.yml@main
     with:
-      goprivate: github.com/eckslopez/*,gitlab.com/platformystical/*
-      gonosumdb: github.com/eckslopez/*,gitlab.com/platformystical/*
+      goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
+      gonosumdb: github.com/zavestudios/*,gitlab.com/platformystical/*

@@ -13,37 +13,37 @@ theme = "hugo-theme-relearn"
   [[module.imports]]
     path = "github.com/McShelby/hugo-theme-relearn"
   [[module.imports]]
-    path = "github.com/eckslopez/panchito"
+    path = "github.com/zavestudios/panchito"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/tenants/panchito"
   [[module.imports]]
-    path = "github.com/eckslopez/rigoberta"
+    path = "github.com/zavestudios/rigoberta"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/tenants/rigoberta"
   [[module.imports]]
-    path = "github.com/eckslopez/thehouseguy"
+    path = "github.com/zavestudios/thehouseguy"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/tenants/thehouseguy"
   [[module.imports]]
-    path = "github.com/eckslopez/xavierlopez.me"
+    path = "github.com/zavestudios/xavierlopez.me"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/tenants/xavierlopez.me"
   [[module.imports]]
-    path = "github.com/eckslopez/platform-pipelines"
+    path = "github.com/zavestudios/platform-pipelines"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/ci-cd/platform-pipelines"
   [[module.imports]]
-    path = "github.com/eckslopez/pg"
+    path = "github.com/zavestudios/pg"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/experiments/pg"
   [[module.imports]]
-    path = "github.com/eckslopez/kubernetes-platform-infrastructure"
+    path = "github.com/zavestudios/kubernetes-platform-infrastructure"
     [[module.imports.mounts]]
       source = "docs"
       target = "content/infra/kubernetes-platform-infrastructure"
