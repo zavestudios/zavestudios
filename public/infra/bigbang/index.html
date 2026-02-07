@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3+dd4f8457f5143e91eae3954813494d2b0cc6741c">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Big Bang Big Bang is a declarative, continuous delivery tool for Kubernetes that enables secure, compliant, and repeatable deployments of cloud-native applications. Built on GitOps principles and designed for enterprise and government environments, Big Bang provides a comprehensive platform for deploying and managing modern applications at scale.
+What is Big Bang? Big Bang is an umbrella Helm chart that packages together a collection of open-source and commercial software tools into a cohesive platform. It leverages Flux CD for GitOps-based deployments and provides:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Big Bang Big Bang is a declarative, continuous delivery tool for Kubernetes that enables secure, compliant, and repeatable deployments of cloud-native applications. Built on GitOps principles and designed for enterprise and government environments, Big Bang provides a comprehensive platform for deploying and managing modern applications at scale.
+What is Big Bang? Big Bang is an umbrella Helm chart that packages together a collection of open-source and commercial software tools into a cohesive platform. It leverages Flux CD for GitOps-based deployments and provides:">
+    <meta property="og:url" content="http://localhost:1313/infra/bigbang/index.html">
+    <meta property="og:site_name" content="ZaveStudios">
+    <meta property="og:description" content="Big Bang Big Bang is a declarative, continuous delivery tool for Kubernetes that enables secure, compliant, and repeatable deployments of cloud-native applications. Built on GitOps principles and designed for enterprise and government environments, Big Bang provides a comprehensive platform for deploying and managing modern applications at scale.
+What is Big Bang? Big Bang is an umbrella Helm chart that packages together a collection of open-source and commercial software tools into a cohesive platform. It leverages Flux CD for GitOps-based deployments and provides:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Infrastructure">
+    <meta itemprop="description" content="Big Bang Big Bang is a declarative, continuous delivery tool for Kubernetes that enables secure, compliant, and repeatable deployments of cloud-native applications. Built on GitOps principles and designed for enterprise and government environments, Big Bang provides a comprehensive platform for deploying and managing modern applications at scale.
+What is Big Bang? Big Bang is an umbrella Helm chart that packages together a collection of open-source and commercial software tools into a cohesive platform. It leverages Flux CD for GitOps-based deployments and provides:">
+    <meta itemprop="wordCount" content="697">
+    <title></title>
+    <link href="/images/logo.png?1770157528" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1770157528" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1770157528" defer></script>
+    <script src="/js/search-lunr.js?1770157528" defer></script>
+    <script src="/js/search.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1770157528";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1770157528" rel="stylesheet">
+    <link href="/css/theme.css?1770157528" rel="stylesheet">
+    <link href="/css/format-html.css?1770157528" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/infra\/bigbang\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/infra/bigbang/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#what-is-big-bang">What is Big Bang?</a></li>
+    <li><a href="#why-big-bang">Why Big Bang?</a>
+      <ul>
+        <li><a href="#for-platform-teams">For Platform Teams</a></li>
+        <li><a href="#for-development-teams">For Development Teams</a></li>
+        <li><a href="#for-organizations">For Organizations</a></li>
+      </ul>
+    </li>
+    <li><a href="#core-capabilities">Core Capabilities</a>
+      <ul>
+        <li><a href="#security-and-compliance">Security and Compliance</a></li>
+        <li><a href="#observability">Observability</a></li>
+        <li><a href="#developer-tools">Developer Tools</a></li>
+      </ul>
+    </li>
+    <li><a href="#documentation-structure">Documentation Structure</a>
+      <ul>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#core-concepts">Core Concepts</a></li>
+        <li><a href="#installation-and-configuration">Installation and Configuration</a></li>
+        <li><a href="#operations">Operations</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#community-and-development">Community and Development</a></li>
+        <li><a href="#reference">Reference</a></li>
+      </ul>
+    </li>
+    <li><a href="#quick-start">Quick Start</a></li>
+    <li><a href="#support-and-community">Support and Community</a>
+      <ul>
+        <li><a href="#getting-help">Getting Help</a></li>
+        <li><a href="#contributing">Contributing</a></li>
+        <li><a href="#learning-resources">Learning Resources</a></li>
+      </ul>
+    </li>
+    <li><a href="#whats-next">What&rsquo;s Next?</a>
+      <ul>
+        <li><a href="#new-users">New Users</a></li>
+        <li><a href="#existing-users">Existing Users</a></li>
+        <li><a href="#platform-teams">Platform Teams</a></li>
+        <li><a href="#developers">Developers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">ZaveStudios</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/infra/index.html"><span itemprop="name">Infrastructure</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/infra/index.html" title="Infrastructure (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/tenants/index.html" title="Tenants (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable infra" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="big-bang">Big Bang<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Big Bang is a declarative, continuous delivery tool for Kubernetes that enables secure, compliant, and repeatable deployments of cloud-native applications. Built on GitOps principles and designed for enterprise and government environments, Big Bang provides a comprehensive platform for deploying and managing modern applications at scale.</p>
+<h2 id="what-is-big-bang">What is Big Bang?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Big Bang is an umbrella Helm chart that packages together a collection of open-source and commercial software tools into a cohesive platform. It leverages Flux CD for GitOps-based deployments and provides:</p>
+<ul>
+<li><strong>Zero Trust Security</strong>: Built-in security controls with defense-in-depth architecture</li>
+<li><strong>Compliance by Design</strong>: Implementation of the DoD DevSecOps Reference Architecture and industry standards</li>
+<li><strong>Observability Stack</strong>: Comprehensive monitoring, logging, and tracing capabilities</li>
+<li><strong>Service Mesh</strong>: Istio-based secure service-to-service communication</li>
+<li><strong>Developer Experience</strong>: Integrated CI/CD pipelines and development tools</li>
+</ul>
+<h2 id="why-big-bang">Why Big Bang?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="for-platform-teams">For Platform Teams<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Rapid Platform Setup</strong>: Deploy a production-ready Kubernetes platform in hours, not months</li>
+<li><strong>Security by Default</strong>: Built-in security controls and compliance frameworks</li>
+<li><strong>Operational Excellence</strong>: Integrated monitoring, alerting, and lifecycle management</li>
+<li><strong>Standardization</strong>: Consistent platform across environments and teams</li>
+</ul>
+<h3 id="for-development-teams">For Development Teams<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Focus on Applications</strong>: Platform capabilities provided out-of-the-box</li>
+<li><strong>Modern Toolchain</strong>: Access to industry-leading development and deployment tools</li>
+<li><strong>Secure by Design</strong>: Security controls integrated into the development workflow</li>
+<li><strong>Self-Service</strong>: GitOps-driven deployments with minimal operational overhead</li>
+</ul>
+<h3 id="for-organizations">For Organizations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Compliance</strong>: Built-in support for NIST, FedRAMP, and DoD security standards</li>
+<li><strong>Cost Efficiency</strong>: Reduced time-to-market and operational overhead</li>
+<li><strong>Risk Reduction</strong>: Proven, tested platform components</li>
+<li><strong>Vendor Independence</strong>: Open-source foundation with commercial support options</li>
+</ul>
+<h2 id="core-capabilities">Core Capabilities<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="security-and-compliance">Security and Compliance<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Istio service mesh with mutual TLS</li>
+<li>Kyverno policy engine for admission control</li>
+<li>Runtime security with vulnerability scanning</li>
+<li>Supply chain security with image signing</li>
+</ul>
+<h3 id="observability">Observability<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Prometheus and Grafana for metrics and dashboards</li>
+<li>Elasticsearch and Kibana for log aggregation and analysis</li>
+<li>Tempo for distributed tracing</li>
+<li>Alertmanager for notification management</li>
+</ul>
+<h3 id="developer-tools">Developer Tools<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>GitLab for source code management and CI/CD</li>
+<li>ArgoCD for application deployment and management</li>
+<li>Nexus for artifact and dependency management</li>
+<li>SonarQube for code quality and security analysis</li>
+</ul>
+<h2 id="documentation-structure">Documentation Structure<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="getting-started">Getting Started<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Start here if you&rsquo;re new to Big Bang:</p>
+<ul>
+<li><strong><a>Overview</a></strong>: Introduction to Big Bang concepts</li>
+<li><strong><a>Prerequisites</a></strong>: Cluster and environment requirements</li>
+<li><strong><a>Quick Start</a></strong>: Deploy Big Bang in minutes</li>
+<li><strong><a>First Deployment</a></strong>: Detailed deployment walkthrough</li>
+<li><strong><a>FAQ</a></strong>: Common questions and answers</li>
+</ul>
+<h3 id="core-concepts">Core Concepts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Understand Big Bang&rsquo;s architecture and design:</p>
+<ul>
+<li><strong><a>Architecture</a></strong>: System design and component relationships</li>
+<li><strong><a>Security Model</a></strong>: Zero trust security implementation</li>
+<li><strong><a>GitOps Workflow</a></strong>: Deployment and management patterns</li>
+<li><strong><a>Package Management</a></strong>: Managing Big Bang components</li>
+</ul>
+<h3 id="installation-and-configuration">Installation and Configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Deploy and customize Big Bang:</p>
+<ul>
+<li><strong><a href="installation/">Installation</a></strong>: Environment-specific deployment guides</li>
+<li><strong><a href="configuration/">Configuration</a></strong>: Customization options and best practices</li>
+<li><strong><a href="migration/">Migration</a></strong>: Upgrade and migration procedures</li>
+</ul>
+<h3 id="operations">Operations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Day-to-day management and maintenance:</p>
+<ul>
+<li><strong><a href="operations/">Operations</a></strong>: Monitoring, backup, and maintenance procedures</li>
+<li><strong><a href="operations/troubleshooting/">Troubleshooting</a></strong>: Diagnose and resolve common issues</li>
+<li><strong><a>Upgrades</a></strong>: Version management and upgrade procedures</li>
+</ul>
+<h3 id="packages">Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Understand and configure Big Bang components:</p>
+<ul>
+<li><strong><a href="packages/">Package Index</a></strong>: Complete list of available packages</li>
+<li><strong><a href="packages/core/">Core Packages</a></strong>: Essential infrastructure components</li>
+<li><strong><a href="packages/addons/">Add-on Packages</a></strong>: Optional application packages</li>
+</ul>
+<h3 id="community-and-development">Community and Development<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Contribute to and extend Big Bang:</p>
+<ul>
+<li><strong><a href="community/">Community</a></strong>: Get involved with the Big Bang community</li>
+<li><strong><a href="community/development/">Development</a></strong>: Contribute code and documentation</li>
+<li><strong><a href="community/adrs/">Architecture Decision Records</a></strong>: Design decisions and rationale</li>
+</ul>
+<h3 id="reference">Reference<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Technical reference materials:</p>
+<ul>
+<li><strong><a href="tutorials/">Tutorials</a></strong>: Step-by-step guides for common tasks</li>
+<li><strong><a href="reference/">Reference</a></strong>: Configuration examples and technical specifications</li>
+</ul>
+<h2 id="quick-start">Quick Start<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For detailed instructions, see the <a>Quick Start Guide</a>.</p>
+<h2 id="support-and-community">Support and Community<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="getting-help">Getting Help<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Documentation</strong>: Start with the guides in this documentation</li>
+<li><strong>Community Support</strong>: <a href="../README.md#community">Engage with the community</a></li>
+<li><strong>Issues</strong>: Report bugs and request features on <a href="https://repo1.dso.mil/big-bang/bigbang/-/issues" rel="external">Repo1</a></li>
+</ul>
+<h3 id="contributing">Contributing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Big Bang is an open-source project welcoming contributions:</p>
+<ul>
+<li><strong>Code Contributions</strong>: Submit merge requests for bug fixes and features</li>
+<li><strong>Documentation</strong>: Help improve and expand the documentation</li>
+<li><strong>Community Support</strong>: Help other users in community forums</li>
+</ul>
+<h3 id="learning-resources">Learning Resources<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong><a href="community/adrs/">Architecture Decision Records</a></strong>: Understand design decisions</li>
+<li><strong><a href="community/development/">Development Guide</a></strong>: Learn how Big Bang works internally</li>
+<li><strong><a href="tutorials/">Tutorials</a></strong>: Hands-on guides for specific use cases</li>
+</ul>
+<h2 id="whats-next">What&rsquo;s Next?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="new-users">New Users<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Start with <a>Getting Started Overview</a></li>
+<li>Review <a>Prerequisites</a></li>
+<li>Follow the <a>Quick Start Guide</a></li>
+<li>Explore <a href="concepts/">Core Concepts</a></li>
+</ol>
+<h3 id="existing-users">Existing Users<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Check <a href="operations/">Operations</a> for maintenance procedures</li>
+<li>Review <a href="operations/troubleshooting/">Troubleshooting</a> for issue resolution</li>
+<li>Plan <a>Upgrades</a> for new versions</li>
+<li>Explore <a href="configuration/">Advanced Configuration</a> options</li>
+</ol>
+<h3 id="platform-teams">Platform Teams<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Understand <a>Architecture</a> and <a>Security Model</a></li>
+<li>Plan <a href="installation/">Installation</a> for your environment</li>
+<li>Establish <a href="operations/">Operations</a> procedures</li>
+<li>Configure <a>Monitoring</a> and alerting</li>
+</ol>
+<h3 id="developers">Developers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Learn <a>GitOps Workflow</a> patterns</li>
+<li>Explore <a>Package Management</a></li>
+<li>Review available <a href="packages/addons/">Add-on Packages</a></li>
+<li>Follow <a href="community/development/">Development Guidelines</a></li>
+</ol>
+<hr>
+<p><strong>Ready to get started?</strong> Begin with the <a>Getting Started Overview</a> or jump straight to the <a>Quick Start Guide</a> to deploy Big Bang in your environment.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <a id="R-logo" class="R-default direction-row" href="/index.html">
+          <span class="logo-title default-animation">ZaveStudios</span>
+        </a>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/adrs/index.html"><a class="padding default-animation" href="/adrs/index.html">Architecture Decision Records</a><ul id="R-subsections-dbdc3721419d814fe87aa505dc6cf5c9" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/ci-cd/index.html"><a class="padding default-animation" href="/ci-cd/index.html">CI/CD</a><ul id="R-subsections-23feba4145c0fd739cb117965ba11416" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/experiments/index.html"><a class="padding" href="/experiments/index.html">Experiments</a></li>
+            <li class="parent " data-nav-id="/infra/index.html"><a class="padding default-animation" href="/infra/index.html">Infrastructure</a><ul id="R-subsections-99503759600e574ce56874d8fb7763e8" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/infra/bigbang/index.html"><a class="padding" href="/infra/bigbang/index.html"></a></li></ul></li>
+            <li class="" data-nav-id="/tenants/index.html"><a class="padding default-animation" href="/tenants/index.html">Tenants</a><ul id="R-subsections-c9e772ccc978a183b81aaafd0378f4ea" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1770157528" defer></script>
+    <script src="/js/theme.js?1770157528" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

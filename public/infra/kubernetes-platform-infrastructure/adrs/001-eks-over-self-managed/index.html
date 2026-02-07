@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3+dd4f8457f5143e91eae3954813494d2b0cc6741c">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="ADR-001: EKS Over Self-Managed Kubernetes Status: Superseded by ADR-004: Hybrid Sandbox &#43; AWS Architecture
+Date: 2024-12-31
+Superseded Date: 2024-12-31
+Author: Xavier Lopez
+Tags: infrastructure, aws, eks, kubernetes, superseded
+Note: This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s &#43; AWS on-demand). See ADR-004 for the current architecture rationale.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="ADR-001: EKS Over Self-Managed Kubernetes Status: Superseded by ADR-004: Hybrid Sandbox &#43; AWS Architecture
+Date: 2024-12-31
+Superseded Date: 2024-12-31
+Author: Xavier Lopez
+Tags: infrastructure, aws, eks, kubernetes, superseded
+Note: This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s &#43; AWS on-demand). See ADR-004 for the current architecture rationale.">
+    <meta property="og:url" content="http://localhost:1313/infra/kubernetes-platform-infrastructure/adrs/001-eks-over-self-managed/index.html">
+    <meta property="og:site_name" content="ZaveStudios">
+    <meta property="og:description" content="ADR-001: EKS Over Self-Managed Kubernetes Status: Superseded by ADR-004: Hybrid Sandbox &#43; AWS Architecture
+Date: 2024-12-31
+Superseded Date: 2024-12-31
+Author: Xavier Lopez
+Tags: infrastructure, aws, eks, kubernetes, superseded
+Note: This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s &#43; AWS on-demand). See ADR-004 for the current architecture rationale.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Infrastructure">
+    <meta itemprop="description" content="ADR-001: EKS Over Self-Managed Kubernetes Status: Superseded by ADR-004: Hybrid Sandbox &#43; AWS Architecture
+Date: 2024-12-31
+Superseded Date: 2024-12-31
+Author: Xavier Lopez
+Tags: infrastructure, aws, eks, kubernetes, superseded
+Note: This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s &#43; AWS on-demand). See ADR-004 for the current architecture rationale.">
+    <meta itemprop="wordCount" content="802">
+    <title></title>
+    <link href="/images/logo.png?1770157528" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1770157528" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1770157528" defer></script>
+    <script src="/js/search-lunr.js?1770157528" defer></script>
+    <script src="/js/search.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1770157528";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1770157528" rel="stylesheet">
+    <link href="/css/theme.css?1770157528" rel="stylesheet">
+    <link href="/css/format-html.css?1770157528" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/infra\/kubernetes-platform-infrastructure\/adrs\/001-eks-over-self-managed\/index.html';
+      window.relearn.relBasePath='..\/..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/infra/kubernetes-platform-infrastructure/adrs/001-eks-over-self-managed/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#context">Context</a></li>
+    <li><a href="#decision">Decision</a></li>
+    <li><a href="#rationale">Rationale</a>
+      <ul>
+        <li><a href="#pros">Pros</a></li>
+        <li><a href="#cons">Cons</a></li>
+      </ul>
+    </li>
+    <li><a href="#alternatives-considered">Alternatives Considered</a>
+      <ul>
+        <li><a href="#option-1-self-managed-k3s-on-ec2">Option 1: Self-Managed k3s on EC2</a></li>
+        <li><a href="#option-2-self-managed-k3s-in-sandbox">Option 2: Self-Managed k3s in Sandbox</a></li>
+        <li><a href="#option-3-other-managed-kubernetes-gke-aks">Option 3: Other Managed Kubernetes (GKE, AKS)</a></li>
+      </ul>
+    </li>
+    <li><a href="#consequences">Consequences</a>
+      <ul>
+        <li><a href="#positive">Positive</a></li>
+        <li><a href="#negative">Negative</a></li>
+        <li><a href="#neutral">Neutral</a></li>
+      </ul>
+    </li>
+    <li><a href="#implementation">Implementation</a>
+      <ul>
+        <li><a href="#steps">Steps</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#success-criteria">Success Criteria</a></li>
+      </ul>
+    </li>
+    <li><a href="#related-decisions">Related Decisions</a></li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#revision-history">Revision History</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">ZaveStudios</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/infra/index.html"><span itemprop="name">Infrastructure</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/infra/index.html" title="Infrastructure (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/tenants/index.html" title="Tenants (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable infra" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="adr-001-eks-over-self-managed-kubernetes">ADR-001: EKS Over Self-Managed Kubernetes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p><strong>Status:</strong> Superseded by <a href="/infra/kubernetes-platform-infrastructure/adrs/004-hybrid-sandbox-aws-architecture/index.html">ADR-004: Hybrid Sandbox + AWS Architecture</a><br>
+<strong>Date:</strong> 2024-12-31<br>
+<strong>Superseded Date:</strong> 2024-12-31<br>
+<strong>Author:</strong> Xavier Lopez<br>
+<strong>Tags:</strong> infrastructure, aws, eks, kubernetes, <em>superseded</em></p>
+<p><strong>Note:</strong> This ADR documents the original AWS-only architecture decision. The project has since pivoted to a hybrid approach (sandbox k3s + AWS on-demand). See <a href="/infra/kubernetes-platform-infrastructure/adrs/004-hybrid-sandbox-aws-architecture/index.html">ADR-004</a> for the current architecture rationale.</p>
+<h2 id="context">Context<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>ZaveStudios requires a Kubernetes cluster to run the Big Bang platform and application workloads. The choice of Kubernetes distribution affects:</p>
+<ul>
+<li>Operational complexity and maintenance burden</li>
+<li>Monthly infrastructure costs</li>
+<li>Demonstration of AWS-native architecture skills</li>
+<li>Control plane reliability and availability</li>
+<li>Portfolio appeal to interested observers</li>
+</ul>
+<p>The platform targets a $150-200/month AWS budget while showcasing production-grade architecture patterns.</p>
+<h2 id="decision">Decision<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>We will use <strong>AWS Elastic Kubernetes Service (EKS)</strong> as the Kubernetes distribution for ZaveStudios.</p>
+<p>The cluster will be configured with:</p>
+<ul>
+<li>Control plane managed by AWS</li>
+<li>Worker nodes on EC2 spot instances (t3a.medium)</li>
+<li>Karpenter for autoscaling</li>
+<li>Single availability zone deployment (us-east-1a)</li>
+<li>Standard AWS networking (VPC CNI, AWS Load Balancer Controller)</li>
+</ul>
+<h2 id="rationale">Rationale<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="pros">Pros<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Industry alignment:</strong> EKS is the standard Kubernetes offering for AWS environments, demonstrating relevant enterprise skills</li>
+<li><strong>Reduced operational burden:</strong> Managed control plane eliminates etcd management, control plane upgrades, and HA concerns</li>
+<li><strong>AWS integration:</strong> Native integration with IAM, CloudWatch, ECR, and other AWS services</li>
+<li><strong>Career relevance:</strong> Most enterprise AWS environments use EKS, making this experience directly transferable</li>
+<li><strong>Reliability:</strong> AWS SLA covers control plane availability</li>
+<li><strong>Security:</strong> Automatic security patches for control plane</li>
+</ul>
+<h3 id="cons">Cons<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Cost:</strong> EKS control plane costs ~$73/month (unavoidable baseline)</li>
+<li><strong>Less control:</strong> Cannot modify control plane configuration or access etcd directly</li>
+<li><strong>AWS lock-in:</strong> Tied to AWS-specific Kubernetes distribution</li>
+<li><strong>Overkill for demo:</strong> Managed control plane may be excessive for a portfolio project</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="option-1-self-managed-k3s-on-ec2">Option 1: Self-Managed k3s on EC2<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Description:</strong> Deploy Rancher k3s on a single EC2 instance, managing the entire Kubernetes stack ourselves</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Significant cost savings (~$30/month vs. $100+/month)</li>
+<li>Full control over all Kubernetes components</li>
+<li>Lightweight footprint suitable for smaller workloads</li>
+<li>Demonstrates deep Kubernetes operational knowledge</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>High operational burden (etcd backups, control plane upgrades, HA concerns)</li>
+<li>Less relevant to enterprise environments (most companies use managed Kubernetes)</li>
+<li>Single point of failure without HA setup</li>
+<li>Time spent on cluster operations vs. platform engineering showcase</li>
+<li>Requires expertise in lower-level Kubernetes administration</li>
+</ul>
+<p><strong>Why not chosen:</strong> The operational burden and reduced career relevance outweigh the cost savings. Time is better spent on platform-level capabilities than cluster operations.</p>
+<h3 id="option-2-self-managed-k3s-in-sandbox">Option 2: Self-Managed k3s in Sandbox<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Description:</strong> Run k3s on sandbox hardware (QEMU/libvirt), expose via Cloudflare Tunnel</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Zero AWS compute costs</li>
+<li>Full control over infrastructure</li>
+<li>Learning opportunity for bare-metal Kubernetes</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Does not demonstrate AWS architecture skills (critical for career goals)</li>
+<li>Home infrastructure reliability concerns</li>
+<li>Network exposure and security considerations</li>
+<li>Limits ability to showcase AWS-native services</li>
+<li>Less professional appearance in portfolio</li>
+</ul>
+<p><strong>Why not chosen:</strong> Fails to demonstrate AWS cloud architecture expertise, which is a primary objective of the portfolio.</p>
+<h3 id="option-3-other-managed-kubernetes-gke-aks">Option 3: Other Managed Kubernetes (GKE, AKS)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Description:</strong> Use Google Kubernetes Engine or Azure Kubernetes Service instead of EKS</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Similar managed experience to EKS</li>
+<li>Multi-cloud portfolio demonstration</li>
+<li>Some services may be cheaper than AWS</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Resume and experience heavily AWS-focused</li>
+<li>AWS Solutions Architect certification in progress</li>
+<li>Splitting cloud providers dilutes expertise demonstration</li>
+<li>Additional learning curve for unfamiliar services</li>
+</ul>
+<p><strong>Why not chosen:</strong> AWS alignment with career goals and existing expertise makes EKS the natural choice.</p>
+<h2 id="consequences">Consequences<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="positive">Positive<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Clear focus:</strong> Can concentrate on platform engineering rather than cluster operations</li>
+<li><strong>Enterprise relevance:</strong> Experience directly applicable to most job opportunities</li>
+<li><strong>Integration opportunities:</strong> Easy to showcase AWS-native services (RDS, Lambda, etc.)</li>
+<li><strong>Reliability:</strong> Managed control plane provides stable foundation for demonstrations</li>
+<li><strong>Scalability:</strong> Can easily add features requiring AWS integration</li>
+</ul>
+<h3 id="negative">Negative<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Cost baseline:</strong> $73/month EKS control plane is unavoidable, limits budget for other services</li>
+<li><strong>Reduced flexibility:</strong> Cannot experiment with alternative control plane configurations</li>
+<li><strong>Less depth:</strong> Doesn&rsquo;t showcase deep Kubernetes control plane expertise</li>
+</ul>
+<h3 id="neutral">Neutral<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Standard choice:</strong> EKS is expected for AWS environments, neither impressive nor concerning</li>
+<li><strong>Learning investment:</strong> Time saved on operations can be invested in platform capabilities</li>
+</ul>
+<h2 id="implementation">Implementation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="steps">Steps<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Create EKS cluster via Terraform in us-east-1</li>
+<li>Configure single-AZ node groups with spot instances</li>
+<li>Install Karpenter for autoscaling</li>
+<li>Set up AWS Load Balancer Controller</li>
+<li>Configure IRSA (IAM Roles for Service Accounts) for secure AWS access</li>
+<li>Document cluster configuration and costs</li>
+</ol>
+<h3 id="timeline">Timeline<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Target completion: Initial cluster deployment in Phase 1 (manual bootstrap)</li>
+<li>Dependencies: VPC and networking infrastructure must exist first</li>
+</ul>
+<h3 id="success-criteria">Success Criteria<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>EKS cluster operational and stable</li>
+<li>Spot instances successfully running workloads with &lt;5% interruption rate</li>
+<li>Control plane costs remain at ~$73/month</li>
+<li>Integration with Flux and Big Bang successful</li>
+<li>Total cluster costs (including nodes) stay within $100-120/month range</li>
+</ul>
+<h2 id="related-decisions">Related Decisions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li><a href="/infra/kubernetes-platform-infrastructure/adrs/002-single-az-deployment/index.html">ADR-002: Single-AZ Deployment</a> - Cost optimization through single-AZ architecture</li>
+<li>Future ADR: Node sizing and spot instance strategy</li>
+<li>Future ADR: Karpenter configuration and autoscaling policies</li>
+</ul>
+<h2 id="references">References<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li><a href="https://aws.amazon.com/eks/pricing/" rel="external">AWS EKS Pricing</a></li>
+<li><a href="https://aws.github.io/aws-eks-best-practices/" rel="external">EKS Best Practices Guide</a></li>
+<li><a href="https://karpenter.sh/" rel="external">Karpenter Documentation</a></li>
+<li><a href="https://aws.amazon.com/certification/certified-solutions-architect-professional/" rel="external">AWS Solutions Architect Pro Certification Study Materials</a></li>
+</ul>
+<h2 id="revision-history">Revision History<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Date</th>
+          <th>Change</th>
+          <th>Author</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>2025-12-31</td>
+          <td>Initial version</td>
+          <td>Xavier Lopez</td>
+      </tr>
+  </tbody>
+</table>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <a id="R-logo" class="R-default direction-row" href="/index.html">
+          <span class="logo-title default-animation">ZaveStudios</span>
+        </a>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/adrs/index.html"><a class="padding default-animation" href="/adrs/index.html">Architecture Decision Records</a><ul id="R-subsections-dbdc3721419d814fe87aa505dc6cf5c9" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/ci-cd/index.html"><a class="padding default-animation" href="/ci-cd/index.html">CI/CD</a><ul id="R-subsections-23feba4145c0fd739cb117965ba11416" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/experiments/index.html"><a class="padding" href="/experiments/index.html">Experiments</a></li>
+            <li class="parent " data-nav-id="/infra/index.html"><a class="padding default-animation" href="/infra/index.html">Infrastructure</a><ul id="R-subsections-99503759600e574ce56874d8fb7763e8" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/infra/kubernetes-platform-infrastructure/adrs/001-eks-over-self-managed/index.html"><a class="padding" href="/infra/kubernetes-platform-infrastructure/adrs/001-eks-over-self-managed/index.html"></a></li></ul></li>
+            <li class="" data-nav-id="/tenants/index.html"><a class="padding default-animation" href="/tenants/index.html">Tenants</a><ul id="R-subsections-c9e772ccc978a183b81aaafd0378f4ea" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1770157528" defer></script>
+    <script src="/js/theme.js?1770157528" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

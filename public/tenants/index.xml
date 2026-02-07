@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tenants :: ZaveStudios</title>
+    <link>http://localhost:1313/tenants/index.html</link>
+    <description>Tenant-specific documentation, synchronized from each tenant repo.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tenants/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Panchito</title>
+      <link>http://localhost:1313/tenants/panchito/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tenants/panchito/index.html</guid>
+      <description>Work in progress.</description>
+    </item>
+    <item>
+      <title>Rigoberta</title>
+      <link>http://localhost:1313/tenants/rigoberta/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tenants/rigoberta/index.html</guid>
+      <description>Work in progress.</description>
+    </item>
+    <item>
+      <title>TheHouseGuy</title>
+      <link>http://localhost:1313/tenants/thehouseguy/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tenants/thehouseguy/index.html</guid>
+      <description>Work in progress.</description>
+    </item>
+    <item>
+      <title>XavierLopez.me</title>
+      <link>http://localhost:1313/tenants/xavierlopez.me/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tenants/xavierlopez.me/index.html</guid>
+      <description>Work in progress.</description>
+    </item>
+  </channel>
+</rss>

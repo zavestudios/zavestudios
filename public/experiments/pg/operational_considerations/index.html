@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3+dd4f8457f5143e91eae3954813494d2b0cc6741c">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Operational Considerations for Multi-Tenant PostgreSQL Purpose This project primarily demonstrates SECURITY isolation for multi-tenant PostgreSQL:
+database-per-tenant role-per-tenant dedicated schema-per-tenant hardened privileges Operationally, multi-tenancy introduces shared resource risks even when security isolation is correct.
+This document captures the operational realities of running Postgres in multi-tenant mode and the mitigations we expect in production (e.g., AWS RDS).">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Operational Considerations for Multi-Tenant PostgreSQL Purpose This project primarily demonstrates SECURITY isolation for multi-tenant PostgreSQL:
+database-per-tenant role-per-tenant dedicated schema-per-tenant hardened privileges Operationally, multi-tenancy introduces shared resource risks even when security isolation is correct.
+This document captures the operational realities of running Postgres in multi-tenant mode and the mitigations we expect in production (e.g., AWS RDS).">
+    <meta property="og:url" content="http://localhost:1313/experiments/pg/operational_considerations/index.html">
+    <meta property="og:site_name" content="ZaveStudios">
+    <meta property="og:description" content="Operational Considerations for Multi-Tenant PostgreSQL Purpose This project primarily demonstrates SECURITY isolation for multi-tenant PostgreSQL:
+database-per-tenant role-per-tenant dedicated schema-per-tenant hardened privileges Operationally, multi-tenancy introduces shared resource risks even when security isolation is correct.
+This document captures the operational realities of running Postgres in multi-tenant mode and the mitigations we expect in production (e.g., AWS RDS).">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Experiments">
+    <meta itemprop="description" content="Operational Considerations for Multi-Tenant PostgreSQL Purpose This project primarily demonstrates SECURITY isolation for multi-tenant PostgreSQL:
+database-per-tenant role-per-tenant dedicated schema-per-tenant hardened privileges Operationally, multi-tenancy introduces shared resource risks even when security isolation is correct.
+This document captures the operational realities of running Postgres in multi-tenant mode and the mitigations we expect in production (e.g., AWS RDS).">
+    <meta itemprop="wordCount" content="709">
+    <title></title>
+    <link href="/images/logo.png?1770157528" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1770157528" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1770157528" defer></script>
+    <script src="/js/search-lunr.js?1770157528" defer></script>
+    <script src="/js/search.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1770157528";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1770157528" rel="stylesheet">
+    <link href="/css/theme.css?1770157528" rel="stylesheet">
+    <link href="/css/format-html.css?1770157528" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/experiments\/pg\/operational_considerations\/index.html';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/experiments/pg/operational_considerations/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#purpose">Purpose</a></li>
+    <li><a href="#core-principle">Core Principle</a></li>
+    <li><a href="#primary-operational-risks-and-mitigations">Primary Operational Risks and Mitigations</a>
+      <ul>
+        <li><a href="#1-connection-exhaustion-shared-blast-radius">1. Connection Exhaustion (Shared Blast Radius)</a></li>
+        <li><a href="#2-runaway-queries-and-unbounded-latency">2. Runaway Queries and Unbounded Latency</a></li>
+        <li><a href="#3-lock-contention-and-transaction-hygiene">3. Lock Contention and Transaction Hygiene</a></li>
+        <li><a href="#4-autovacuum-bloat-and-storage-growth">4. Autovacuum, Bloat, and Storage Growth</a></li>
+        <li><a href="#5-backups-and-snapshots-are-multi-tenant-objects">5. Backups and Snapshots are Multi-Tenant Objects</a></li>
+      </ul>
+    </li>
+    <li><a href="#recommended-monitoring-signals-aws-rds">Recommended Monitoring Signals (AWS RDS)</a></li>
+    <li><a href="#project-implemented-guardrails-local--portable">Project-Implemented Guardrails (Local + Portable)</a></li>
+    <li><a href="#when-not-to-use-this-model">When NOT to Use This Model</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">ZaveStudios</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/experiments/index.html"><span itemprop="name">Experiments</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/experiments/index.html" title="Experiments (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/infra/index.html" title="Infrastructure (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable experiments" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="operational-considerations-for-multi-tenant-postgresql">Operational Considerations for Multi-Tenant PostgreSQL<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h2 id="purpose">Purpose<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This project primarily demonstrates SECURITY isolation for multi-tenant PostgreSQL:</p>
+<ul>
+<li>database-per-tenant</li>
+<li>role-per-tenant</li>
+<li>dedicated schema-per-tenant</li>
+<li>hardened privileges</li>
+</ul>
+<p>Operationally, multi-tenancy introduces shared resource risks even when security isolation is correct.</p>
+<p>This document captures the operational realities of running Postgres in multi-tenant mode and the mitigations we expect in production (e.g., AWS RDS).</p>
+<hr>
+<h2 id="core-principle">Core Principle<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Security isolation does not imply performance isolation.</p>
+<p>All tenants share:</p>
+<ul>
+<li>CPU / memory / IOPS</li>
+<li>WAL throughput</li>
+<li>background workers (autovacuum, checkpointer, etc.)</li>
+<li>connection limits and internal memory structures</li>
+<li>storage and checkpoint behavior</li>
+</ul>
+<p>A single “noisy tenant” can degrade all tenants without ever violating access controls.</p>
+<hr>
+<h2 id="primary-operational-risks-and-mitigations">Primary Operational Risks and Mitigations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="1-connection-exhaustion-shared-blast-radius">1. Connection Exhaustion (Shared Blast Radius)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Risk:</p>
+<ul>
+<li>A tenant opens too many connections (or leaks them), starving others.</li>
+</ul>
+<p>Mitigations:</p>
+<ul>
+<li>Per-tenant role connection limits (CONNECTION LIMIT)</li>
+<li>External pooling (pgBouncer) using transaction pooling where possible</li>
+<li>App-level connection pool caps</li>
+<li>Alerting on DBConnections growth and saturation</li>
+</ul>
+<p>Project guardrails:</p>
+<ul>
+<li>Each tenant role sets a CONNECTION LIMIT.</li>
+<li>Test suite validates that exceeding the per-role limit fails.</li>
+</ul>
+<hr>
+<h3 id="2-runaway-queries-and-unbounded-latency">2. Runaway Queries and Unbounded Latency<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Risk:</p>
+<ul>
+<li>A tenant issues expensive queries, or an application bug triggers long-running statements.</li>
+</ul>
+<p>Mitigations:</p>
+<ul>
+<li>Per-role statement timeouts (statement_timeout)</li>
+<li>lock_timeout to avoid waiting forever on locks</li>
+<li>idle_in_transaction_session_timeout to prevent “idle in transaction” session leaks</li>
+<li>query monitoring and slow query logging (RDS logs + CloudWatch + SIEM)</li>
+</ul>
+<p>Project guardrails:</p>
+<ul>
+<li>Each tenant role sets statement_timeout (and optionally lock/idle timeouts).</li>
+<li>Test suite validates a long <code>pg_sleep()</code> query is terminated.</li>
+</ul>
+<hr>
+<h3 id="3-lock-contention-and-transaction-hygiene">3. Lock Contention and Transaction Hygiene<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Risk:</p>
+<ul>
+<li>Long transactions block VACUUM/DDL and increase bloat, causing rising latency for everyone.</li>
+</ul>
+<p>Mitigations:</p>
+<ul>
+<li>idle_in_transaction_session_timeout</li>
+<li>enforce short transactions at the application layer</li>
+<li>monitor locks (pg_locks) and long transactions (pg_stat_activity)</li>
+<li>routine maintenance policies</li>
+</ul>
+<p>Project notes:</p>
+<ul>
+<li>We include recommended role-level timeouts.</li>
+<li>Full lock/bloat tuning is environment-specific and is documented as a production expectation.</li>
+</ul>
+<hr>
+<h3 id="4-autovacuum-bloat-and-storage-growth">4. Autovacuum, Bloat, and Storage Growth<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Risk:</p>
+<ul>
+<li>High churn tables bloat; autovacuum can fall behind; shared storage grows and performance degrades.</li>
+</ul>
+<p>Mitigations:</p>
+<ul>
+<li>Track dead tuples / autovacuum progress</li>
+<li>Per-tenant table design guidance (indexes, churn patterns)</li>
+<li>Scaling decisions: storage, IOPS, instance class</li>
+</ul>
+<p>Project notes:</p>
+<ul>
+<li>This project is not a performance benchmark.</li>
+<li>Production requires monitoring and capacity planning.</li>
+</ul>
+<hr>
+<h3 id="5-backups-and-snapshots-are-multi-tenant-objects">5. Backups and Snapshots are Multi-Tenant Objects<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Risk:</p>
+<ul>
+<li>A snapshot contains all tenants’ data; access to snapshots is highly sensitive.</li>
+</ul>
+<p>Mitigations:</p>
+<ul>
+<li>Strict IAM controls for snapshot operations</li>
+<li>KMS key policies limiting who can use keys</li>
+<li>Audit snapshot actions centrally</li>
+<li>Consider per-tenant logical exports if contractual/mission needs demand it</li>
+</ul>
+<p>Project notes:</p>
+<ul>
+<li>Multi-tenant backup handling is a key IL4 operational concern; enforce via platform IAM.</li>
+</ul>
+<hr>
+<h2 id="recommended-monitoring-signals-aws-rds">Recommended Monitoring Signals (AWS RDS)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Minimum signals to alert on:</p>
+<ul>
+<li>DBConnections (approaching max / pool limits)</li>
+<li>CPUUtilization</li>
+<li>FreeableMemory</li>
+<li>FreeStorageSpace</li>
+<li>Read/Write latency and IOPS saturation</li>
+<li>Deadlocks</li>
+<li>Replication lag (if applicable)</li>
+<li>Long-running queries (pg_stat_activity)</li>
+<li>Autovacuum lag / bloat indicators</li>
+</ul>
+<p>Log sources:</p>
+<ul>
+<li>RDS PostgreSQL logs (to CloudWatch Logs)</li>
+<li>pgAudit logs (SQL-level auditing and denied actions)</li>
+<li>Application logs (connection pool and query timing)</li>
+</ul>
+<hr>
+<h2 id="project-implemented-guardrails-local--portable">Project-Implemented Guardrails (Local + Portable)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This repo implements and/or validates:</p>
+<ul>
+<li>Per-tenant CONNECTION LIMIT</li>
+<li>Per-tenant statement_timeout</li>
+<li>Negative tests validating those controls</li>
+</ul>
+<p>Future enhancements:</p>
+<ul>
+<li>Provide a pgBouncer example docker-compose profile</li>
+<li>Add “noisy neighbor” load simulations (optional)</li>
+<li>Provide Terraform modules for RDS + parameter groups + alarms</li>
+</ul>
+<hr>
+<h2 id="when-not-to-use-this-model">When NOT to Use This Model<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This model is not a fit when:</p>
+<ol>
+<li>
+<p>Tenants require strong performance isolation</p>
+<ul>
+<li>If one tenant cannot be allowed to impact another’s latency at all,
+use separate RDS instances (or separate clusters) per tenant.</li>
+</ul>
+</li>
+<li>
+<p>Tenants have materially different compliance requirements</p>
+<ul>
+<li>If one tenant requires different logging, retention, encryption keys, patch cadence,
+or operational controls, isolate them at the instance/cluster boundary.</li>
+</ul>
+</li>
+<li>
+<p>Tenants require independent backup/restore and RPO/RTO guarantees</p>
+<ul>
+<li>Multi-tenant snapshots are shared objects.</li>
+<li>If per-tenant restore independence is mandatory, consider separate instances.</li>
+</ul>
+</li>
+<li>
+<p>The expected workload is highly variable / spiky / unpredictable</p>
+<ul>
+<li>Multi-tenant works best when tenants are well-behaved or governed.</li>
+<li>If you cannot enforce pool limits and timeouts, multi-tenant will be fragile.</li>
+</ul>
+</li>
+<li>
+<p>The team cannot staff the operational rigor</p>
+<ul>
+<li>Multi-tenant requires monitoring, guardrails, and disciplined change management.</li>
+<li>Without those, cost savings may be erased by incident cost.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="summary">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Multi-tenant PostgreSQL can be secure and cost-effective, but it must be paired with:</p>
+<ul>
+<li>guardrails (connection limits, timeouts)</li>
+<li>monitoring and alerting</li>
+<li>disciplined operational practices</li>
+</ul>
+<p>This repository’s goal is to provide a repeatable baseline for those controls and the evidence (tests + docs) to support platform adoption in regulated environments.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <a id="R-logo" class="R-default direction-row" href="/index.html">
+          <span class="logo-title default-animation">ZaveStudios</span>
+        </a>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/adrs/index.html"><a class="padding default-animation" href="/adrs/index.html">Architecture Decision Records</a><ul id="R-subsections-dbdc3721419d814fe87aa505dc6cf5c9" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/ci-cd/index.html"><a class="padding default-animation" href="/ci-cd/index.html">CI/CD</a><ul id="R-subsections-23feba4145c0fd739cb117965ba11416" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/experiments/index.html"><a class="padding default-animation" href="/experiments/index.html">Experiments</a><ul id="R-subsections-fc581a3813c1f5f183d87c299445898b" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/experiments/pg/operational_considerations/index.html"><a class="padding" href="/experiments/pg/operational_considerations/index.html"></a></li></ul></li>
+            <li class="" data-nav-id="/infra/index.html"><a class="padding" href="/infra/index.html">Infrastructure</a></li>
+            <li class="" data-nav-id="/tenants/index.html"><a class="padding default-animation" href="/tenants/index.html">Tenants</a><ul id="R-subsections-c9e772ccc978a183b81aaafd0378f4ea" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1770157528" defer></script>
+    <script src="/js/theme.js?1770157528" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

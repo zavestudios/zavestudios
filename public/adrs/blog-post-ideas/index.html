@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3+724408dbdb33a50847bfdb2163b85624843ea35f">
+    <meta name="description" content="Purpose: Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.
+Target Blog: xavierlopez.me
+Queued (Ready to Write) 1. Why I’m Running My Platform on Spare Capacity Status: Ready to write
+Target Date: Week of January 6, 2025
+Priority: HIGH - Timely, explains recent architecture decision">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Blog Post Ideas :: ZaveStudios">
+    <meta name="twitter:description" content="Purpose: Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.
+Target Blog: xavierlopez.me
+Queued (Ready to Write) 1. Why I’m Running My Platform on Spare Capacity Status: Ready to write
+Target Date: Week of January 6, 2025
+Priority: HIGH - Timely, explains recent architecture decision">
+    <meta property="og:url" content="http://localhost:1313/adrs/blog-post-ideas/index.html">
+    <meta property="og:site_name" content="ZaveStudios">
+    <meta property="og:title" content="Blog Post Ideas :: ZaveStudios">
+    <meta property="og:description" content="Purpose: Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.
+Target Blog: xavierlopez.me
+Queued (Ready to Write) 1. Why I’m Running My Platform on Spare Capacity Status: Ready to write
+Target Date: Week of January 6, 2025
+Priority: HIGH - Timely, explains recent architecture decision">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Architecture Decision Records">
+    <meta itemprop="name" content="Blog Post Ideas :: ZaveStudios">
+    <meta itemprop="description" content="Purpose: Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.
+Target Blog: xavierlopez.me
+Queued (Ready to Write) 1. Why I’m Running My Platform on Spare Capacity Status: Ready to write
+Target Date: Week of January 6, 2025
+Priority: HIGH - Timely, explains recent architecture decision">
+    <meta itemprop="wordCount" content="1328">
+    <title>Blog Post Ideas :: ZaveStudios</title>
+    <link href="/css/auto-complete/auto-complete.min.css?1770148976" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1770148976" defer></script>
+    <script src="/js/search-lunr.js?1770148976" defer></script>
+    <script src="/js/search.js?1770148976" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1770148976";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1770148976" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1770148976" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1770148976" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1770148976" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1770148976" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1770148976" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1770148976" rel="stylesheet">
+    <link href="/css/theme.css?1770148976" rel="stylesheet">
+    <link href="/css/format-html.css?1770148976" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/adrs\/blog-post-ideas\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/adrs/blog-post-ideas/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#queued-ready-to-write">Queued (Ready to Write)</a>
+      <ul>
+        <li><a href="#1-why-im-running-my-platform-on-spare-capacity">1. Why I&rsquo;m Running My Platform on Spare Capacity</a></li>
+        <li><a href="#2-cloud-ready-vs-cloud-dependent-building-portable-infrastructure">2. Cloud-Ready vs. Cloud-Dependent: Building Portable Infrastructure</a></li>
+        <li><a href="#3-aws-on-a-budget-demonstrating-cloud-skills-without-monthly-costs">3. AWS on a Budget: Demonstrating Cloud Skills Without Monthly Costs</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-ideas-needs-development">Future Ideas (Needs Development)</a>
+      <ul>
+        <li><a href="#the-bootstrap-problem-deploying-gitops-when-gitops-deploys-everything">The Bootstrap Problem: Deploying GitOps When GitOps Deploys Everything</a></li>
+        <li><a href="#studying-for-two-certifications-while-building-one-platform">Studying for Two Certifications While Building One Platform</a></li>
+        <li><a href="#big-bang-devsecops-platform-engineering-reference-architecture">Big Bang DevSecOps: Platform Engineering Reference Architecture</a></li>
+        <li><a href="#from-platform-engineer-to-senior-architect-a-roadmap">From Platform Engineer to Senior Architect: A Roadmap</a></li>
+        <li><a href="#postgresql-multi-tenancy-at-scale-security-patterns">PostgreSQL Multi-Tenancy at Scale: Security Patterns</a></li>
+        <li><a href="#infrastructure-as-interview-prep-learning-by-building">Infrastructure as Interview Prep: Learning by Building</a></li>
+      </ul>
+    </li>
+    <li><a href="#in-progress">In Progress</a></li>
+    <li><a href="#published">Published</a></li>
+    <li><a href="#blog-post-guidelines">Blog Post Guidelines</a>
+      <ul>
+        <li><a href="#writing-style">Writing Style</a></li>
+        <li><a href="#structure-template">Structure Template</a></li>
+        <li><a href="#seo-optimization">SEO Optimization</a></li>
+        <li><a href="#cross-promotion-checklist">Cross-Promotion Checklist</a></li>
+      </ul>
+    </li>
+    <li><a href="#content-calendar">Content Calendar</a>
+      <ul>
+        <li><a href="#january-2025">January 2025</a></li>
+        <li><a href="#february-2025">February 2025</a></li>
+        <li><a href="#q2-2025">Q2 2025</a></li>
+      </ul>
+    </li>
+    <li><a href="#metrics-to-track">Metrics to Track</a></li>
+    <li><a href="#notes--ideas">Notes &amp; Ideas</a></li>
+    <li><a href="#editorial-voice--principles">Editorial Voice &amp; Principles</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">ZaveStudios</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/adrs/index.html"><span itemprop="name">Architecture Decision Records</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Blog Post Ideas</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/adrs/roadmap/index.html" title="Implementation Roadmap (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/adrs/template/index.html" title="ADR Template (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable adrs" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="blog-post-ideas">Blog Post Ideas</h1>
+
+<p><strong>Purpose:</strong> Track blog post concepts from idea through publication. Posts support career advancement by demonstrating technical thinking, architecture decisions, and platform engineering expertise.</p>
+<p><strong>Target Blog:</strong> <a href="https://xavierlopez.me" rel="external">xavierlopez.me</a></p>
+<hr>
+<h2 id="queued-ready-to-write">Queued (Ready to Write)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="1-why-im-running-my-platform-on-spare-capacity">1. Why I&rsquo;m Running My Platform on Spare Capacity<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Ready to write<br>
+<strong>Target Date:</strong> Week of January 6, 2025<br>
+<strong>Priority:</strong> HIGH - Timely, explains recent architecture decision</p>
+<p><strong>Core Message:</strong> Cost-conscious engineering decisions during job search, infrastructure portability as a career asset</p>
+<p><strong>Key Points:</strong></p>
+<ul>
+<li>$800-1100 savings during 6-month job search</li>
+<li>&ldquo;Cloud-ready, not cloud-dependent&rdquo; philosophy</li>
+<li>Hybrid cloud thinking (common in enterprises)</li>
+<li>Can deploy to AWS on-demand for interviews</li>
+<li>Better interview story than &ldquo;I built it all in AWS&rdquo;</li>
+</ul>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li><a href="adrs/004-hybrid-sandbox-aws-architecture.md">ADR-004: Hybrid Home Lab + AWS Architecture</a></li>
+<li>README.md - Hybrid Cloud Strategy section</li>
+<li>Cost model documentation</li>
+</ul>
+<p><strong>Keywords:</strong> platform engineering portfolio, sandbox, DevOps career, cloud native, cost optimization, hybrid cloud</p>
+<p><strong>Target Audience:</strong> Platform engineers, DevOps professionals, job seekers, career changers</p>
+<p><strong>Estimated Length:</strong> 1500-2000 words</p>
+<p><strong>Cross-Promotion:</strong></p>
+<ul>
+<li>LinkedIn post with architecture diagram</li>
+<li>Twitter/X thread with key takeaways</li>
+<li>Dev.to cross-post</li>
+</ul>
+<hr>
+<h3 id="2-cloud-ready-vs-cloud-dependent-building-portable-infrastructure">2. Cloud-Ready vs. Cloud-Dependent: Building Portable Infrastructure<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Ready to outline<br>
+<strong>Target Date:</strong> Mid-January 2025<br>
+<strong>Priority:</strong> MEDIUM</p>
+<p><strong>Core Message:</strong> Infrastructure portability through IaC and environment-agnostic design</p>
+<p><strong>Key Points:</strong></p>
+<ul>
+<li>Multi-environment design principles</li>
+<li>Same GitOps workflows, different infrastructure</li>
+<li>Terraform for true portability</li>
+<li>Environment parity strategies</li>
+<li>Why vendor lock-in is a business risk</li>
+</ul>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li>ADR-004 - Environment parity section</li>
+<li>README.md - Multi-environment strategy</li>
+<li>Terraform modules (examples)</li>
+<li>Architecture diagrams (both environments)</li>
+</ul>
+<p><strong>Keywords:</strong> infrastructure portability, multi-cloud, hybrid cloud, platform engineering, IaC, Terraform, GitOps</p>
+<p><strong>Target Audience:</strong> Platform engineers, architects, CTOs, engineering managers</p>
+<p><strong>Estimated Length:</strong> 2000-2500 words</p>
+<p><strong>Potential Code Examples:</strong></p>
+<ul>
+<li>Kustomize overlays for different environments</li>
+<li>Terraform module reuse</li>
+<li>Environment-specific values files</li>
+</ul>
+<hr>
+<h3 id="3-aws-on-a-budget-demonstrating-cloud-skills-without-monthly-costs">3. AWS on a Budget: Demonstrating Cloud Skills Without Monthly Costs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Needs outline<br>
+<strong>Target Date:</strong> Late January 2025<br>
+<strong>Priority:</strong> MEDIUM</p>
+<p><strong>Core Message:</strong> How to prove AWS expertise through IaC without paying for 24/7 cloud resources</p>
+<p><strong>Key Points:</strong></p>
+<ul>
+<li>On-demand deployment strategy ($10-20 per demo)</li>
+<li>IaC as proof of cloud competency</li>
+<li>Interview tactics and talking points</li>
+<li>Cost comparison: 24/7 ($900-1200) vs on-demand ($50-100)</li>
+<li>Terraform + certification study integration</li>
+</ul>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li><a href="adrs/004-hybrid-sandbox-aws-architecture.md">ADR-004</a></li>
+<li><a href="certifications/aws-sa-pro-mapping.md">AWS SA Pro Mapping</a></li>
+<li>Cost model documentation</li>
+<li>Interview preparation notes</li>
+</ul>
+<p><strong>Keywords:</strong> AWS Solutions Architect, AWS certification, cost optimization, platform engineering, IaC, job search, interview prep</p>
+<p><strong>Target Audience:</strong> Cloud engineers, AWS certification candidates, job seekers, career changers</p>
+<p><strong>Estimated Length:</strong> 1500-2000 words</p>
+<p><strong>Potential Sections:</strong></p>
+<ul>
+<li>Cost breakdown with real numbers</li>
+<li>Terraform deployment procedure</li>
+<li>Interview script/talking points</li>
+<li>Certification study integration</li>
+</ul>
+<hr>
+<h2 id="future-ideas-needs-development">Future Ideas (Needs Development)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="the-bootstrap-problem-deploying-gitops-when-gitops-deploys-everything">The Bootstrap Problem: Deploying GitOps When GitOps Deploys Everything<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Concept only<br>
+<strong>Priority:</strong> LOW<br>
+<strong>Target Date:</strong> Q1 2025</p>
+<p><strong>Core Message:</strong> Solving circular dependencies in GitOps bootstrap sequences</p>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li>Bootstrap sequence documentation</li>
+<li>Flux installation procedures</li>
+<li>ADR-003 (Flux/ArgoCD separation)</li>
+</ul>
+<p><strong>Why Interesting:</strong> Technical deep-dive, relatable problem, shows problem-solving thinking</p>
+<hr>
+<h3 id="studying-for-two-certifications-while-building-one-platform">Studying for Two Certifications While Building One Platform<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Concept only<br>
+<strong>Priority:</strong> MEDIUM<br>
+<strong>Target Date:</strong> Q1 2025 (after some implementation progress)</p>
+<p><strong>Core Message:</strong> Integrated learning approach - every component built maps to exam objectives</p>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li><a href="certifications/aws-sa-pro-mapping.md">AWS SA Pro Mapping</a></li>
+<li><a href="certifications/ckad-mapping.md">CKAD Mapping</a></li>
+<li>GitHub issues showing cert alignment</li>
+</ul>
+<p><strong>Why Interesting:</strong> Learning strategy, efficiency, demonstrates intentional skill development</p>
+<hr>
+<h3 id="big-bang-devsecops-platform-engineering-reference-architecture">Big Bang DevSecOps: Platform Engineering Reference Architecture<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Idea only<br>
+<strong>Priority:</strong> LOW<br>
+<strong>Target Date:</strong> Q2 2025 (after more Big Bang experience)</p>
+<p><strong>Core Message:</strong> Why Big Bang is an underutilized reference architecture for platform teams</p>
+<p><strong>Potential Points:</strong></p>
+<ul>
+<li>DoD-proven patterns</li>
+<li>Helm chart of charts approach</li>
+<li>Built-in security controls</li>
+<li>Package ecosystem</li>
+</ul>
+<p><strong>Why Interesting:</strong> Niche topic, demonstrates deep expertise, useful to community</p>
+<hr>
+<h3 id="from-platform-engineer-to-senior-architect-a-roadmap">From Platform Engineer to Senior Architect: A Roadmap<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Idea only<br>
+<strong>Priority:</strong> MEDIUM<br>
+<strong>Target Date:</strong> Q2 2025</p>
+<p><strong>Core Message:</strong> Concrete steps for leveling up from senior engineer to architect roles</p>
+<p><strong>Source Material:</strong></p>
+<ul>
+<li><a href="../Architecture_Transition_Skills_Roadmap.md">Architecture Transition Skills Roadmap</a></li>
+<li>Personal experience and coaching insights</li>
+</ul>
+<p><strong>Why Interesting:</strong> Career content, helps others, positions author as thought leader</p>
+<hr>
+<h3 id="postgresql-multi-tenancy-at-scale-security-patterns">PostgreSQL Multi-Tenancy at Scale: Security Patterns<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Idea only<br>
+<strong>Priority:</strong> LOW<br>
+<strong>Target Date:</strong> Q2-Q3 2025 (after implementation)</p>
+<p><strong>Core Message:</strong> Row-level security and tenant isolation patterns in PostgreSQL</p>
+<p><strong>Potential Points:</strong></p>
+<ul>
+<li>RLS implementation</li>
+<li>Tenant context management</li>
+<li>Performance considerations</li>
+<li>Security boundaries</li>
+</ul>
+<p><strong>Why Interesting:</strong> Deep technical content, demonstrates database expertise</p>
+<hr>
+<h3 id="infrastructure-as-interview-prep-learning-by-building">Infrastructure as Interview Prep: Learning by Building<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Status:</strong> Idea only<br>
+<strong>Priority:</strong> LOW<br>
+<strong>Target Date:</strong> Q2 2025</p>
+<p><strong>Core Message:</strong> Why building real infrastructure is better than study guides</p>
+<p><strong>Potential Points:</strong></p>
+<ul>
+<li>Hands-on vs theoretical knowledge</li>
+<li>Mapping platform to certifications</li>
+<li>Interview stories from real work</li>
+<li>Portfolio-driven learning</li>
+</ul>
+<hr>
+<h2 id="in-progress">In Progress<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><em>No posts currently in draft</em></p>
+<hr>
+<h2 id="published">Published<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><em>No posts published yet</em></p>
+<hr>
+<h2 id="blog-post-guidelines">Blog Post Guidelines<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="writing-style">Writing Style<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Conversational but professional</strong> - Write like you&rsquo;re explaining to a colleague</li>
+<li><strong>No emojis</strong> - Keep it professional (per your preference)</li>
+<li><strong>Code examples</strong> - Include real code from the platform when relevant</li>
+<li><strong>Diagrams</strong> - Use Mermaid or screenshots where helpful</li>
+<li><strong>Personal voice</strong> - &ldquo;I decided&hellip;&rdquo; not &ldquo;One should consider&hellip;&rdquo;</li>
+</ul>
+<h3 id="structure-template">Structure Template<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li><strong>Hook</strong> - Problem or question that drew you in</li>
+<li><strong>Context</strong> - Why this matters, who cares</li>
+<li><strong>Deep Dive</strong> - Technical content, decision process, implementation</li>
+<li><strong>Lessons Learned</strong> - What worked, what didn&rsquo;t, what you&rsquo;d do differently</li>
+<li><strong>Takeaways</strong> - 2-3 key points readers should remember</li>
+<li><strong>Call to Action</strong> - Link to GitHub, invite discussion, mention you&rsquo;re job searching</li>
+</ol>
+<h3 id="seo-optimization">SEO Optimization<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Title:</strong> 60 characters or less, includes primary keyword</li>
+<li><strong>Meta description:</strong> 155 characters or less, compelling summary</li>
+<li><strong>Headers:</strong> Use H2/H3 for structure, include keywords naturally</li>
+<li><strong>Internal links:</strong> Link to related blog posts, portfolio pages</li>
+<li><strong>External links:</strong> Link to source material (GitHub, docs, ADRs)</li>
+<li><strong>Images:</strong> Alt text with keywords, diagrams that explain concepts</li>
+</ul>
+<h3 id="cross-promotion-checklist">Cross-Promotion Checklist<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Publish on xavierlopez.me</li>
+<li><input disabled="" type="checkbox"> LinkedIn post (summary + link)</li>
+<li><input disabled="" type="checkbox"> Twitter/X thread (key points)</li>
+<li><input disabled="" type="checkbox"> Dev.to cross-post (optional)</li>
+<li><input disabled="" type="checkbox"> Update this document with published link</li>
+<li><input disabled="" type="checkbox"> Add to portfolio &ldquo;Writing&rdquo; section</li>
+</ul>
+<hr>
+<h2 id="content-calendar">Content Calendar<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="january-2025">January 2025<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Week 1 (Jan 6-12): Write &ldquo;Why I&rsquo;m Running My Platform on a Home Lab&rdquo;</li>
+<li>Week 2 (Jan 13-19): Outline &ldquo;Cloud-Ready vs. Cloud-Dependent&rdquo;</li>
+<li>Week 3 (Jan 20-26): Write &ldquo;AWS on a Budget&rdquo;</li>
+<li>Week 4 (Jan 27-Feb 2): Edit and publish posts</li>
+</ul>
+<h3 id="february-2025">February 2025<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Evaluate post performance</li>
+<li>Identify next topics based on platform progress</li>
+<li>Consider interview prep content if interviews scheduled</li>
+</ul>
+<h3 id="q2-2025">Q2 2025<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>More technical deep-dives as platform matures</li>
+<li>Career progression content if moving to new role</li>
+<li>Certification content after exams</li>
+</ul>
+<hr>
+<h2 id="metrics-to-track">Metrics to Track<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Per Post:</strong></p>
+<ul>
+<li>Views (Google Analytics)</li>
+<li>Time on page (engagement indicator)</li>
+<li>LinkedIn post engagement (likes, comments, shares)</li>
+<li>GitHub traffic from blog referrals</li>
+<li>Interview mentions (&ldquo;I read your post about&hellip;&rdquo;)</li>
+</ul>
+<p><strong>Overall:</strong></p>
+<ul>
+<li>Total blog views per month</li>
+<li>Subscriber count (if email list)</li>
+<li>LinkedIn follower growth</li>
+<li>GitHub repo stars/traffic</li>
+<li>Job leads attributed to content</li>
+</ul>
+<hr>
+<h2 id="notes--ideas">Notes &amp; Ideas<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Blog Post Triggers:</strong></p>
+<ul>
+<li>Every ADR is a potential blog post</li>
+<li>Major implementation milestones</li>
+<li>Interesting problems solved</li>
+<li>Architecture decisions with trade-offs</li>
+<li>Learning experiences worth sharing</li>
+<li>Interview prep insights</li>
+</ul>
+<p><strong>Content Repurposing:</strong></p>
+<ul>
+<li>Turn ADRs into blog posts</li>
+<li>Turn blog posts into LinkedIn articles</li>
+<li>Turn complex posts into Twitter threads</li>
+<li>Turn technical posts into talks (future)</li>
+</ul>
+<p><strong>Voice &amp; Positioning:</strong></p>
+<ul>
+<li>Platform engineer transitioning to architect</li>
+<li>Cost-conscious, business-aware technologist</li>
+<li>Hybrid cloud expertise</li>
+<li>Security and compliance experience</li>
+<li>Learning in public, sharing the journey</li>
+</ul>
+<hr>
+<h2 id="editorial-voice--principles">Editorial Voice &amp; Principles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Core principle:</strong> Confidence through demonstration, not declaration.</p>
+<p><strong>The voice:</strong></p>
+<ul>
+<li>&ldquo;Here&rsquo;s what I built. Here&rsquo;s how it works. Here&rsquo;s the tradeoffs I considered.&rdquo;</li>
+<li>Show, don&rsquo;t argue</li>
+<li>Let the quality of work speak for itself</li>
+<li>Respect the reader&rsquo;s intelligence</li>
+</ul>
+<p><strong>What this sounds like:</strong></p>
+<ul>
+<li>✅ &ldquo;I built a platform that runs on KVM/libvirt with AWS deployment capability&rdquo;</li>
+<li>✅ &ldquo;Here&rsquo;s the cost calculation: $0/month vs $150-200/month&rdquo;</li>
+<li>✅ &ldquo;This pattern might make sense if your organization has spare capacity&rdquo;</li>
+<li>❌ &ldquo;Enterprises should stop putting everything in the cloud&rdquo;</li>
+<li>❌ &ldquo;You&rsquo;re wasting money if you don&rsquo;t do this&rdquo;</li>
+<li>❌ &ldquo;This is the best way to build platforms&rdquo;</li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<ul>
+<li>Demonstrates actual experience, not just opinions</li>
+<li>Shows ability to think through tradeoffs</li>
+<li>Signals engineering maturity (no silver bullets)</li>
+<li>Avoids becoming a target for fact-checking</li>
+<li>Builds trust through honesty about limitations</li>
+</ul>
+<p><strong>Occasional provocation:</strong></p>
+<ul>
+<li>Sometimes we&rsquo;ll take a strong position</li>
+<li>Must be deliberate, not accidental</li>
+<li>Must be grounded in deep experience</li>
+<li>Still framed as &ldquo;here&rsquo;s what I&rsquo;ve seen&rdquo; not &ldquo;universal truth&rdquo;</li>
+</ul>
+<p><strong>For hiring managers, this signals:</strong></p>
+<ul>
+<li>Won&rsquo;t overpromise on projects</li>
+<li>Thinks through consequences before building</li>
+<li>Can articulate tradeoffs clearly</li>
+<li>Confident enough to show limitations, not just wins</li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> January 7, 2025<br>
+<strong>Next Review:</strong> Weekly (update status, add new ideas)</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <a id="R-logo" class="R-default direction-row" href="/index.html">
+          <span class="logo-title default-animation">ZaveStudios</span>
+        </a>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/adrs/index.html"><a class="padding default-animation" href="/adrs/index.html">Architecture Decision Records</a><ul id="R-subsections-dbdc3721419d814fe87aa505dc6cf5c9" class="collapsible-menu">
+            <li class="" data-nav-id="/adrs/roadmap/index.html"><a class="padding" href="/adrs/roadmap/index.html">Implementation Roadmap</a></li>
+            <li class="active " data-nav-id="/adrs/blog-post-ideas/index.html"><a class="padding" href="/adrs/blog-post-ideas/index.html">Blog Post Ideas</a></li>
+            <li class="" data-nav-id="/adrs/template/index.html"><a class="padding" href="/adrs/template/index.html">ADR Template</a></li></ul></li>
+            <li class="" data-nav-id="/ci-cd/index.html"><a class="padding default-animation" href="/ci-cd/index.html">CI/CD</a><ul id="R-subsections-23feba4145c0fd739cb117965ba11416" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/experiments/index.html"><a class="padding" href="/experiments/index.html">Experiments</a></li>
+            <li class="" data-nav-id="/infra/index.html"><a class="padding" href="/infra/index.html">Infrastructure</a></li>
+            <li class="" data-nav-id="/tenants/index.html"><a class="padding default-animation" href="/tenants/index.html">Tenants</a><ul id="R-subsections-c9e772ccc978a183b81aaafd0378f4ea" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1770148976" defer></script>
+    <script src="/js/theme.js?1770148976" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

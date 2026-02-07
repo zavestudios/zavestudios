@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3+dd4f8457f5143e91eae3954813494d2b0cc6741c">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Multi-Tenant PostgreSQL Threat Model Purpose This document outlines the threat model for running multiple tenants on a single PostgreSQL server (e.g., a shared AWS RDS instance) with one database per tenant. It identifies key assets, actors, threats, and the controls used to mitigate them.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Multi-Tenant PostgreSQL Threat Model Purpose This document outlines the threat model for running multiple tenants on a single PostgreSQL server (e.g., a shared AWS RDS instance) with one database per tenant. It identifies key assets, actors, threats, and the controls used to mitigate them.">
+    <meta property="og:url" content="http://localhost:1313/experiments/pg/threat_model/index.html">
+    <meta property="og:site_name" content="ZaveStudios">
+    <meta property="og:description" content="Multi-Tenant PostgreSQL Threat Model Purpose This document outlines the threat model for running multiple tenants on a single PostgreSQL server (e.g., a shared AWS RDS instance) with one database per tenant. It identifies key assets, actors, threats, and the controls used to mitigate them.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Experiments">
+    <meta itemprop="description" content="Multi-Tenant PostgreSQL Threat Model Purpose This document outlines the threat model for running multiple tenants on a single PostgreSQL server (e.g., a shared AWS RDS instance) with one database per tenant. It identifies key assets, actors, threats, and the controls used to mitigate them.">
+    <meta itemprop="wordCount" content="596">
+    <title></title>
+    <link href="/images/logo.png?1770157528" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1770157528" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1770157528" defer></script>
+    <script src="/js/search-lunr.js?1770157528" defer></script>
+    <script src="/js/search.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1770157528";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1770157528" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1770157528" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1770157528" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1770157528" rel="stylesheet">
+    <link href="/css/theme.css?1770157528" rel="stylesheet">
+    <link href="/css/format-html.css?1770157528" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/experiments\/pg\/threat_model\/index.html';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/experiments/pg/threat_model/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#purpose">Purpose</a></li>
+    <li><a href="#assets">Assets</a></li>
+    <li><a href="#actors">Actors</a></li>
+    <li><a href="#primary-security-goal">Primary Security Goal</a></li>
+    <li><a href="#key-threats-and-mitigations">Key Threats and Mitigations</a>
+      <ul>
+        <li><a href="#t1-cross-database-data-access">T1. Cross-database data access</a></li>
+        <li><a href="#t2-cross-schema-access-within-a-database">T2. Cross-schema access within a database</a></li>
+        <li><a href="#t3-abuse-of-public-schema-and-search_path">T3. Abuse of <code>public</code> schema and <code>search_path</code></a></li>
+        <li><a href="#t4-privilege-escalation-via-extensions-or-foreign-data-wrappers">T4. Privilege escalation via extensions or foreign data wrappers</a></li>
+        <li><a href="#t5-data-exposure-via-backups-and-snapshots">T5. Data exposure via backups and snapshots</a></li>
+        <li><a href="#t6-noisy-neighbor--resource-starvation">T6. Noisy neighbor / resource starvation</a></li>
+      </ul>
+    </li>
+    <li><a href="#residual-risks">Residual Risks</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">ZaveStudios</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/experiments/index.html"><span itemprop="name">Experiments</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/experiments/index.html" title="Experiments (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/infra/index.html" title="Infrastructure (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable experiments" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="multi-tenant-postgresql-threat-model">Multi-Tenant PostgreSQL Threat Model<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h2 id="purpose">Purpose<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This document outlines the threat model for running multiple tenants on a single PostgreSQL server (e.g., a shared AWS RDS instance) with one database per tenant. It identifies key assets, actors, threats, and the controls used to mitigate them.</p>
+<h2 id="assets">Assets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Tenant data stored in per-tenant databases:
+<ul>
+<li><code>db_tenant_a</code>, <code>db_tenant_b</code>, <code>db_tenant_c</code>, …</li>
+</ul>
+</li>
+<li>Tenant credentials:
+<ul>
+<li><code>tenant_a_app</code>, <code>tenant_b_app</code>, <code>tenant_c_app</code>, …</li>
+</ul>
+</li>
+<li>PostgreSQL configuration and privileges.</li>
+<li>RDS instance configuration, snapshots, and backups.</li>
+<li>Audit logs / connection logs.</li>
+</ul>
+<h2 id="actors">Actors<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li><strong>Tenant application</strong>:
+<ul>
+<li>Connects as its assigned role (e.g., <code>tenant_a_app</code>).</li>
+</ul>
+</li>
+<li><strong>Platform operators / DBAs</strong>:
+<ul>
+<li>Use the admin role (e.g., <code>postgres</code> or <code>rds_superuser</code> on RDS).</li>
+</ul>
+</li>
+<li><strong>Adversarial tenant</strong>:
+<ul>
+<li>Attempts to access other tenants’ data, escalate privileges, or disrupt service.</li>
+</ul>
+</li>
+<li><strong>External attacker</strong>:
+<ul>
+<li>Attempts to compromise application or database from outside.</li>
+</ul>
+</li>
+</ul>
+<h2 id="primary-security-goal">Primary Security Goal<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Prevent <strong>tenant-to-tenant data access</strong>:</p>
+<blockquote>
+<p>A tenant must never be able to read, write, or otherwise access another tenant’s data, even though they share the same PostgreSQL server and infrastructure.</p>
+</blockquote>
+<h2 id="key-threats-and-mitigations">Key Threats and Mitigations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="t1-cross-database-data-access">T1. Cross-database data access<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: Tenant A connects to Tenant B’s database and queries data.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li><code>REVOKE CONNECT</code> on all tenant databases from <code>PUBLIC</code>.</li>
+<li><code>GRANT CONNECT</code> only to the corresponding tenant role.</li>
+<li>RDS <code>pg_hba</code> equivalent plus security groups restrict network access.</li>
+</ul>
+</li>
+<li><strong>Evidence</strong>:
+<ul>
+<li><code>scripts/test_isolation.sh</code> attempts cross-database connections and expects failures.</li>
+</ul>
+</li>
+</ul>
+<h3 id="t2-cross-schema-access-within-a-database">T2. Cross-schema access within a database<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: Tenant tries to access objects outside its own schema.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li>Each tenant uses only its <code>app</code> schema (<code>CREATE SCHEMA app AUTHORIZATION tenant_x_app</code>).</li>
+<li>No tenant role is granted privileges on other schemas.</li>
+<li>The <code>public</code> schema is not used for tenant data and can be fully locked down.</li>
+</ul>
+</li>
+<li><strong>Evidence</strong>:
+<ul>
+<li>Tests verify that tenant roles can only query <code>app.sample_data</code> in their own DB.</li>
+</ul>
+</li>
+</ul>
+<h3 id="t3-abuse-of-public-schema-and-search_path">T3. Abuse of <code>public</code> schema and <code>search_path</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: Tenant creates functions or tables in <code>public</code> to shadow system functions or pollute namespaces.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li><code>public</code> schema is locked down (no <code>CREATE</code> for tenant roles).</li>
+<li>Tenant objects are placed in the <code>app</code> schema.</li>
+<li><code>search_path</code> can be set to <code>app, pg_catalog</code> in the hardened configuration.</li>
+</ul>
+</li>
+<li><strong>Evidence</strong>:
+<ul>
+<li>Configuration and future tests ensure tenant roles cannot use <code>public</code> for arbitrary object creation.</li>
+</ul>
+</li>
+</ul>
+<h3 id="t4-privilege-escalation-via-extensions-or-foreign-data-wrappers">T4. Privilege escalation via extensions or foreign data wrappers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: Tenant uses <code>CREATE EXTENSION</code>, <code>CREATE SERVER</code>, or FDW features to access other data.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li>Only admin roles can create extensions.</li>
+<li>Tenant roles are not granted <code>CREATE EXTENSION</code> or <code>CREATE SERVER</code>.</li>
+</ul>
+</li>
+<li><strong>Evidence</strong>:
+<ul>
+<li>Future negative tests will try to create extensions as tenant roles and expect failures.</li>
+</ul>
+</li>
+</ul>
+<h3 id="t5-data-exposure-via-backups-and-snapshots">T5. Data exposure via backups and snapshots<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: A single RDS snapshot contains multiple tenants’ data and is improperly shared.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li>Strict control over who can create and access RDS snapshots.</li>
+<li>Clear SOP for backup/restore that treats snapshots as multi-tenant sensitive artifacts.</li>
+<li>Optional per-tenant logical dumps for export/return-of-data use cases.</li>
+</ul>
+</li>
+</ul>
+<h3 id="t6-noisy-neighbor--resource-starvation">T6. Noisy neighbor / resource starvation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Threat</strong>: One tenant’s workload degrades performance for others.</li>
+<li><strong>Mitigations</strong>:
+<ul>
+<li>Appropriate sizing and IO class for the shared RDS instance.</li>
+<li>Connection pooling and connection limits per application.</li>
+<li>Monitoring and alerting on CPU/IO/per-tenant usage.</li>
+</ul>
+</li>
+<li><strong>Note</strong>:
+<ul>
+<li>This is an availability/SLO concern rather than direct data isolation but is relevant for multi-tenant systems.</li>
+</ul>
+</li>
+</ul>
+<h2 id="residual-risks">Residual Risks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Admin account compromise (e.g., <code>rds_superuser</code>) remains a critical risk; this is true for single-tenant instances as well.</li>
+<li>Misconfiguration in IAM, security groups, or parameter groups could weaken isolation if not audited.</li>
+<li>Bugs in PostgreSQL or the cloud provider’s platform are possible but mitigated by timely patching and version management.</li>
+</ul>
+<h2 id="conclusion">Conclusion<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>With the controls described above, multi-tenant use of a single PostgreSQL server can provide strong tenant isolation while significantly reducing the number of database instances required. The test suite in this project serves as ongoing evidence that these controls function as intended.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <a id="R-logo" class="R-default direction-row" href="/index.html">
+          <span class="logo-title default-animation">ZaveStudios</span>
+        </a>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/adrs/index.html"><a class="padding default-animation" href="/adrs/index.html">Architecture Decision Records</a><ul id="R-subsections-dbdc3721419d814fe87aa505dc6cf5c9" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/ci-cd/index.html"><a class="padding default-animation" href="/ci-cd/index.html">CI/CD</a><ul id="R-subsections-23feba4145c0fd739cb117965ba11416" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/experiments/index.html"><a class="padding default-animation" href="/experiments/index.html">Experiments</a><ul id="R-subsections-fc581a3813c1f5f183d87c299445898b" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/experiments/pg/threat_model/index.html"><a class="padding" href="/experiments/pg/threat_model/index.html"></a></li></ul></li>
+            <li class="" data-nav-id="/infra/index.html"><a class="padding" href="/infra/index.html">Infrastructure</a></li>
+            <li class="" data-nav-id="/tenants/index.html"><a class="padding default-animation" href="/tenants/index.html">Tenants</a><ul id="R-subsections-c9e772ccc978a183b81aaafd0378f4ea" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1770157528" defer></script>
+    <script src="/js/theme.js?1770157528" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>
