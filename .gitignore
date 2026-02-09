@@ -21,32 +21,25 @@ terraform.tfvars
 *.pem
 *.key
 secrets/
-.env
-.env.*
 
 # Build artifacts
 dist/
 build/
 *.log
 
+# Hugo output
+/public/
+/resources/_gen/
+hugo_stats.json
+
+# Hugo build cache
+/.hugo_build.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # Internal operating doctrine (not for public consumption)
 README.internal.md
 CLAUDE.md
-
-# --------------------------------------------------
-# Hugo (Modules + Relearn)
-# --------------------------------------------------
-
-# Generated site (build output)
-/public/
-
-# Hugo Module cache (do NOT commit)
-hugo_stats.json
-.hugo_build.lock
-
-# Generated assets (can always be rebuilt)
-resources/_gen/
-
-# Hugo Modules cache (local only)
-.hugo_cache/
-

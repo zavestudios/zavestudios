@@ -1,0 +1,25 @@
+{{- $path := .Get "file" -}}
+{{- if not $path -}}
+  {{- errorf "readfile shortcode requires a 'file' param" -}}
+{{- end -}}
+
+{{- $res := resources.Get $path -}}
+{{- if not $res -}}
+  {{- errorf "readfile shortcode could not find resource: %s" $path -}}
+{{- end -}}
+
+{{- $content := $res.Content -}}
+{{- $strip := .Get "strip_h1" | default "true" -}}
+{{- if and (eq (lower $strip) "true") (hasPrefix $content "# ") -}}
+  {{- $content = replaceRE "^# .+\\n" "" $content -}}
+{{- end -}}
+
+{{- $rewrite := .Get "rewrite_links" | default "true" -}}
+{{- if eq (lower $rewrite) "true" -}}
+  {{- $content = replaceRE "\\]\\((https?://[^)]+)\\)" "](ABSOLUTE:$1)" $content -}}
+  {{- $content = replaceRE "\\]\\((mailto:[^)]+)\\)" "](ABSOLUTE:$1)" $content -}}
+  {{- $content = replaceRE "\\]\\(([^)#/][^)]*)\\)" "](https://gitlab.com/platformystical/bigbang/-/blob/main/docs/$1)" $content -}}
+  {{- $content = replaceRE "\\]\\(ABSOLUTE:" "](" $content -}}
+{{- end -}}
+
+{{- $content | markdownify -}}

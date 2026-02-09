@@ -1,4 +1,7 @@
-# ZaveStudios Implementation Roadmap
+---
+title: "Implementation Roadmap"
+weight: 10
+---
 
 **Last Updated:** January 2, 2026  
 **Current Phase:** Phase I - Foundation & Bootstrap

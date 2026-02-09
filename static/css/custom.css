@@ -1,0 +1,30 @@
+/* Hide site title text, show only logo */
+#R-logo-title,
+.logo-title,
+#logo-title,
+a#logo-title,
+#R-logo a:not(:has(img)) {
+    display: none !important;
+}
+
+/* Target any text next to the logo */
+#R-logo > a:last-child {
+    display: none !important;
+}
+
+/* Make logo larger like MetalLB - increase image size */
+#R-logo img {
+    max-width: 200px !important;
+    width: 200px !important;
+    height: auto !important;
+}
+
+/* Ensure logo container has proper spacing */
+#R-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 1rem;
+    width: 100%;
+}

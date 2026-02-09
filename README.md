@@ -15,9 +15,9 @@ runs on spare capacity with AWS deployment capability.
 ## Architecture Layers
 
 ### Infrastructure Layer
-- **[kubernetes-platform-infrastructure](https://github.com/eckslopez/kubernetes-platform-infrastructure)**: 3-node k3s cluster, automated deployment
-- **[pg-multitenant](https://github.com/eckslopez/pg)**: PostgreSQL multi-tenant data layer with security isolation
-- **[platform-pipelines](https://github.com/eckslopez/platform-pipelines)**: Reusable CI/CD workflows
+- **[kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure)**: 3-node k3s cluster, automated deployment
+- **[pg-multitenant](https://github.com/zavestudios/pg)**: PostgreSQL multi-tenant data layer with security isolation
+- **[platform-pipelines](https://github.com/zavestudios/platform-pipelines)**: Reusable CI/CD workflows
 
 ### Platform Services Layer
 - **GitOps**: Flux (platform services) + ArgoCD (applications)
@@ -32,9 +32,9 @@ and database tenants:
 | Application | Technology | Database Tenant | Purpose |
 |-------------|------------|-----------------|---------|
 | [xavierlopez.me](https://xavierlopez.me) | Jekyll (static) | N/A | Portfolio and technical blog |
-| [panchito](https://github.com/eckslopez/panchito) | Python/Flask/Celery | db_panchito | Real estate data ETL service |
-| [thehouseguy](https://github.com/eckslopez/thehouseguy) | Ruby on Rails | db_thehouseguy | Real estate listing application |
-| [rigoberta](https://github.com/eckslopez/rigoberta) | Ruby on Rails | db_rigoberta | Reference Rails template |
+| [panchito](https://github.com/zavestudios/panchito) | Python/Flask/Celery | db_panchito | Real estate data ETL service |
+| [thehouseguy](https://github.com/zavestudios/thehouseguy) | Ruby on Rails | db_thehouseguy | Real estate listing application |
+| [rigoberta](https://github.com/zavestudios/rigoberta) | Ruby on Rails | db_rigoberta | Reference Rails template |
 
 Each tenant application:
 - Deploys to isolated Kubernetes namespace
@@ -79,15 +79,15 @@ See [pg-multitenant documentation](https://github.com/pg/docs) for security mode
 ## Repository Organization
 
 ### Infrastructure & Platform
-- [kubernetes-platform-infrastructure](https://github.com/eckslopez/kubernetes-platform-infrastructure) - k3s cluster, deployment automation
-- [pg-multitenant](https://github.com/eckslopez/pg) - Multi-tenant PostgreSQL with security isolation
-- [platform-pipelines](https://github.com/eckslopez/platform-pipelines) - Reusable CI/CD workflows for all projects
+- [kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure) - k3s cluster, deployment automation
+- [pg-multitenant](https://github.com/zavestudios/pg) - Multi-tenant PostgreSQL with security isolation
+- [platform-pipelines](https://github.com/zavestudios/platform-pipelines) - Reusable CI/CD workflows for all projects
 
 ### Tenant Applications  
 - [xavierlopez.me](xavierlopez.me) - Portfolio and blog site (Jekyll)
-- [panchito](https://github.com/eckslopez/panchito) - Real estate ETL service (Python/Flask/Celery)
-- [thehouseguy](https://github.com/eckslopez/thehouseguy) - Real estate application (Rails)
-- [rigoberta](https://github.com/eckslopez/rigoberta) - Rails reference template
+- [panchito](https://github.com/zavestudios/panchito) - Real estate ETL service (Python/Flask/Celery)
+- [thehouseguy](https://github.com/zavestudios/thehouseguy) - Real estate application (Rails)
+- [rigoberta](https://github.com/zavestudios/rigoberta) - Rails reference template
 
 ## Current Status
 
@@ -110,7 +110,7 @@ See [pg-multitenant documentation](https://github.com/pg/docs) for security mode
 ## Key Design Decisions
 
 Platform-level architecture decisions are documented here. 
-Infrastructure-specific decisions are in [kpi/docs/adrs](https://github.com/eckslopez/kubernetes-platform-infrastructure/docs/adrs).
+Infrastructure-specific decisions are in [kpi/docs/adrs](https://github.com/zavestudios/kubernetes-platform-infrastructure/docs/adrs).
 
 - Multi-tenancy model: Namespace + database isolation
 - GitOps separation: Flux (platform) + ArgoCD (apps)
@@ -134,8 +134,20 @@ See [tenant onboarding guide](link) for details. (TODO)
 - [Cost Analysis](link to kpi cost docs)
 - [Blog Posts](https://xavierlopez.me) - Technical writing about platform decisions
 
+### Hugo Modules (External Docs)
+
+This site pulls documentation from other repositories via Hugo Modules.
+
+Prerequisites for local builds:
+- Git access to all module repos (SSH keys or HTTPS token).
+- `GOPRIVATE` / `GONOSUMDB` set for private modules, for example:
+  - `GOPRIVATE=github.com/zavestudios/*,gitlab.com/platformystical/*`
+  - `GONOSUMDB=github.com/zavestudios/*,gitlab.com/platformystical/*`
+
+CI must also provide credentials to fetch private repos when applicable.
+
 ---
 
 **Maintainer:** Xavier Lopez  
 **Portfolio:** [xavierlopez.me](https://xavierlopez.me)  
-**GitHub:** [@eckslopez](https://github.com/eckslopez)
+**GitHub:** [@zavestudios](https://github.com/zavestudios)
