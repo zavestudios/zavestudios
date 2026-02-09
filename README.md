@@ -67,7 +67,7 @@ See [pg-multitenant documentation](https://github.com/zavestudios/pg) for securi
 **Sandbox Environment (Primary):**
 - Infrastructure: $0/month (runs on spare capacity)
 - Serves all tenant applications continuously
-- See [kpi cost analysis](https://) for details
+- See [kpi cost analysis](#) for details
 
 **AWS On-Demand (Demonstrations):**
 - Deploy: ~20 minutes to operational platform
