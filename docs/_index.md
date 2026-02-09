@@ -38,4 +38,4 @@ Follow this learning path to understand the platform:
 - Multi-tenant PostgreSQL validated
 - GitOps deployment in progress
 
-See the [Implementation Roadmap](architecture/roadmap/) for detailed status and timeline.
+See the [Implementation Roadmap](architecture/roadmap.md) for detailed status and timeline.

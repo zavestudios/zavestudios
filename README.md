@@ -60,7 +60,7 @@ PostgreSQL Instance (pg-multitenant)
 └── db_rigoberta (reference data)
 ```
 
-See [pg-multitenant documentation](https://github.com/pg/docs) for security model details.
+See [pg-multitenant documentation](https://github.com/zavestudios/pg) for security model details.
 
 ## Cost Model
 
@@ -84,7 +84,7 @@ See [pg-multitenant documentation](https://github.com/pg/docs) for security mode
 - [platform-pipelines](https://github.com/zavestudios/platform-pipelines) - Reusable CI/CD workflows for all projects
 
 ### Tenant Applications  
-- [xavierlopez.me](xavierlopez.me) - Portfolio and blog site (Jekyll)
+- [xavierlopez.me](https://xavierlopez.me) - Portfolio and blog site (Jekyll)
 - [panchito](https://github.com/zavestudios/panchito) - Real estate ETL service (Python/Flask/Celery)
 - [thehouseguy](https://github.com/zavestudios/thehouseguy) - Real estate application (Rails)
 - [rigoberta](https://github.com/zavestudios/rigoberta) - Rails reference template
@@ -110,7 +110,7 @@ See [pg-multitenant documentation](https://github.com/pg/docs) for security mode
 ## Key Design Decisions
 
 Platform-level architecture decisions are documented here. 
-Infrastructure-specific decisions are in [kpi/docs/adrs](https://github.com/zavestudios/kubernetes-platform-infrastructure/docs/adrs).
+Infrastructure-specific decisions are in [kpi/docs/adrs](https://github.com/zavestudios/kubernetes-platform-infrastructure/tree/main/docs/adrs).
 
 - Multi-tenancy model: Namespace + database isolation
 - GitOps separation: Flux (platform) + ArgoCD (apps)
@@ -125,13 +125,13 @@ New tenant applications follow this onboarding process:
 3. **ArgoCD application**: Define deployment manifest
 4. **GitOps**: Commit to platform-gitops repository
 
-See [tenant onboarding guide](link) for details. (TODO)
+See [tenant onboarding guide](#) for details. (TODO)
 
 ## Documentation
 
-- [Platform Architecture Overview](link to kpi/docs/architecture.md)
-- [Multi-Tenant Security Model](link to pg/docs/security.md)
-- [Cost Analysis](link to kpi cost docs)
+- [Platform Architecture Overview](#)
+- [Multi-Tenant Security Model](#)
+- [Cost Analysis](#)
 - [Blog Posts](https://xavierlopez.me) - Technical writing about platform decisions
 
 ### Hugo Modules (External Docs)

@@ -98,8 +98,10 @@ Explain why this decision was made. What factors influenced it?
 
 ## Related Decisions
 
+<!--
 - [ADR-XXX: Related Decision Title](xxx-related-decision.md)
 - [ADR-YYY: Another Related Decision](yyy-another-decision.md)
+-->
 
 ## References
 
