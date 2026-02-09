@@ -5,6 +5,8 @@ on:
     branches: ["main"]
   schedule:
     - cron: "0 12 * * *"
+  repository_dispatch:
+    types: [module_update]
   workflow_dispatch:
 
 permissions:
