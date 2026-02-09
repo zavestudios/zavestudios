@@ -25,3 +25,7 @@ jobs:
     with:
       goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
       gonosumdb: github.com/zavestudios/*,gitlab.com/platformystical/*
+
+  link-check:
+    name: Check Markdown Links
+    uses: zavestudios/platform-pipelines/.github/workflows/link-check.yml@main
