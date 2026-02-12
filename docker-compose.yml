@@ -18,7 +18,7 @@ services:
     environment:
       HUGO_ENVIRONMENT: development
       HUGO_ENV: development
-      HUGO_MODULE_REPLACEMENTS: "github.com/zavestudios/panchito -> /work/panchito,github.com/zavestudios/rigoberta -> /work/rigoberta,github.com/zavestudios/thehouseguy -> /work/thehouseguy,github.com/zavestudios/xavierlopez.me -> /work/xavierlopez.me,github.com/zavestudios/platform-pipelines -> /work/platform-pipelines,github.com/zavestudios/pg -> /work/pg,github.com/zavestudios/kubernetes-platform-infrastructure -> /work/kubernetes-platform-infrastructure,gitlab.com/platformystical/bigbang -> /work/bigbang"
+      HUGO_MODULE_REPLACEMENTS: "github.com/zavestudios/panchito -> /work/panchito,github.com/zavestudios/rigoberta -> /work/rigoberta,github.com/zavestudios/thehouseguy -> /work/thehouseguy,github.com/zavestudios/xavierlopez.me -> /work/xavierlopez.me,github.com/zavestudios/platform-pipelines -> /work/platform-pipelines,github.com/zavestudios/gitops -> /work/gitops,github.com/zavestudios/oracle -> /work/oracle,github.com/zavestudios/data-pipelines -> /work/data-pipelines,github.com/zavestudios/pg -> /work/pg,github.com/zavestudios/kubernetes-platform-infrastructure -> /work/kubernetes-platform-infrastructure,gitlab.com/platformystical/bigbang -> /work/bigbang"
 
 volumes:
   hugo_themes:
