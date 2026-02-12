@@ -28,7 +28,7 @@ Follow this learning path to understand the platform:
 1. **[Architecture](architecture/)** - Design decisions, patterns, and roadmap
 2. **[Infrastructure](infrastructure/)** - Kubernetes clusters, networking, and databases
 3. **[Platform Services](platform-services/)** - GitOps, CI/CD, and observability
-4. **[Applications](applications/)** - Tenant applications and use cases
+4. **[Current Tenant Applications](applications/)** - Tenant applications and use cases
 5. **[Experiments](experiments/)** - Proofs of concept and research
 
 ## Platform Status
@@ -38,4 +38,4 @@ Follow this learning path to understand the platform:
 - Multi-tenant PostgreSQL validated
 - GitOps deployment in progress
 
-See the [Implementation Roadmap](architecture/roadmap.md) for detailed status and timeline.
+See the [Architecture Overview](architecture/roadmap.md) for detailed status and timeline.

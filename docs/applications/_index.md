@@ -1,5 +1,5 @@
 ---
-title: "Applications"
+title: "Current Tenant Applications"
 weight: 40
 ---
 
