@@ -2,6 +2,8 @@ name: Deploy Hugo site to Pages
 
 on:
   push:
+    branches: ["**"]
+  pull_request:
     branches: ["main"]
   schedule:
     - cron: "0 12 * * *"
@@ -19,8 +21,50 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    name: Build Hugo Site (No Deploy)
+    if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "latest"
+          extended: true
+
+      - name: Ensure Relearn Theme
+        run: |
+          if [ ! -d themes/hugo-theme-relearn ]; then
+            git clone --depth 1 https://github.com/McShelby/hugo-theme-relearn themes/hugo-theme-relearn
+          fi
+
+      - name: Update Hugo Modules
+        env:
+          GOPRIVATE: github.com/zavestudios/*,gitlab.com/platformystical/*
+          GONOSUMDB: github.com/zavestudios/*,gitlab.com/platformystical/*
+        run: hugo mod get -u
+
+      - name: Build
+        env:
+          GOPRIVATE: github.com/zavestudios/*,gitlab.com/platformystical/*
+          GONOSUMDB: github.com/zavestudios/*,gitlab.com/platformystical/*
+          HUGO_ENVIRONMENT: production
+          HUGO_ENV: production
+        run: hugo --config hugo.toml --minify
+
   deploy:
     name: Deploy Hugo Site
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     uses: zavestudios/platform-pipelines/.github/workflows/hugo-deploy.yml@main
     with:
       goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
