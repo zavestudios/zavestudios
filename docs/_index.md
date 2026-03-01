@@ -25,11 +25,12 @@ ZaveStudios is an Application and Data Engineering Platform running multiple ten
 
 Follow this learning path to understand the platform:
 
-1. **[Architecture](architecture/)** - Design decisions and patterns
-2. **[Infrastructure](infrastructure/)** - Kubernetes clusters, networking, and databases
-3. **[Platform Services](platform-services/)** - GitOps, CI/CD, and observability
-4. **[Current Tenant Applications](applications/)** - Tenant applications and use cases
-5. **[Experiments](experiments/)** - Proofs of concept and research
+1. **[Documentation](documentation/)** - Platform governance, architecture, and operational standards
+2. **[Architecture](architecture/)** - Design decisions and patterns
+3. **[Infrastructure](infrastructure/)** - Kubernetes clusters, networking, and databases
+4. **[Platform Services](platform-services/)** - GitOps, CI/CD, and observability
+5. **[Current Tenant Applications](applications/)** - Tenant applications and use cases
+6. **[Experiments](experiments/)** - Proofs of concept and research
 
 ## Platform Status
 
