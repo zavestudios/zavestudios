@@ -3,8 +3,6 @@ title: "Infrastructure"
 weight: 20
 ---
 
-# Infrastructure
-
 Shared runtime substrate providing Kubernetes clusters, GitOps automation, and infrastructure provisioning. Only infrastructure repositories may mutate shared infrastructure state - tenants operate within boundaries, never across them.
 
 Infrastructure demonstrates portability patterns: Kind (local) → Linode (sandbox) → AWS (production target) with zero tenant awareness of substrate changes.
@@ -19,8 +17,7 @@ Infrastructure demonstrates portability patterns: Kind (local) → Linode (sandb
 Kubernetes cluster definitions and platform configuration for multiple environments.
 
 **Environments:**
-- **Local:** Kind clusters for development and testing
-- **Sandbox:** Linode LKE for cost-efficient cloud validation
+- **Sandbox:** libvirt/QEMU + k3s for cost-efficient validation
 - **Production Target:** AWS EKS design (not yet deployed)
 
 **Capabilities:**
@@ -108,9 +105,9 @@ Network policies restrict inter-namespace communication. Tenants consume shared 
 **Design constraint:** Infrastructure should be replaceable without tenant changes.
 
 **Portability demonstrations:**
-- Kind → Linode migration required zero tenant code changes
 - PostgreSQL engine is abstracted via contract (`spec.persistence.engine: postgres`)
 - Future AWS migration will be infrastructure-only operation
+- Cluster substrate (libvirt/QEMU + k3s → AWS EKS) replaceable without tenant awareness
 
 **Anti-pattern:** Tenant code that assumes specific cloud provider, database implementation, or cluster distribution violates portability constraints.
 

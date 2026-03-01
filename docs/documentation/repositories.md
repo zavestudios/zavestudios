@@ -3,8 +3,6 @@ title: "Repository Directory"
 weight: 10
 ---
 
-# Repository Directory
-
 All repositories in the ZaveStudios organization, organized by taxonomy category.
 
 See [REPO_TAXONOMY.md](https://github.com/zavestudios/platform-docs/blob/main/_platform/REPO_TAXONOMY.md) for detailed classification rules and governance.
@@ -79,9 +77,9 @@ External-facing or personal projects outside the platform reference model.
 1. Every repository belongs to exactly one category
 2. Category assignment is declared authoritatively in [REPO_TAXONOMY.md](https://github.com/zavestudios/platform-docs/blob/main/_platform/REPO_TAXONOMY.md)
 3. Reclassification requires explicit taxonomy update via pull request
-4. Only `infrastructure` repositories may mutate shared infrastructure state
-5. Only `tenant` repositories may deploy runtime workloads
-6. `platform-service` repositories provide reusable capabilities
-7. `portfolio` repositories are excluded from platform invariants unless explicitly promoted
+4. Only **infrastructure** repositories may mutate shared infrastructure state
+5. Only **tenant** repositories may deploy runtime workloads
+6. **platform-service** repositories provide reusable capabilities
+7. **portfolio** repositories are excluded from platform invariants unless explicitly promoted
 
-**Ambiguity is architectural debt. Classification changes must be deliberate and reviewable.**
+Ambiguity is architectural debt. Classification changes must be deliberate and reviewable.

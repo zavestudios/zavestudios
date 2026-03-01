@@ -3,8 +3,6 @@ title: "Conceptual Overview"
 weight: 5
 ---
 
-# Platform Architecture Overview
-
 ZaveStudios implements a **contract-driven control plane model** where tenant workloads express requirements through declarative contracts, and the platform translates those contracts into runtime infrastructure.
 
 ## Four-Plane Control Model
@@ -141,8 +139,7 @@ All tenants consume shared GitOps, CI/CD, and observability infrastructure. Cost
 
 The platform runs on multiple substrates without tenant changes:
 
-**Local Development:** Kind + PostgreSQL in Docker
-**Sandbox:** Linode LKE cluster + managed PostgreSQL
+**Sandbox:** libvirt/QEMU + k3s + PostgreSQL
 **Production Target:** AWS EKS + RDS PostgreSQL
 
 Tenants declare requirements in contracts. Platform chooses how to satisfy based on environment. Database engine, Kubernetes distribution, and cloud provider are replaceable without application rewrites.

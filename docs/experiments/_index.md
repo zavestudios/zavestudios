@@ -3,8 +3,6 @@ title: "Experiments"
 weight: 50
 ---
 
-# Experiments
-
 Proofs of concept, research, and exploratory work that inform platform evolution during Formation Phase.
 
 Experiments validate architectural assumptions, test infrastructure patterns, and prove feasibility before committing to production implementation. They represent ongoing exploration rather than operational capabilities.
@@ -39,8 +37,7 @@ Research into code generation patterns for:
 **Status:** Ongoing
 
 Validation of zero-tenant-change infrastructure migrations:
-- Kind → Linode cluster migration (completed)
-- Future: Linode → AWS migration design
+- Future: Sandbox → AWS migration design
 - Database engine portability testing
 
 **Goal:** Prove infrastructure portability claims through actual migrations. No tenant code changes permitted.

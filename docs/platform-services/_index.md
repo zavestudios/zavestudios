@@ -3,8 +3,6 @@ title: "Platform Services"
 weight: 30
 ---
 
-# Platform Services
-
 Reusable capabilities consumed by tenant applications, providing CI/CD automation, base image builds, and database provisioning without requiring tenant-level infrastructure knowledge.
 
 Platform services enable tenant workloads to declare requirements in contracts and receive provisioned capabilities automatically.
@@ -55,6 +53,33 @@ Database provisioning and management service providing multi-tenant PostgreSQL a
 - Tenant-specific migration tooling
 
 **Tenant integration:** Tenants declare `spec.persistence.engine: postgres` in contract. Platform provisions isolated database schema automatically.
+
+---
+
+## BigBang Platform Services
+
+Many core platform services are provided through the [Big Bang](https://github.com/zavestudios/bigbang) distribution, which delivers DoD-validated security and observability patterns.
+
+**GitOps Automation:**
+- **Flux** - Continuous deployment and GitOps reconciliation
+- **ArgoCD** - Application deployment and sync management
+
+**Observability:**
+- **Prometheus** - Metrics collection and alerting
+- **Grafana** - Metrics visualization and dashboards
+- **Loki** - Log aggregation
+- **Tempo** - Distributed tracing
+
+**Security:**
+- **Istio** - Service mesh and mTLS
+- **Kyverno** - Policy enforcement
+- **Twistlock** - Container security scanning
+
+**Additional Services:**
+- **Velero** - Backup and disaster recovery
+- **Keycloak** - Identity and access management
+
+BigBang services are consumed automatically by all tenants through platform infrastructure. Tenants receive observability, security, and GitOps capabilities without explicit configuration.
 
 ---
 

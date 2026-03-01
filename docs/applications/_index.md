@@ -3,8 +3,6 @@ title: "Tenant Applications"
 weight: 40
 ---
 
-# Tenant Applications
-
 Contract-governed workloads running on the platform, demonstrating multi-tenant deployment patterns with namespace isolation, database tenancy, and GitOps automation.
 
 Each tenant deploys via the platform contract (`zave.yaml`) without infrastructure access or custom workflow logic. See individual repository links for detailed implementation.

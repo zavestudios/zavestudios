@@ -3,8 +3,6 @@ title: "Documentation"
 weight: 15
 ---
 
-# Platform Documentation
-
 Comprehensive platform documentation is maintained in the [platform-docs](https://github.com/zavestudios/platform-docs) repository, which serves as the authoritative source for all governance, architecture, and operational standards.
 
 ## Documentation Sections

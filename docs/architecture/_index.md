@@ -3,8 +3,6 @@ title: "Architecture"
 weight: 10
 ---
 
-# Platform Architecture
-
 High-level architecture, control plane model, and design patterns.
 
 ## Overview

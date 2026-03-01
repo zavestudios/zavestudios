@@ -3,8 +3,6 @@ title: "Design Principles"
 weight: 10
 ---
 
-# Platform Design Principles
-
 These principles guide architectural decisions and trade-offs across the platform.
 
 ## Tenant Contract Principles

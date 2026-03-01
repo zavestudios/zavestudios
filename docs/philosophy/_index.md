@@ -3,8 +3,6 @@ title: "Philosophy"
 weight: 5
 ---
 
-# Platform Philosophy
-
 ZaveStudios demonstrates a contract-driven approach to platform engineering where tenant applications express requirements through declarative contracts, and the platform translates those contracts into infrastructure reality.
 
 ## Core Beliefs

@@ -3,8 +3,6 @@ title: "Formation Phase"
 weight: 20
 ---
 
-# Formation Phase Status
-
 The platform is currently in **Formation Phase**, the initial lifecycle state focused on surface stabilization and reference implementation.
 
 ## What is Formation Phase?
