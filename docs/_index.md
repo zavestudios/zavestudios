@@ -25,7 +25,7 @@ ZaveStudios is an Application and Data Engineering Platform running multiple ten
 
 Follow this learning path to understand the platform:
 
-1. **[Architecture](architecture/)** - Design decisions, patterns, and roadmap
+1. **[Architecture](architecture/)** - Design decisions and patterns
 2. **[Infrastructure](infrastructure/)** - Kubernetes clusters, networking, and databases
 3. **[Platform Services](platform-services/)** - GitOps, CI/CD, and observability
 4. **[Current Tenant Applications](applications/)** - Tenant applications and use cases
@@ -33,9 +33,8 @@ Follow this learning path to understand the platform:
 
 ## Platform Status
 
-**Current Phase:** Foundation (Phase I)
-- Kubernetes cluster operational
-- Multi-tenant PostgreSQL validated
-- GitOps deployment in progress
+**Current Phase:** Formation
 
-See the [Architecture Overview](architecture/roadmap.md) for detailed status and timeline.
+The platform is in Formation Phase, focusing on surface stabilization.
+
+See [platform-docs](https://github.com/zavestudios/platform-docs) for formation goals and exit criteria.
