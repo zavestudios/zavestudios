@@ -3,4 +3,6 @@ title: "The House Guy"
 weight: 30
 ---
 
-{{< readfile file="applications/thehouseguy.md" >}}
+Real estate listing application built with Ruby on Rails.
+
+See the [thehouseguy repository](https://github.com/zavestudios/thehouseguy) for details.
