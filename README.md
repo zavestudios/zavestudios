@@ -6,6 +6,7 @@ multi-tenant architecture, and GitOps automation.
 **Repository Category:** `portfolio` (canonical classification in [REPO_TAXONOMY.md](https://github.com/zavestudios/platform-docs/blob/main/_platform/REPO_TAXONOMY.md))
 
 **Contract Governance:** This repository is a contract-governed portfolio workload.
+
 Canonical contract: [`zave.yaml`](./zave.yaml)
 
 ## Platform Overview
@@ -20,17 +21,20 @@ runs on spare capacity with AWS deployment capability.
 ## Architecture Layers
 
 ### Infrastructure Layer
+
 - **[kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure)**: 3-node k3s cluster, automated deployment
 - **[pg-multitenant](https://github.com/zavestudios/pg)**: PostgreSQL multi-tenant data layer with security isolation
 - **[platform-pipelines](https://github.com/zavestudios/platform-pipelines)**: Reusable CI/CD workflows
 
 ### Platform Services Layer
+
 - **GitOps**: Flux (platform services) + ArgoCD (applications)
 - **Service Mesh**: Istio
 - **Observability**: Prometheus + Grafana
 - **CI/CD**: GitLab (self-hosted)
 
 ### Tenant Applications
+
 The platform hosts multiple tenant applications, each with isolated namespaces 
 and database tenants:
 
@@ -42,6 +46,7 @@ and database tenants:
 | [rigoberta](https://github.com/zavestudios/rigoberta) | Ruby on Rails | db_rigoberta | Reference Rails template |
 
 Each tenant application:
+
 - Deploys to isolated Kubernetes namespace
 - Has dedicated database tenant in pg-multitenant PostgreSQL
 - Deploys via ArgoCD GitOps
@@ -70,11 +75,13 @@ See [pg-multitenant documentation](https://github.com/zavestudios/pg) for securi
 ## Cost Model
 
 **Sandbox Environment (Primary):**
+
 - Infrastructure: $0/month (runs on spare capacity)
 - Serves all tenant applications continuously
 - See [kpi cost analysis](#) for details
 
 **AWS On-Demand (Demonstrations):**
+
 - Deploy: ~20 minutes to operational platform
 - Cost: ~$10-20 per weekend deployment
 - Identical platform services and applications
@@ -84,11 +91,13 @@ See [pg-multitenant documentation](https://github.com/zavestudios/pg) for securi
 ## Repository Organization
 
 ### Infrastructure & Platform
+
 - [kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure) - k3s cluster, deployment automation
 - [pg-multitenant](https://github.com/zavestudios/pg) - Multi-tenant PostgreSQL with security isolation
 - [platform-pipelines](https://github.com/zavestudios/platform-pipelines) - Reusable CI/CD workflows for all projects
 
-### Tenant Applications  
+### Tenant Applications
+
 - [xavierlopez.me](https://xavierlopez.me) - Portfolio and blog site (Jekyll)
 - [panchito](https://github.com/zavestudios/panchito) - Real estate ETL service (Python/Flask/Celery)
 - [thehouseguy](https://github.com/zavestudios/thehouseguy) - Real estate application (Rails)
@@ -97,17 +106,20 @@ See [pg-multitenant documentation](https://github.com/zavestudios/pg) for securi
 ## Current Status
 
 **Phase I: Foundation** (~20% complete)
-- ✅ k3s cluster operational (automated deployment)
-- ✅ Multi-tenant PostgreSQL pattern validated
-- 🔄 Flux GitOps bootstrap (next)
-- 🔄 Platform services deployment (Big Bang)
+
+-  k3s cluster operational (automated deployment)
+-  Multi-tenant PostgreSQL pattern validated
+-  Flux GitOps bootstrap (next)
+-  Platform services deployment (Big Bang)
 
 **Phase II: Tenant Applications** (planned)
+
 - Application deployments via ArgoCD
 - Tenant onboarding automation
 - Per-tenant observability
 
 **Phase III: Production Hardening** (planned)
+
 - Backup/restore per tenant
 - Disaster recovery procedures
 - Advanced monitoring and alerting
@@ -144,6 +156,7 @@ See [tenant onboarding guide](#) for details. (TODO)
 This site uses Hugo with the `hugo-theme-relearn` theme module.
 
 Prerequisites for local builds:
+
 - Docker and Docker Compose
 
 ---
