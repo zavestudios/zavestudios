@@ -1,0 +1,47 @@
+# Strict Documentation Authority Audit
+
+Date: 2026-03-02
+Repository: `zavestudios`
+Category (canonical): `portfolio` (from `platform-docs/_platform/REPO_TAXONOMY.md`)
+Overall Disposition: **Compliant**
+
+## Scope Snapshot
+
+- `docs/` present: yes
+- `README.md` present: yes
+- `zave.yaml` present: yes
+- Authoritative governance source linked: yes (`platform-docs`)
+- Cross-repo runtime doc import coupling in code: not detected
+
+## Resolved Findings
+
+1. Removed stale cross-repo Hugo Modules claim from README.
+2. Added explicit README category declaration:
+   - `Repository Category: portfolio`
+3. Added canonical workload contract:
+   - `zave.yaml` with `runtime: static`, `exposure: public-http`, `delivery: rolling`
+
+## Layer Contract Check
+
+- Correct for `portfolio` layer:
+  - Narrative and explanatory documentation in site repo
+  - Links to canonical governance in `platform-docs`
+- Prohibited coupling state:
+  - No detected runtime import/embedding of sibling-repo docs as authority source
+
+## Validation Commands
+
+```bash
+# Ensure no direct cross-repo module coupling remains in build files
+rg -n "github.com/zavestudios/(panchito|rigoberta|thehouseguy|gitops|pg|platform-pipelines)|gitlab.com/platformystical/bigbang" go.mod docker-compose.yml
+
+# Ensure README category line exists
+rg -n "Repository Category:\s*`portfolio`|Repository Category:\s*portfolio" README.md
+
+# Ensure canonical contract file exists
+test -f zave.yaml && yq e '.spec.runtime, .spec.exposure, .spec.delivery' zave.yaml
+```
+
+## Manual Steps
+
+- None.
