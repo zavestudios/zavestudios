@@ -64,7 +64,7 @@ Tenants have zero direct cluster access. All mutations flow through Contract →
 
 ## Control Flow
 
-**Tenant deployment flow:**
+**Tenant deployment flow (target architecture):**
 
 1. Developer updates `zave.yaml` contract in tenant repository
 2. GitHub Actions workflow validates contract schema
@@ -74,7 +74,9 @@ Tenants have zero direct cluster access. All mutations flow through Contract →
 6. Kubernetes schedules workload in tenant namespace
 7. Platform services provision database resources if declared in contract
 
-**No manual steps.** No infrastructure access required. Contract in, running workload out.
+**Target state:** No manual steps. No infrastructure access required. Contract in, running workload out.
+
+**Current state (Formation Phase):** Manual Conformance Mode. Repository scaffolding, workflow bindings, and GitOps manifests are created manually until generators are implemented.
 
 ## Repository Taxonomy
 

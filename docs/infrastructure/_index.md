@@ -5,7 +5,7 @@ weight: 20
 
 Shared runtime substrate providing Kubernetes clusters, GitOps automation, and infrastructure provisioning. Only infrastructure repositories may mutate shared infrastructure state - tenants operate within boundaries, never across them.
 
-Infrastructure demonstrates portability patterns: Kind (local) → Linode (sandbox) → AWS (production target) with zero tenant awareness of substrate changes.
+Infrastructure demonstrates portability patterns: libvirt/QEMU (sandbox) → AWS (production target) with zero tenant awareness of substrate changes.
 
 ---
 

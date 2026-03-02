@@ -14,7 +14,7 @@ Tenants declare what they need in `zave.yaml`. The platform handles how to deliv
 The platform is currently in Formation Phase, focused on surface stabilization and reference implementation. Production-grade patterns are demonstrated, but automation and generator tooling are still being built.
 
 **Portability as a design constraint.**
-Infrastructure should be replaceable without tenant changes. Kubernetes clusters can run on Kind (local), Linode (sandbox), or AWS (production) with zero tenant awareness. Database engines can migrate from PostgreSQL to alternatives without application rewrites.
+Infrastructure should be replaceable without tenant changes. Kubernetes clusters can run on libvirt/QEMU (sandbox) or AWS (production) with zero tenant awareness. Database engines can migrate from PostgreSQL to alternatives without application rewrites.
 
 **Multi-tenancy as proof of generality.**
 If the platform can't handle multiple isolated tenants with shared services, it hasn't proven its abstractions are sound. Multi-tenant database architecture and namespace isolation demonstrate the platform's capability to provide secure, performant resource sharing.

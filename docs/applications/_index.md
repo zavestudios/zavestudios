@@ -69,7 +69,7 @@ Real estate listing application built with Ruby on Rails, demonstrating multi-te
 
 ## Contract-Governed Deployment
 
-All tenant applications deploy through the same contract-driven process:
+All tenant applications follow the same contract-driven deployment model:
 
 1. Developer updates `zave.yaml` contract in tenant repository
 2. CI validates contract schema and builds container image
@@ -77,6 +77,8 @@ All tenant applications deploy through the same contract-driven process:
 4. Flux/ArgoCD deploys to tenant-isolated namespace
 5. Platform services provision database resources
 
-No manual infrastructure access or workflow customization required.
+**Target state:** No manual infrastructure access or workflow customization required.
+
+**Current state:** Formation Phase with Manual Conformance Mode. Initial scaffolding is manual until generators are implemented.
 
 See [Repository Directory](../documentation/repositories/) for complete taxonomy or [Conceptual Overview](../architecture/overview/) for deployment architecture.
