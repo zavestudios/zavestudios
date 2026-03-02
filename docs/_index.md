@@ -2,40 +2,76 @@
 title: "ZaveStudios"
 ---
 
-{{% notice note %}}
-**Under Construction** — This site is under construction as of February 8, 2026.
-{{% /notice %}}
+ZaveStudios is a reference implementation of an opinionated Internal Developer Platform (IDP) that reduces infrastructure decisions to a [bounded declarative contract](https://github.com/zavestudios/platform-docs/blob/main/_platform/CONTRACT_SCHEMA.md) while guaranteeing delivery, governance, and safe evolution. It models the conversion of infrastructure from an ongoing design problem into a constrained, productized interface.
 
-# Application & Data Platform Engineering
+Variance in build pipelines, deployment mechanics, data provisioning, network topology, and governance leads to entropy, fragility, and platform teams devolving into reactive support functions. ZaveStudios aims to eliminate variance in infrastructure composition while preserving tenant autonomy.
 
-Production-grade platform demonstrating infrastructure portability, multi-tenant architecture, and GitOps automation.
+---
 
-## What is ZaveStudios?
+## How It Works
 
-ZaveStudios is an Application and Data Engineering Platform running multiple tenant applications with isolated resources, shared services, and tenant-specific data isolation. The platform demonstrates production patterns for multi-tenancy, GitOps, cost-efficient infrastructure design and will soon feature meaningful AI integration.
+Tenants write a contract like this:
 
-**Key Capabilities:**
-- Multi-tenant namespace and database isolation
-- GitOps automation (Flux + ArgoCD)
-- PostgreSQL multi-tenant secure and performant architecture experiments
-- Zero-cost sandbox with AWS deployment capability
-- Production-grade observability and security
+```yaml
+apiVersion: zave.io/v1
+kind: Workload
+metadata:
+  name: my-app
+spec:
+  runtime: container
+  persistence:
+    engine: postgres
+  exposure: public-http
+```
 
-## Getting Started
+The platform translates that contract into:
+- Container builds and semantic versioning
+- GitOps manifests and automated deployments
+- Isolated database resources with connection pooling
+- Observability, security, and service mesh integration
 
-Follow this learning path to understand the platform:
+Developers write application code. The platform handles everything else.
 
-1. **[Documentation](documentation/)** - Platform governance, architecture, and operational standards
-2. **[Architecture](architecture/)** - Design decisions and patterns
-3. **[Infrastructure](infrastructure/)** - Kubernetes clusters, networking, and databases
-4. **[Platform Services](platform-services/)** - GitOps, CI/CD, and observability
-5. **[Current Tenant Applications](applications/)** - Tenant applications and use cases
-6. **[Experiments](experiments/)** - Proofs of concept and research
+---
 
-## Platform Status
+## Why This Exists
 
-**Current Phase:** Formation
+Platform teams operate in the dark. You inherit infrastructure decisions made years ago, reverse-engineer implicit contracts from tribal knowledge, and spend months building tooling that should have been there from day one.
 
-The platform is in Formation Phase, focusing on surface stabilization.
+This platform is designed differently:
 
-See [platform-docs](https://github.com/zavestudios/platform-docs) for formation goals and exit criteria.
+**Contracts over conventions.** Requirements are explicit, not inferred from repository structure or deployment patterns.
+
+**Documentation is architecture.** The operating model, contract schema, and lifecycle rules define how the system works. When code and docs diverge, the code is wrong.
+
+**Formation before optimization.** Prove patterns work at reference scale before investing in generators and automation.
+
+**Platform teams of one.** If it requires a team to operate, the abstractions failed.
+
+---
+
+## What You'll Find Here
+
+**[Philosophy](philosophy/)** — Core beliefs, design principles, and Formation Phase status
+
+**[Architecture](architecture/)** — Four-plane control model and contract-driven design
+
+**[Documentation](documentation/)** — Complete platform governance and operational standards
+
+**[Infrastructure](infrastructure/)** — Kubernetes clusters, GitOps, and infrastructure portability
+
+**[Platform Services](platform-services/)** — Shared workflows, base images, and multi-tenant database provisioning
+
+**[Tenant Applications](applications/)** — Six running workloads demonstrating contract patterns
+
+**[Experiments](experiments/)** — Research validating architectural assumptions before production
+
+---
+
+## Current Status
+
+The platform is in **Formation Phase** — stabilizing contracts, proving multi-tenant patterns, and building reference implementations before committing to full automation.
+
+No revenue dependencies. No customer commitments. Just deliberate architecture and patient execution.
+
+See [platform-docs](https://github.com/zavestudios/platform-docs) for complete governance specifications and Formation Phase exit criteria.
