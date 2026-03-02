@@ -2,9 +2,9 @@
 title: "ZaveStudios"
 ---
 
-ZaveStudios is a reference implementation of an opinionated Internal Developer Platform (IDP) that reduces infrastructure decisions to a [bounded declarative contract](https://github.com/zavestudios/platform-docs/blob/main/_platform/CONTRACT_SCHEMA.md) while guaranteeing delivery, governance, and safe evolution. It models the conversion of infrastructure from an ongoing design problem into a constrained, productized interface.
+ZaveStudios implements an opinionated Developer Platform architecture designed as a portable operating model. It minimizes cognitive overload through bounded declarative contracts while guaranteeing delivery, governance, and safe evolution. It transforms infrastructure from an ongoing design problem into a constrained, productized interface.
 
-Variance in build pipelines, deployment mechanics, data provisioning, network topology, and governance leads to entropy, fragility, and platform teams devolving into reactive support functions. ZaveStudios aims to eliminate variance in infrastructure composition while preserving tenant autonomy.
+Uncontrolled variance in build pipelines, deployment mechanics, data provisioning, network topology, and governance generates entropy, fragility, and reactive platform teams. ZaveStudios eliminates variance in infrastructure composition while preserving tenant autonomy.
 
 ---
 
