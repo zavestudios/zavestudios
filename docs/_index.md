@@ -36,9 +36,9 @@ Developers write application code. The platform handles everything else.
 
 ## Why This Exists
 
-Platform teams operate in the dark. You inherit infrastructure decisions made years ago, reverse-engineer implicit contracts from tribal knowledge, and spend months building tooling that should have been there from day one.
+Great platforms make infrastructure decisions explicit, contracts versioned, and tenant onboarding predictable. They convert complexity into product interfaces that developers can understand and trust.
 
-This platform is designed differently:
+This platform demonstrates those principles:
 
 **Contracts over conventions.** Requirements are explicit, not inferred from repository structure or deployment patterns.
 
