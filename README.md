@@ -3,6 +3,11 @@
 Production-grade Kubernetes platform demonstrating infrastructure portability, 
 multi-tenant architecture, and GitOps automation.
 
+**Repository Category:** `portfolio` (canonical classification in [REPO_TAXONOMY.md](https://github.com/zavestudios/platform-docs/blob/main/_platform/REPO_TAXONOMY.md))
+
+**Contract Governance:** This repository is a contract-governed portfolio workload.
+Canonical contract: [`zave.yaml`](./zave.yaml)
+
 ## Platform Overview
 
 ZaveStudios is a multi-tenant platform running on Kubernetes infrastructure. 
@@ -134,17 +139,12 @@ See [tenant onboarding guide](#) for details. (TODO)
 - [Cost Analysis](#)
 - [Blog Posts](https://xavierlopez.me) - Technical writing about platform decisions
 
-### Hugo Modules (External Docs)
+### Local Build Notes
 
-This site pulls documentation from other repositories via Hugo Modules.
+This site uses Hugo with the `hugo-theme-relearn` theme module.
 
 Prerequisites for local builds:
-- Git access to all module repos (SSH keys or HTTPS token).
-- `GOPRIVATE` / `GONOSUMDB` set for private modules, for example:
-  - `GOPRIVATE=github.com/zavestudios/*,gitlab.com/platformystical/*`
-  - `GONOSUMDB=github.com/zavestudios/*,gitlab.com/platformystical/*`
-
-CI must also provide credentials to fetch private repos when applicable.
+- Docker and Docker Compose
 
 ---
 
