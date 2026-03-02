@@ -8,6 +8,7 @@ High-level architecture, control plane model, and design patterns.
 ## Overview
 
 - **[Conceptual Overview](overview/)** - Four-plane control model, repository taxonomy, and generator architecture
+- **[Architectural Influences](influences/)** - Works and practitioners that informed the platform design
 
 ## Authoritative Documentation
 
