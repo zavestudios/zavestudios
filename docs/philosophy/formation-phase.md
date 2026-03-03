@@ -135,8 +135,8 @@ Workloads in Formation Phase cannot support revenue-generating services. Platfor
 **No customer commitments:**
 No SLAs, uptime guarantees, or customer-facing dependencies. Downtime for architectural changes is acceptable.
 
-**No operational overhead:**
-Platform must remain operable by a single person. Complexity that requires a team indicates abstraction failure.
+**No operational sprawl:**
+Platform must remain operable with low coordination overhead. Complexity that requires continuous manual coordination indicates abstraction failure.
 
 **Breaking changes permitted:**
 Contract schema, repository taxonomy, and architectural doctrine can be revised. Tenant migrations are acceptable cost of stabilization.
