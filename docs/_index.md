@@ -2,35 +2,21 @@
 title: "ZaveStudios"
 ---
 
-ZaveStudios implements an opinionated Developer Platform architecture designed to minimize cognitive overhead for platform and tenant teams through bounded declarative contracts while guaranteeing delivery, governance, and safe evolution. It transforms infrastructure from an ongoing design problem into a constrained, productized interface.
+ZaveStudios is a public narrative and interpretation layer for the platform work collected across the ZaveStudios repositories. It explains the intent, tradeoffs, and shape of the platform without serving as the canonical source for governance or contract rules.
 
-Uncontrolled variance in build pipelines, deployment mechanics, data provisioning, network topology, and governance generates entropy, fragility, and reactive platform teams. ZaveStudios eliminates variance in infrastructure composition while preserving tenant autonomy.
+The underlying platform work is focused on reducing architectural variance across workloads while preserving application-level autonomy.
 
 ---
 
 ## How It Works
 
-Tenants write a contract like this:
-
-```yaml
-apiVersion: zave.io/v1
-kind: Workload
-metadata:
-  name: my-app
-spec:
-  runtime: container
-  persistence:
-    engine: postgres
-  exposure: public-http
-```
-
-The platform translates that contract into:
+At a high level, tenant repositories declare intent through a small contract surface and the platform translates that intent into:
 - Container builds and semantic versioning
 - GitOps manifests and automated deployments
 - Isolated database resources with connection pooling
 - Observability, security, and service mesh integration
 
-Developers write application code. The platform handles everything else.
+The canonical contract shape and validation rules live in `platform-docs`, not on this site.
 
 ---
 
@@ -42,7 +28,7 @@ This platform demonstrates those principles:
 
 **Contracts over conventions.** Requirements are explicit, not inferred from repository structure or deployment patterns.
 
-**Documentation is architecture.** The operating model, contract schema, and lifecycle rules define how the system works. When code and docs diverge, the code is wrong.
+**Documentation is architecture.** The canonical operating model, contract schema, lifecycle rules, and validation rules live in `platform-docs`. This site explains them, but does not redefine them.
 
 **Formation before optimization.** Prove patterns work at reference scale before investing in generators and automation.
 
@@ -56,7 +42,7 @@ This platform demonstrates those principles:
 
 **[Architecture](architecture/)** — Four-plane control model and contract-driven design
 
-**[Documentation](documentation/)** — Complete platform governance and operational standards
+**[Documentation](documentation/)** — Pointers to the canonical governance and operational docs
 
 **[Infrastructure](infrastructure/)** — Kubernetes clusters, GitOps, and infrastructure portability
 
@@ -74,4 +60,4 @@ The platform is in **Formation Phase** — stabilizing contracts, proving multi-
 
 No revenue dependencies. No customer commitments. Just deliberate architecture and patient execution.
 
-See [platform-docs](https://github.com/zavestudios/platform-docs) for complete governance specifications and Formation Phase exit criteria.
+See [platform-docs](https://github.com/zavestudios/platform-docs) for the canonical governance specifications, contract rules, and Formation Phase exit criteria.

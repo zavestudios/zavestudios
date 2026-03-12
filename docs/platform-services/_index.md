@@ -3,9 +3,7 @@ title: "Platform Services"
 weight: 30
 ---
 
-Reusable capabilities consumed by tenant applications, providing CI/CD automation, base image builds, and database provisioning without requiring tenant-level infrastructure knowledge.
-
-Platform services enable tenant workloads to declare requirements in contracts and receive provisioned capabilities automatically.
+This page summarizes reusable platform capabilities. Canonical service boundaries, contract behavior, and generator semantics live in `platform-docs`.
 
 ---
 
@@ -14,7 +12,7 @@ Platform services enable tenant workloads to declare requirements in contracts a
 ### Platform Pipelines - Shared CI/CD Workflows
 **Repository:** [zavestudios/platform-pipelines](https://github.com/zavestudios/platform-pipelines)
 
-Reusable GitHub Actions workflows for container builds, static site deployment, and semantic versioning. Tenants consume these workflows via thin bindings in `.github/workflows/*.yml` without implementing custom CI logic.
+Reusable GitHub Actions workflows for container builds, static site deployment, and related delivery automation. Tenant repositories are expected to consume these workflows through thin bindings rather than carrying full CI implementations.
 
 **Capabilities:**
 - Container image builds with multi-platform support (linux/amd64, linux/arm64)
@@ -22,7 +20,7 @@ Reusable GitHub Actions workflows for container builds, static site deployment, 
 - Static site deployment (Hugo, Jekyll)
 - GitOps repository updates on successful builds
 
-**Tenant integration:** Workflow bindings reference `@main` or pinned versions from platform-pipelines. No custom pipeline code in tenant repositories.
+**Tenant integration:** See the workload repos and `platform-pipelines` for current usage patterns. Canonical workflow ownership rules live in `platform-docs`.
 
 ---
 
@@ -44,7 +42,7 @@ Supply chain primitives providing hardened base images for tenant workloads. Red
 ### pg - PostgreSQL Multi-Tenant Provisioning
 **Repository:** [zavestudios/pg](https://github.com/zavestudios/pg)
 
-Database provisioning and management service providing multi-tenant PostgreSQL architecture with schema-per-tenant isolation, connection pooling, and resource limits.
+Database provisioning and management service providing the shared PostgreSQL capability used by workload repositories.
 
 **Capabilities:**
 - Automated schema provisioning per tenant
@@ -52,7 +50,7 @@ Database provisioning and management service providing multi-tenant PostgreSQL a
 - Resource limits and query monitoring
 - Tenant-specific migration tooling
 
-**Tenant integration:** Tenants declare `spec.persistence.engine: postgres` in contract. Platform provisions isolated database schema automatically.
+**Tenant integration:** Workload contracts can request persistence through the canonical contract surface defined in `platform-docs`.
 
 ---
 
@@ -85,23 +83,7 @@ BigBang services are consumed automatically by all tenants through platform infr
 
 ## Service Consumption Model
 
-Platform services are consumed declaratively through the tenant contract:
-
-```yaml
-apiVersion: zave.io/v1
-kind: Workload
-metadata:
-  name: example-tenant
-spec:
-  runtime: container          # Consumes: platform-pipelines, image-factory
-  persistence:
-    engine: postgres           # Consumes: pg
-  capabilities:
-    - name: metrics            # Future: observability platform service
-    - name: tracing
-```
-
-Tenants declare needs, platform services fulfill them. No direct service integration or configuration required in tenant code.
+Platform services are intended to be consumed through the workload contract and shared workflow bindings rather than through ad hoc tenant-specific integration. See the canonical contract and generator documents in `platform-docs` for the supported model.
 
 ---
 
