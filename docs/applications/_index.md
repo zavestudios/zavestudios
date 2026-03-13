@@ -3,9 +3,9 @@ title: "Tenant Applications"
 weight: 40
 ---
 
-Contract-governed workloads running on the platform, demonstrating multi-tenant deployment patterns with namespace isolation, database tenancy, and GitOps automation.
+Contract-governed workloads running on the platform, demonstrating the kinds of applications the platform is intended to support.
 
-Each tenant deploys via the platform contract (`zave.yaml`) without infrastructure access or custom workflow logic. See individual repository links for detailed implementation.
+This page is descriptive rather than normative. Canonical workload rules, contracts, and lifecycle semantics live in `platform-docs`.
 
 ---
 
@@ -67,18 +67,6 @@ Real estate listing application built with Ruby on Rails, demonstrating multi-te
 
 ---
 
-## Contract-Governed Deployment
+## Deployment Model
 
-All tenant applications follow the same contract-driven deployment model:
-
-1. Developer updates `zave.yaml` contract in tenant repository
-2. CI validates contract schema and builds container image
-3. GitOps automation updates cluster manifests
-4. Flux/ArgoCD deploys to tenant-isolated namespace
-5. Platform services provision database resources
-
-**Target state:** No manual infrastructure access or workflow customization required.
-
-**Current state:** Formation Phase with Manual Conformance Mode. Initial scaffolding is manual until generators are implemented.
-
-See [Repository Directory](../documentation/repositories/) for complete taxonomy or [Conceptual Overview](../architecture/overview/) for deployment architecture.
+These repos are intended to consume the same platform model: contract-backed workloads, shared delivery workflows, and GitOps-managed deployment state. See [Repository Directory](../documentation/repositories/) for repository discovery and [Conceptual Overview](../architecture/overview/) for an architectural summary. Use `platform-docs` for the canonical deployment and lifecycle model.

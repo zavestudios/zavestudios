@@ -3,13 +3,13 @@ title: "Documentation"
 weight: 15
 ---
 
-Comprehensive platform documentation is maintained in the [platform-docs](https://github.com/zavestudios/platform-docs) repository, which serves as the authoritative source for all governance, architecture, and operational standards.
+Comprehensive platform documentation is maintained in the [platform-docs](https://github.com/zavestudios/platform-docs) repository, which is the authoritative source for governance, contract rules, lifecycle semantics, and operational standards.
 
 ## Documentation Sections
 
-**Core Platform Governance:**
+**Canonical Platform Governance:**
 
-- **[Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/PLATFORM_OPERATING_MODEL.md)** - Control plane architecture, formation phase model, and operational boundaries
+- **[Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/OPERATING_MODEL.md)** - Control plane architecture, formation phase model, and operational boundaries
 - **[Repository Taxonomy](https://github.com/zavestudios/platform-docs/blob/main/_platform/REPO_TAXONOMY.md)** - Repository classification and organizational structure
 - **[Architectural Doctrine (Tier 0)](https://github.com/zavestudios/platform-docs/blob/main/_platform/ARCHITECTURAL_DOCTRINE_TIER0.md)** - Core architectural principles and design constraints
 
@@ -30,4 +30,4 @@ Browse all platform repositories organized by taxonomy in the [Repository Direct
 
 ## Contributing
 
-All documentation follows the platform contract model. See [platform-docs](https://github.com/zavestudios/platform-docs) for contribution guidelines.
+Use this site for narrative explanation and discovery. Use [platform-docs](https://github.com/zavestudios/platform-docs) for canonical governance and contribution changes that affect platform rules.

@@ -151,6 +151,21 @@ See [tenant onboarding guide](#) for details. (TODO)
 - [Cost Analysis](#)
 - [Blog Posts](https://xavierlopez.me) - Technical writing about platform decisions
 
+## Local Development
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Git
+
+### Quick Start
+
+- Copy the environment template:
+  `cp .env.example .env`
+- Start the local Hugo server:
+  `docker compose up`
+- Open the site at `http://localhost:1313`
+
 ### Local Build Notes
 
 This site uses Hugo with the `hugo-theme-relearn` theme module.
