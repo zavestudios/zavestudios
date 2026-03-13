@@ -33,8 +33,8 @@ Demonstrate GitOps, observability, and security patterns in a cost-efficient san
 **Automate what repeats.**
 Manual scaffolding is acceptable in Formation Phase. Once patterns stabilize, generators should eliminate repetitive decisions.
 
-**Platform teams of one.**
-The entire platform is designed to be operated and extended by a single person. If it requires a team to maintain, the abstractions failed.
+**Operationally lean by design.**
+The platform is designed for low operational overhead through bounded interfaces and automation. If coordination cost dominates maintenance, the abstractions need refinement.
 
 ## Current Focus
 
