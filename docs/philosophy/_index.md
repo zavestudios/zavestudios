@@ -3,12 +3,12 @@ title: "Philosophy"
 weight: 5
 ---
 
-ZaveStudios demonstrates a contract-driven approach to platform engineering where tenant applications express requirements through declarative contracts, and the platform translates those contracts into infrastructure reality.
+ZaveStudios demonstrates a contract-driven approach to platform engineering. This page describes the thinking behind the platform; canonical rules and semantics live in `platform-docs`.
 
 ## Core Beliefs
 
 **Contracts over conventions.**
-Tenants declare what they need in `zave.yaml`. The platform handles how to deliver it. No repository design decisions, no workflow customization, no infrastructure access required.
+Workloads should describe intent through a small contract surface, while delivery mechanics stay platform-owned.
 
 **Formation before optimization.**
 The platform is currently in Formation Phase, focused on surface stabilization and reference implementation. Production-grade patterns are demonstrated, but automation and generator tooling are still being built.
@@ -20,7 +20,7 @@ Infrastructure should be replaceable without tenant changes. Kubernetes clusters
 If the platform can't handle multiple isolated tenants with shared services, it hasn't proven its abstractions are sound. Multi-tenant database architecture and namespace isolation demonstrate the platform's capability to provide secure, performant resource sharing.
 
 **Documentation is architecture.**
-The platform operating model, contract schema, and architectural doctrine are not aspirational - they define how the system works. When documentation and implementation diverge, the implementation is wrong.
+Canonical doctrine, contract schema, lifecycle, and operating rules belong in `platform-docs`. This site explains and interprets those choices rather than redefining them.
 
 ## Design Philosophy
 
@@ -31,7 +31,7 @@ Use managed PostgreSQL before building a database operator. Use GitHub Actions b
 Demonstrate GitOps, observability, and security patterns in a cost-efficient sandbox environment. Prove concepts work before scaling investment.
 
 **Automate what repeats.**
-Manual scaffolding is acceptable in Formation Phase. Once patterns stabilize, generators should eliminate repetitive decisions. The Generator Model defines four stages: Repository, Pipeline, GitOps, and Capability generators.
+Manual scaffolding is acceptable in Formation Phase. Once patterns stabilize, generators should eliminate repetitive decisions.
 
 **Platform teams of one.**
 The entire platform is designed to be operated and extended by a single person. If it requires a team to maintain, the abstractions failed.
@@ -51,4 +51,4 @@ See [Formation Phase Status](formation-phase/) for detailed progress and goals.
 
 - [Platform Principles](principles/) - Specific design principles and constraints
 - [Architectural Overview](../architecture/overview/) - Conceptual architecture and control plane model
-- [Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/PLATFORM_OPERATING_MODEL.md) - Full operating model specification
+- [Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/OPERATING_MODEL.md) - Full operating model specification

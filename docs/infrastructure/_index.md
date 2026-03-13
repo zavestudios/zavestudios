@@ -3,9 +3,9 @@ title: "Infrastructure"
 weight: 20
 ---
 
-Shared runtime substrate providing Kubernetes clusters, GitOps automation, and infrastructure provisioning. Only infrastructure repositories may mutate shared infrastructure state - tenants operate within boundaries, never across them.
+Shared runtime substrate providing Kubernetes clusters, GitOps automation, and infrastructure provisioning.
 
-Infrastructure demonstrates portability patterns: libvirt/QEMU (sandbox) → AWS (production target) with zero tenant awareness of substrate changes.
+This page summarizes the infrastructure layer. Canonical mutation boundaries, control-plane rules, and portability constraints live in `platform-docs`.
 
 ---
 
@@ -33,7 +33,7 @@ Kubernetes cluster definitions and platform configuration for multiple environme
 ### GitOps - Declarative Cluster State
 **Repository:** [zavestudios/gitops](https://github.com/zavestudios/gitops)
 
-GitOps state management using Flux and ArgoCD. All cluster state is declared in Git - manual `kubectl` operations are prohibited in operational workflows.
+GitOps state management using Flux and ArgoCD.
 
 **Capabilities:**
 - Automated deployment reconciliation
@@ -41,7 +41,7 @@ GitOps state management using Flux and ArgoCD. All cluster state is declared in 
 - Configuration drift detection and correction
 - Progressive delivery patterns (future)
 
-**Workflow:** CI updates GitOps repository → Flux/ArgoCD detects change → Cluster state reconciled automatically. Humans observe, automation executes.
+This repository represents the desired-state layer for platform and workload deployment.
 
 ---
 
@@ -71,19 +71,7 @@ Platform One Big Bang distribution configuration providing DoD-validated securit
 
 ## Infrastructure Boundaries
 
-**Only infrastructure repositories may:**
-- Provision or destroy Kubernetes clusters
-- Modify cluster-wide configuration (RBAC, network policies)
-- Manage GitOps state repository structure
-- Configure shared infrastructure resources (databases, networking)
-
-**Tenants and platform services cannot:**
-- Access cluster-admin credentials
-- Modify infrastructure state directly
-- Bypass GitOps automation with manual `kubectl` operations
-- Create cross-tenant resources or access other namespaces
-
-**Boundary enforcement:** If a tenant needs to bypass boundaries, the platform contract is incomplete. Gaps drive platform evolution, not infrastructure access grants.
+Infrastructure repositories define the shared substrate that workload and platform-service repositories consume. See `platform-docs` for the canonical authority boundaries and enforcement model.
 
 ---
 
@@ -109,7 +97,7 @@ Network policies restrict inter-namespace communication. Tenants consume shared 
 - Future AWS migration will be infrastructure-only operation
 - Cluster substrate (libvirt/QEMU + k3s → AWS EKS) replaceable without tenant awareness
 
-**Anti-pattern:** Tenant code that assumes specific cloud provider, database implementation, or cluster distribution violates portability constraints.
+Details of the portability model are defined canonically in `platform-docs`.
 
 ---
 
@@ -117,4 +105,4 @@ Network policies restrict inter-namespace communication. Tenants consume shared 
 
 - [Repository Directory](../documentation/repositories/) - Complete infrastructure repository taxonomy
 - [Architectural Doctrine](https://github.com/zavestudios/platform-docs/blob/main/_platform/ARCHITECTURAL_DOCTRINE_TIER0.md) - Boundary enforcement principles
-- [Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/PLATFORM_OPERATING_MODEL.md) - Infrastructure mutation authority
+- [Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/OPERATING_MODEL.md) - Infrastructure mutation authority
