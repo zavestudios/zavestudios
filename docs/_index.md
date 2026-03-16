@@ -2,9 +2,9 @@
 title: "ZaveStudios"
 ---
 
-ZaveStudios is a public narrative and interpretation layer for the platform work collected across the ZaveStudios repositories. It explains the intent, tradeoffs, and shape of the platform without serving as the canonical source for governance or contract rules.
+ZaveStudios is an opinionated developer platform architecture designed to make infrastructure predictable, composable, and easy to operate.  It achieves this by replacing ad-hoc infrastructure design with bounded declarative contracts that govern how applications are instantiated, delivered, and evolved within the platform. By constraining the platform interface while preserving application-level autonomy, ZaveStudios reduces architectural variance across workloads and eliminates large classes of operational and governance complexity.
 
-The underlying platform work is focused on reducing architectural variance across workloads while preserving application-level autonomy.
+The purpose of this documentation is to make the platform model and its operating principles clear and coherent to both new and experienced observers.
 
 ---
 
