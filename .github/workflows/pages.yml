@@ -23,7 +23,7 @@ concurrency:
 jobs:
   build:
     if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
-    uses: zavestudios/platform-pipelines/.github/workflows/hugo-build.yml@main
+    uses: zavestudios/platform-pipelines/.github/workflows/hugo-build.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
     with:
       goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
       gonosumdb: github.com/zavestudios/*,gitlab.com/platformystical/*
@@ -31,11 +31,11 @@ jobs:
   deploy:
     name: Deploy Hugo Site
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    uses: zavestudios/platform-pipelines/.github/workflows/hugo-deploy.yml@main
+    uses: zavestudios/platform-pipelines/.github/workflows/hugo-deploy.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
     with:
       goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
       gonosumdb: github.com/zavestudios/*,gitlab.com/platformystical/*
 
   link-check:
     name: Check Markdown Links
-    uses: zavestudios/platform-pipelines/.github/workflows/link-check.yml@main
+    uses: zavestudios/platform-pipelines/.github/workflows/link-check.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
