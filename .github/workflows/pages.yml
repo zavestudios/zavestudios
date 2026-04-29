@@ -13,8 +13,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -31,6 +29,10 @@ jobs:
   deploy:
     name: Deploy Hugo Site
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     uses: zavestudios/platform-pipelines/.github/workflows/hugo-deploy.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
     with:
       goprivate: github.com/zavestudios/*,gitlab.com/platformystical/*
