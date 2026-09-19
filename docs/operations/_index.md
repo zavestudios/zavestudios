@@ -3,57 +3,84 @@ title: "Operations Guide"
 weight: 20
 ---
 
-Operations describes the platform's critical path from declared intent to running workload.
+How you tell whether the platform is right, and how you find where it went
+wrong.
 
-This is not a private runbook. It is the public operating model: how the platform is maintained, where authority lives, and how tenant intent moves through governed delivery and runtime paths.
+This is not a runbook. It is the diagnostic method: what the platform compares
+against what, and what a mismatch at each boundary actually means.
 
-## Tenant / Workload Onboarding
+## Three Statements Of The Same System
 
-Onboarding starts with a workload boundary and a small contract surface. The platform should make the supported path obvious before a tenant has to reason about infrastructure.
+At any moment the platform holds three descriptions of what should be running.
+Health is whether they agree.
 
-The goal is a predictable adoption path: create or update a workload contract, bind the repository to shared workflows, register desired state, and attach required platform services through governed interfaces.
+```mermaid
+flowchart TB
+  intent["<b>Declared intent</b><br/><i>The workload contract</i><br/>What the tenant asked for"]
+  desired["<b>Desired state</b><br/><i>Git</i><br/>What was derived and merged"]
+  live["<b>Live state</b><br/><i>Cluster</i><br/>What is actually running"]
 
-## Contract Validation
+  intent -- "derived into" --> desired
+  desired -- "reconciled into" --> live
 
-Contracts are the first authority boundary. They define what the workload is asking the platform to provide.
+  intent -. "should equal" .- desired
+  desired -. "should equal" .- live
 
-Validation should catch unsupported runtime values, exposure modes, delivery strategies, capability declarations, and configuration shapes before runtime state is proposed.
+  classDef s fill:#f4f8fc,stroke:#1168bd,stroke-width:2px,color:#000000
+  class intent,desired,live s
+```
 
-## Shared Workflow Binding
+Diagnosis is not "what is broken." It is **which pair disagrees**, because the
+answer determines where to look and nothing else does.
 
-Shared workflows keep delivery behavior platform-owned. Tenants should not carry full custom CI/CD logic for standard workload paths.
+## What Each Mismatch Means
 
-The workflow layer validates intent, builds artifacts, and prepares changes for the GitOps path. It is a proposal layer, not the final runtime authority.
+| Disagreement | Meaning | Where the fault is |
+|---|---|---|
+| Intent ≠ desired | What was asked for was never derived | Validation or generation |
+| Desired ≠ live | What was merged was not applied | Reconciliation, or admission refused it |
+| Live changed on its own | Something wrote directly to the cluster | A bypass of the delivery path |
+| All three agree, behaviour wrong | The contract expressed the wrong thing | The request, not the platform |
 
-## GitOps Registration
+The last row is the one most often misdiagnosed. A system that is perfectly
+reconciled and still behaving wrongly is not broken — it is doing exactly what
+was declared, and the declaration is the defect.
 
-GitOps represents desired runtime state. Workload registration, service integration, routing, environment configuration, and platform capability materialization should be reviewable and reproducible through Git-managed state.
+## Drift Has A Direction
 
-This keeps the live system anchored to declared intent rather than unmanaged manual changes.
+```mermaid
+flowchart TB
+  a["<b>Git leads</b><br/><i>Merged, not yet applied</i>"]
+  b["<b>Cluster leads</b><br/><i>Applied, not in Git</i>"]
 
-## Platform Service Attachment
+  a -- "resolves itself" --> ok["<b>Converged</b>"]
+  b -. "never resolves itself" .-> gone["<b>Silently reverted<br/>or silently permanent</b>"]
 
-Platform services are attached through contracts, workflow bindings, GitOps state, or platform-owned configuration.
+  classDef good fill:#f4f8fc,stroke:#1168bd,stroke-width:2px,color:#000000
+  classDef bad  fill:#ffffff,stroke:#6b6b6b,stroke-width:1px,color:#000000,stroke-dasharray: 4 4
+  class a,ok good
+  class b,gone bad
+```
 
-The platform owns service mechanics: provisioning, wiring, policy, credentials, observability, and lifecycle behavior. Tenants consume the capability through the supported interface.
+The two directions are not symmetric, and treating them as one kind of problem
+is the mistake.
 
-## Health and Drift
+Git ahead of the cluster is ordinary and self-correcting — reconciliation is
+pending, and waiting is a valid response. Cluster ahead of Git never corrects
+itself. It is either erased by the next reconciliation, destroying work nobody
+recorded, or it persists in a resource nothing manages, which is worse because
+it survives.
 
-Runtime health is evaluated by comparing contract intent, GitOps desired state, and live runtime state.
+That asymmetry is why direct cluster changes are enumerated rather than
+forbidden outright, and why break-glass carries an obligation to return the
+change to Git immediately. The exception is not the write; it is leaving it
+there.
 
-When those layers disagree, operators should inspect the boundary where the mismatch appears: contract validation, workflow output, GitOps reconciliation, runtime objects, or observability signals.
+## Observability Answers A Different Question
 
-## Platform Evolution
+Telemetry tells you how the system is behaving. The three-way comparison tells
+you whether it is what you asked for. A workload can be healthy by every metric
+and still be the wrong workload, and it can be correct by all three
+descriptions and still be failing under load.
 
-The platform evolves by stabilizing repeated patterns and turning them into reusable capabilities.
-
-Contract changes, new platform services, delivery strategy changes, and runtime capability expansion should move through reviewable change paths with clear compatibility expectations.
-
-## Source References
-
-The canonical rules and implementation references live in source repositories:
-
-- [platform-docs](https://github.com/zavestudios/platform-docs) - governance, contracts, lifecycle, and operating model
-- [gitops](https://github.com/zavestudios/gitops) - desired runtime state and reconciliation surface
-- [kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure) - cluster substrate and shared platform configuration
-- [platform-pipelines](https://github.com/zavestudios/platform-pipelines) - shared workflow mechanics
+Both are needed, and confusing them wastes the outage.

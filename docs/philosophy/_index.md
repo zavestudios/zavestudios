@@ -39,4 +39,4 @@ See [Formation Phase Status](../formation-phase/) for current framing.
 
 - [Platform Principles](principles/) - Specific design principles and constraints
 - [Architecture](../architecture/) - Conceptual architecture and control-plane model
-- [Platform Services](../platform-services/) - Shared capabilities consumed by workloads
+- [Platform Services](../architecture/platform-services/) - Shared capabilities consumed by workloads

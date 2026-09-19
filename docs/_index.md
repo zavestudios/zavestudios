@@ -2,32 +2,55 @@
 title: "ZaveStudios"
 ---
 
-ZaveStudios is my internal developer platform sandbox: an opinionated platform architecture designed to make infrastructure predictable, composable, and easier to operate through bounded declarative contracts.
+ZaveStudios is a studio in the working sense — a place where the practice
+happens. Concretely, it is an on-premises internal developer platform, built
+and operated as one system, in which infrastructure decisions are reduced to a
+bounded declarative contract.
 
-This site is the public narrative and working map for that platform. It explains the intent, tradeoffs, and current shape, while demonstrating the architecture, governance, and operating discipline required to run a platform.
+Tenants declare intent. The platform owns the mechanics. Everything here
+follows from that one boundary.
+
+## How The Practice Runs
+
+Three positions shape what gets built and what does not.
+
+**Automate after the pattern is clear.** Manual scaffolding is acceptable while
+a pattern is still forming. Automation should encode something stable, not
+conceal a decision that has not been made yet. This is why parts of the
+platform are described on this site as incomplete rather than as finished —
+a studio has unfinished work in it, and hiding that would make the rest less
+believable.
+
+**Depth over breadth.** New work strengthens an existing capability rather than
+widening the surface. Six capabilities that hold under load are worth more than
+twenty that have never been tested.
+
+**If it cannot be explained clearly, it is too broad or too implicit.** The
+diagrams on this site are a test of that rather than a record of it. Anything
+that resists being drawn is usually wrong before it is undrawn.
 
 ## Architecture
 
-[Architecture](architecture/) begins with the principles behind an effective internal developer platform, then explains how workload contracts, shared workflows, GitOps, runtime state, and platform services apply them. Tenants declare intent, and the platform owns the repeatable delivery and infrastructure mechanics.
+[Architecture](architecture/) is the drawings. It opens with the system in
+context and the authority boundary that defines the platform, then descends
+through four layers — the substrate and how traffic reaches it, what governs
+the cluster, the capabilities tenants consume, and the workloads that consume
+them. Individual capabilities and workloads have their own views beneath those.
 
 ## Tenant Guide
 
-[Tenant Guide](tenant-guide/) describes the supported path for workload owners. Tenants define application and data behavior, express workload needs through a bounded contract, and consume platform capabilities through governed interfaces.
-
-## Platform Services
-
-[Platform Services](platform-services/) describes the reusable capabilities available to tenants: shared delivery and image builds, GitOps-managed runtime state, data services and orchestration, observability and policy controls, shared model access, and agent runtimes.
-
-These services carry the platform's cross-cutting practices: DevSecOps establishes the governed baseline, secure data engineering adds reusable data capabilities, and operational AI adds model access and agent-assisted workflows inside the same controls.
+[Tenant Guide](tenant-guide/) is the supported path for workload owners: how to
+declare a workload, what may be varied, and how platform capabilities are
+consumed through governed interfaces.
 
 ## Operations
 
-[Operations](operations/) follows the critical path from declared intent to a running workload: onboarding, contract validation, shared workflow binding, GitOps registration, platform service attachment, and runtime health and drift.
-
-## Workloads
-
-[Workloads](workloads/) shows the platform in use. Tenant and reference workloads exercise web, batch, service-style data, analytical, and AI-assisted patterns without creating separate delivery models for each domain.
+[Operations](operations/) is the diagnostic method — how declared intent,
+desired state, and live state are compared, and what a disagreement between any
+two of them tells you about where the fault is.
 
 ## Formation Phase
 
-[Formation Phase](formation-phase/) explains the platform's current maturity. The immediate work is to stabilize the contract surface, narrow the supported path, strengthen GitOps authority, and make tenant onboarding increasingly predictable.
+[Formation Phase](formation-phase/) is the current maturity and the work
+outstanding: stabilising the contract surface, narrowing the supported path,
+strengthening GitOps authority, and making onboarding predictable.

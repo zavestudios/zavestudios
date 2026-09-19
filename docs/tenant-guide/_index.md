@@ -67,6 +67,6 @@ This path keeps tenant autonomy focused on workload behavior while the platform 
 
 ## Related Sections
 
-- [Platform Services](../platform-services/) - Reusable capabilities available to tenants
+- [Platform Services](../architecture/platform-services/) - Reusable capabilities available to tenants
 - [Operations](../operations/) - How the platform moves intent toward runtime
-- [Workloads](../workloads/) - Reference workloads using the platform path
+- [Workloads](../architecture/tenant-workloads/) - Reference workloads using the platform path
