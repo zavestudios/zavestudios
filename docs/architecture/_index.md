@@ -3,118 +3,91 @@ title: "Architecture"
 weight: 30
 ---
 
-ZaveStudios is built around a baseline path: workloads declare intent, and the platform supplies the secure delivery and runtime mechanics.
+ZaveStudios is built around a baseline path: workloads declare intent, and the platform supplies continuous integration, secure delivery, shared capabilities, and runtime mechanics.
 
 The architecture brings DevSecOps, secure data engineering, data pipelines, and operational AI into one governed shape. Shared platform services provide delivery, data-service integration, observability, policy, and model access through consistent interfaces.
 
-## What Makes an IDP Effective
+## System Context
 
-A good internal developer platform gives its users a clear path from workload intent to a running system. It combines useful self-service with stable boundaries, dependable operations, and a continuous understanding of tenant needs.
+Who touches the platform, and what it depends on.
 
-### Platform as a Product
+```mermaid
+flowchart TB
+  dev@{ shape: person, label: "Tenant Developer" }
+  op@{ shape: person, label: "Platform Operator" }
+  agent["<b>Coding Agents</b><br/><i>[External system]</i><br/>Propose change as pull requests"]
 
-An IDP serves developers, data practitioners, and workload operators as customers. Platform priorities follow their critical journeys, recurring needs, and evidence of friction. Clear ownership and feedback keep the platform useful as those needs evolve.
+  gh["<b>GitHub</b><br/><i>[External system]</i><br/>Repos, Actions, images"]
+  cf["<b>Cloudflare</b><br/><i>[External system]</i><br/>DNS, tunnel, edge TLS"]
 
-### Clear Responsibilities
+  platform["<b>ZaveStudios Platform</b><br/><i>[Software system]</i><br/>On-prem k3s. Continuous integration,<br/>secure delivery, shared capabilities,<br/>and runtime mechanics."]
 
-Tenants own application and data behavior. The platform owns reusable delivery, infrastructure, governance, and service mechanics. This division gives tenants autonomy within a predictable operating model.
+  agent -- "proposes change to" --> gh
+  op -- "merges change into" --> gh
+  dev -- "declares intent to" --> platform
+  gh -. "supplies desired state<br/><i>Flux, pull-based</i>" .-> platform
+  cf -- "routes traffic to<br/><i>HTTPS</i>" --> platform
 
-### Golden Paths and Self-Service
-
-Golden paths turn recurring work into supported, self-service workflows. They reduce cognitive load by supplying secure defaults and a small set of meaningful decisions. A successful path is easier to adopt than a custom implementation.
-
-### Declarative Interfaces
-
-Stable, versioned interfaces let tenants describe what a workload needs while the platform determines how to satisfy that intent. Declarative contracts also give automation, validation, and lifecycle management a consistent input.
-
-### Built-In Governance and Operability
-
-Security, policy, observability, and lifecycle controls belong in the normal platform path. Their consistent application makes workloads easier to operate and gives tenants and operators a shared view of system health.
-
-### Measured Evolution
-
-An IDP grows from demonstrated user needs and repeated operating patterns. Measures such as time to first deploy, adoption, reliability, and tenant friction show where the platform is creating leverage and where it needs improvement.
-
-## Architectural Shape
-
-ZaveStudios applies these principles through two responsibilities:
-
-1. Define a clear, reusable capability set.
-2. Make adoption predictable for workload owners.
-
-The architecture establishes where decisions live. Workload owners make application and data decisions. The platform owns the repeatable mechanics around delivery, policy, runtime state, data services, observability, and shared model access.
-
-## Baseline Path
-
-Every workload enters through the same DevSecOps path:
-
-- shared CI/CD and image build behavior
-- policy and identity controls
-- observability expectations
-- GitOps-managed runtime state
-- platform-owned service integration
-
-Secure data engineering, data pipelines, and operational AI build on that baseline and inherit its controls.
-
-## Control Model
-
-**Contract plane** captures workload intent. It keeps the workload interface small enough for owners to understand while giving the platform a structured input for validation and automation.
-
-**CI plane** validates workload intent, builds artifacts, and proposes runtime changes. CI remains the proposal layer.
-
-**GitOps plane** owns desired runtime state. Deployment state, workload registration, routing, service integration, and environment configuration should be represented through Git-managed state.
-
-**Runtime plane** executes declared state. Kubernetes, data services, observability, policy, and security controls reflect platform-managed configuration.
-
-The intended flow is:
-
-```text
-Workload intent -> CI validation/build -> GitOps desired state -> Runtime execution
+  classDef actor    fill:#ffffff,stroke:#052e56,stroke-width:2px,color:#000000
+  classDef system   fill:#f4f8fc,stroke:#1168bd,stroke-width:2px,color:#000000
+  classDef external fill:#ffffff,stroke:#6b6b6b,stroke-width:1px,color:#000000,stroke-dasharray: 4 4
+  class dev,op actor
+  class platform system
+  class agent,gh,cf external
 ```
 
-## Capability Areas
+**Reading the diagram.** Solid outline with a figure is a person. Solid blue
+fill is the system in scope. Dashed grey outline is something outside
+ZaveStudios' control. A dotted arrow is a pull: the destination fetches, the
+source is not pushing.
 
-- DevSecOps provides the operating substrate: CI/CD, GitOps, policy, identity, observability, and security controls
-- Secure data engineering provides the primary workload domain: ingestion, transformation, persistence, orchestration, tenant isolation, and analysis
-- Operational AI provides shared model access and AI-enabled workload patterns inside the same delivery, identity, observability, and runtime boundaries
+Nobody changes the platform by touching it. Intent is declared, change is
+merged, and the cluster pulls what Git says should be true. That is why the
+operator and the coding agents point at GitHub rather than at the platform —
+only the tenant developer addresses it directly.
 
-## Infrastructure Substrate
+Notation follows the [C4 model](https://c4model.com/), which is deliberately
+tool-independent — the diagrams here are plain Mermaid flowcharts applying C4's
+conventions, with the key above. This is a Level 1 context diagram, so the
+platform is a single box: it shows who uses it and what it depends on, and
+nothing about how it is built. The views below open it up.
 
-The infrastructure layer gives the platform a stable place to enforce runtime policy, tenant isolation, routing, and service integration.
+## Where Authority Lives
 
-**Kubernetes** is the execution layer for workloads and shared services.
+A platform is an authority boundary before it is anything else. Tenants decide
+what a workload is; the platform decides how it is built, delivered, and run.
+Four planes hold that line, and none may reach past the next.
 
-**GitOps** is the reviewable bridge between validated workload intent and live runtime behavior.
+```mermaid
+flowchart TB
+  contract["<b>Contract</b><br/><i>Intent authority</i><br/>What the workload is"]
+  ci["<b>CI</b><br/><i>Proposal authority</i><br/>Validates and builds"]
+  gitops["<b>GitOps</b><br/><i>State authority</i><br/>Owns desired state"]
+  runtime["<b>Runtime</b><br/><i>Execution authority</i><br/>Reflects declared state"]
 
-**Environment automation** supports provisioning and host preparation below the GitOps layer without becoming an alternate delivery path.
+  contract -- "may propose to" --> ci
+  ci -- "may write to" --> gitops
+  gitops -- "may reconcile into" --> runtime
 
-## Adoption Model
+  ci -. "may not write to" .-x runtime
+  runtime -. "is never a source for" .-x gitops
 
-The platform is successful when workload adoption is predictable:
+  classDef plane fill:#f4f8fc,stroke:#1168bd,stroke-width:2px,color:#000000
+  class contract,ci,gitops,runtime plane
+```
 
-- the workload owner declares intent
-- shared workflows handle build and validation
-- GitOps represents desired runtime state
-- platform services satisfy data, observability, security, and model-access needs
-- the runtime reflects the declared state
+The crossed edges matter as much as the solid ones. CI proposes and never
+enacts. The runtime executes and is never a source of truth. Every view below
+is a place where that boundary is held.
 
-The supported path is explicit, repeatable, and easier than building a custom path.
+## The Four Views
 
-## Influences
+Four layers, from the metal up — and at each one, the same question: what is
+declared, what is derived, and who may change it. Each is opened in its own
+page.
 
-ZaveStudios draws on exemplary internal developer platforms, data platforms, Score, CNCF practices, and work by industry leaders. These sources inform its platform boundaries, tenant interfaces, operating model, and service design.
-
-Reference work includes:
-
-- [Humanitec reference architectures](https://humanitec.com/reference-architectures) and [IDP design principles](https://developer.humanitec.com/platform-orchestrator/guides/getting-started/master-your-internal-developer-platform/design-principles/)
-- [Score](https://score.dev/) and its platform-agnostic workload specification
-- [CNCF Platform Engineering](https://tag-app-delivery.cncf.io/whitepapers/platforms/)
-- [Databricks architecture guidance](https://docs.databricks.com/aws/en/lakehouse-architecture/)
-
-## Deeper References
-
-For the underlying operating and governance documents, use [platform-docs](https://github.com/zavestudios/platform-docs):
-
-- [Platform Operating Model](https://github.com/zavestudios/platform-docs/blob/main/_platform/OPERATING_MODEL.md)
-- [Architectural Doctrine (Tier 0)](https://github.com/zavestudios/platform-docs/blob/main/_platform/ARCHITECTURAL_DOCTRINE_TIER0.md)
-- [Contract Schema](https://github.com/zavestudios/platform-docs/blob/main/_platform/CONTRACT_SCHEMA.md)
+1. **Substrate and Ingress** — VMs, cluster nodes, network, and how external
+   traffic reaches a workload
+2. **Inside the Cluster** — the control planes, and what owns state at each
+3. **Platform Services** — the shared capabilities tenants consume
+4. **Tenant Workloads** — what actually runs, and how it is registered
