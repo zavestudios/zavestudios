@@ -16,7 +16,7 @@ incident, it works, and the cluster now contains a resource that exists in no
 repository. The cluster and the source of truth have quietly diverged, and
 nobody will find out until the next reconcile overwrites the fix or fails to.
 
-In the second, change is centralised so heavily that tenants cannot move. One
+In the second, change is centralized so heavily that tenants cannot move. One
 reconciler owns everything, every deployment is a platform-team ticket, and
 teams start asking for cluster credentials so they can get their work done —
 which returns you to the first problem, now with more credentials in

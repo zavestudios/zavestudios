@@ -16,7 +16,7 @@ variance is a product decision — it is accumulated accident. The platform team
 then supports an estate where no two workloads fail the same way, and gradually
 becomes a reactive support function for systems it did not design.
 
-The instinctive fix is to standardise by review: templates, checklists, a
+The instinctive fix is to standardize by review: templates, checklists, a
 meeting before anything ships. That fails differently. It scales with headcount
 rather than automation, and teams route around it.
 
@@ -41,13 +41,13 @@ spec:
 ```
 
 Three decisions for a default HTTP service. Not three files — three decisions.
-`apiVersion`, `kind`, and `metadata.name` are structural, not choices.
+apiVersion, kind, and metadata.name are structural, not choices.
 
 The platform treats this as a compiler. The contract is source, generators are
 the compiler, and GitOps is the scheduler that runs the output. Repository
 scaffold, pipeline, deployment state, and runtime configuration are all
 derived — none of them authored. The rule that
-makes it work is severe: **if a behaviour cannot be derived from the contract,
+makes it work is severe: **if a behavior cannot be derived from the contract,
 it does not exist in the platform.**
 
 Generators are correspondingly constrained. Same contract, same output, every
@@ -70,7 +70,7 @@ not discouraged, refused.
 
 **Registration is not the same as deployable.** A merged contract with generated
 state still will not run if its secret paths do not exist, if the secret operator
-is not authorised to read them, or if a platform dependency it declares is not
+is not authorized to read them, or if a platform dependency it declares is not
 present. Those prerequisites are part of onboarding, not an afterthought
 discovered at first deploy.
 
@@ -78,7 +78,7 @@ discovered at first deploy.
 
 Five applications run on the platform today, with materially different internal
 architectures — a batch pipeline whose compute is dispatched rather than
-resident, a long-running normalisation service, an externally exposed web
+resident, a long-running normalization service, an externally exposed web
 application, and a durable job executor with its invariants enforced in the
 database. Each has its own page.
 

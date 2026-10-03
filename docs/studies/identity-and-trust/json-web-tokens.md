@@ -13,7 +13,7 @@ the claims, and a signature proves they were issued by someone trusted. No
 lookup, no shared state, and therefore no way to take it back.
 
 Most of what follows is a consequence of that trade rather than a separate
-fact to memorise.
+fact to memorize.
 
 ## Anatomy
 
@@ -49,14 +49,14 @@ A valid signature is necessary and nowhere near sufficient.
 | Check | What it prevents |
 |---|---|
 | Signature over header and payload | Tampering and forgery |
-| `alg` matches what the verifier expects | Algorithm substitution |
-| `iss` is a trusted issuer | Tokens minted elsewhere |
-| `aud` names *this* service | A token for one service accepted by another |
-| `exp` has not passed | Indefinite reuse |
-| `nbf` has passed | Tokens used before their window |
+| alg matches what the verifier expects | Algorithm substitution |
+| iss is a trusted issuer | Tokens minted elsewhere |
+| aud names *this* service | A token for one service accepted by another |
+| exp has not passed | Indefinite reuse |
+| nbf has passed | Tokens used before their window |
 
 **A token does not expire. A verifier refuses it.** Nothing in a JWT enforces
-anything — `exp` is a number in a readable payload, and a verifier that does
+anything — exp is a number in a readable payload, and a verifier that does
 not check it has issued permanent credentials. Every item above is work the
 verifier must do, and each one skipped is a control that silently does not
 exist.
@@ -84,8 +84,8 @@ sequenceDiagram
   V-->>A: Valid
 ```
 
-This is algorithm confusion, and it is subtler than the better-known `alg:
-none`. The verifier never accepts an unsigned token and never skips a check. It
+This is algorithm confusion, and it is subtler than the better-known alg:
+none. The verifier never accepts an unsigned token and never skips a check. It
 is fooled into using an asymmetric public key — material designed to be
 distributed freely — as a symmetric shared secret.
 
@@ -94,7 +94,7 @@ token does not.** A verifier configured to accept exactly RS256 is immune to
 both attacks, and a library that infers the algorithm from the token is
 dangerous regardless of how carefully it validates everything else.
 
-## Keys, And Why `kid` Exists
+## Keys, And Why kid Exists
 
 ```mermaid
 flowchart TB
@@ -133,7 +133,7 @@ is checked against a store, which is a lookup, which is the state the design
 removed. The honest description is that statelessness is preserved for the
 common path and abandoned for the sensitive one.
 
-**Possession is authorisation.** A bearer token grants its holder everything it
+**Possession is authorization.** A bearer token grants its holder everything it
 claims, with no proof the holder is the party it was issued to. Stealing one is
 sufficient. This is why proof-of-possession schemes and mutual TLS exist — they bind a
 credential to a party rather than to whoever is carrying it.
@@ -148,7 +148,7 @@ A verified signature proves the token was issued by the holder of a key and has
 not been altered. It proves nothing about whether the bearer should be allowed
 to do the thing they are asking to do.
 
-Authentication and authorisation collapse into one step surprisingly often,
+Authentication and authorization collapse into one step surprisingly often,
 usually as *this token is valid, therefore proceed*. A token is evidence about
 identity. The decision that follows is a separate question with a separate
 answer, and conflating them is how an expired understanding of someone's

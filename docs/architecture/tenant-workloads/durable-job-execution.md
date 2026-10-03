@@ -43,7 +43,7 @@ distribute, and no endpoint to secure — the only access path is one already
 governed by credentials the platform issues.
 
 The datastore is dedicated rather than shared. Queue semantics depend on
-transactional guarantees and lock behaviour that are properties of *this*
+transactional guarantees and lock behavior that are properties of *this*
 database's configuration, and sharing it would make another workload's load a
 correctness concern rather than a performance one.
 
@@ -90,7 +90,7 @@ erDiagram
 
 Four relations, each earning its place.
 
-A **job** is the request and its lifecycle. Its `idempotency_key` carries a
+A **job** is the request and its lifecycle. Its idempotency key carries a
 uniqueness constraint, so submitting the same work twice is safe by
 construction rather than by convention — the second insert fails at the database
 rather than producing a duplicate run.
@@ -148,7 +148,7 @@ in another language would inherit the same guarantees for free.
 Two components exist solely to guarantee ordering.
 
 A migration job applies the schema and runs to completion, with a bounded retry
-budget. Independently, an initialisation gate on the worker blocks startup until
+budget. Independently, an initialization gate on the worker blocks startup until
 it can observe that the contract actually exists, polling rather than assuming.
 
 The gate does not check that the database is reachable — it checks that the

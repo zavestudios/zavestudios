@@ -5,6 +5,7 @@ contentDir = "docs"
 [params]
   themeVariant = "blue"
   disableTitleSeparator = true
+  disableInlineCopyToClipBoard = true
   collapsibleMenu = true
   alwaysopen = false
   externallinktarget = true
