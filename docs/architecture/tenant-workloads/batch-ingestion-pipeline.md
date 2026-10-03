@@ -4,7 +4,7 @@ weight: 20
 ---
 
 A scheduled pipeline that pulls flat files from object storage, validates and
-normalises them, loads them into a relational store, and then checks its own
+normalizes them, loads them into a relational store, and then checks its own
 work.
 
 ## A Workload With No Resident Compute
@@ -64,7 +64,7 @@ flowchart TB
   src["<b>Source files</b><br/><i>Object storage</i>"]
   ev["<b>Extract and validate</b>"]
   rej["<b>Rejected records</b><br/><i>Captured, not discarded</i>"]
-  ld["<b>Normalise and load</b>"]
+  ld["<b>Normalize and load</b>"]
   tgt["<b>Relational store</b>"]
   dq["<b>Quality assertions</b>"]
 
@@ -129,5 +129,5 @@ approaching a stream, and moving to streaming would not be a tuning change.
 
 **The destination is a single point of failure**, dedicated to this workload
 rather than shared, for the same reason as elsewhere: the pipeline's
-correctness depends on its transactional behaviour, and sharing would make
+correctness depends on its transactional behavior, and sharing would make
 another workload's load a correctness concern.

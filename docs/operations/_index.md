@@ -40,7 +40,7 @@ answer determines where to look and nothing else does.
 | Intent ≠ desired | What was asked for was never derived | Validation or generation |
 | Desired ≠ live | What was merged was not applied | Reconciliation, or admission refused it |
 | Live changed on its own | Something wrote directly to the cluster | A bypass of the delivery path |
-| All three agree, behaviour wrong | The contract expressed the wrong thing | The request, not the platform |
+| All three agree, behavior wrong | The contract expressed the wrong thing | The request, not the platform |
 
 The last row is the one most often misdiagnosed. A system that is perfectly
 reconciled and still behaving wrongly is not broken — it is doing exactly what

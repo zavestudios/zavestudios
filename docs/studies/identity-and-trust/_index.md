@@ -7,7 +7,7 @@ How a party proves who it is, and how that claim is carried, verified, and kept
 alive.
 
 This is the largest group, and it is a sequence rather than a set. Each topic
-leans on the one before it: a token is the artifact, delegated authorisation is
+leans on the one before it: a token is the artifact, delegated authorization is
 the framework that carries it, identity is layered onto that framework, and
 single sign-on is what a user experiences when all three work. Mutual TLS and
 workload identity are the same problem asked about machines instead of people.
@@ -16,7 +16,7 @@ expiry.
 
 - **[JSON Web Tokens](json-web-tokens/)** — what a token contains, how a
   signature makes it verifiable without a lookup, and what it cannot tell you
-- OAuth 2.0 — delegated authorisation: acting on another party's behalf
+- OAuth 2.0 — delegated authorization: acting on another party's behalf
   without holding their credentials
 - OpenID Connect — authentication layered onto a delegation framework, and why
   that layering was necessary
