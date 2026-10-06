@@ -1,6 +1,8 @@
 ---
 title: "CI/CD"
 weight: 20
+planes: ["Integration and Delivery"]
+pillars: ["Applications and Workloads", "Automation and Orchestration"]
 ---
 
 Tenants do not write pipelines. Build, scan, signing, publication, and

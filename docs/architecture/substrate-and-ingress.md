@@ -1,6 +1,8 @@
 ---
 title: "Substrate and Ingress"
 weight: 10
+planes: ["Resource"]
+pillars: ["Networks", "Devices"]
 ---
 
 How ZaveStudios runs on its own hardware, and how a request from the public

@@ -1,6 +1,8 @@
 ---
 title: "Workflow Orchestration"
 weight: 10
+planes: ["Integration and Delivery"]
+pillars: ["Data", "Automation and Orchestration", "Identity"]
 ---
 
 Scheduled and event-driven pipelines, run as ordinary Kubernetes workloads

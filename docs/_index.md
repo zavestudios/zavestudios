@@ -64,9 +64,3 @@ consumed through governed interfaces.
 [Operations](operations/) is the diagnostic method — how declared intent,
 desired state, and live state are compared, and what a disagreement between any
 two of them tells you about where the fault is.
-
-## Formation Phase
-
-[Formation Phase](formation-phase/) is the current maturity and the work
-outstanding: stabilizing the contract surface, narrowing the supported path,
-strengthening GitOps authority, and making onboarding predictable.

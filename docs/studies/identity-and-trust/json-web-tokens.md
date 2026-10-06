@@ -1,6 +1,8 @@
 ---
 title: "JSON Web Tokens"
 weight: 10
+planes: ["Security"]
+pillars: ["Identity", "Applications and Workloads"]
 ---
 
 A JWT replaces a database lookup with a signature. Every property it has, good

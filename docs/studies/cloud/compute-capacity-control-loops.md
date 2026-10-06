@@ -1,6 +1,7 @@
 ---
 title: "Compute Capacity Control Loops"
 weight: 20
+planes: ["Resource"]
 ---
 
 An Auto Scaling group, an EKS managed node group, and a Karpenter NodePool can
