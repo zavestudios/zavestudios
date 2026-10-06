@@ -1,6 +1,8 @@
 ---
 title: "Inside the Cluster"
 weight: 20
+planes: ["Integration and Delivery"]
+pillars: ["Automation and Orchestration", "Applications and Workloads", "Networks"]
 ---
 
 Who is allowed to change a running cluster, and what stops everything else.

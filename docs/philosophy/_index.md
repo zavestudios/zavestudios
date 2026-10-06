@@ -33,8 +33,6 @@ The platform is in Formation Phase, working toward:
 - operational AI patterns that stay inside platform controls
 - automation for repeated scaffolding and delivery mechanics
 
-See [Formation Phase Status](../formation-phase/) for current framing.
-
 ## Related Sections
 
 - [Platform Principles](principles/) - Specific design principles and constraints
