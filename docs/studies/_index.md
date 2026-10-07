@@ -50,7 +50,7 @@ Where a request is accepted, where it is refused, and what sits between services
 
 How a system reports on itself, and how rules are evaluated against it.
 
-- OpenTelemetry — One vocabulary for traces, metrics, and logs, and what standardizing the wire format buys.
+- **[OTLP and the Collector Pipeline](observability-and-policy/otlp-and-the-collector-pipeline/)** — What the wire protocol fixes, how a collector routes each signal separately, and the four places a span is lost without the sender hearing about it.
 - Policy Engines — Evaluating rules as data rather than code, and where in a request's life that evaluation belongs.
 
 
