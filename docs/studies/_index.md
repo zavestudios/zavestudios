@@ -28,7 +28,7 @@ What a unit of work looks like, and how a new version of one reaches the cluster
 How a party proves who it is, and how that claim is carried, verified, and kept alive. Sequenced so each topic leans on the one before it.
 
 - **[JSON Web Tokens](identity-and-trust/json-web-tokens/)** — What a token actually contains, how a signature makes it verifiable without a lookup, and what it cannot tell you.
-- OAuth 2.0 — Delegated authorization: how one party acts on another's behalf without holding their credentials.
+- **[OAuth 2.0](identity-and-trust/oauth-2-0/)** — Delegated authorization: how one party acts on another's behalf without holding their credentials.
 - OpenID Connect — Authentication layered onto a delegation framework, and why that layering was necessary.
 - Single Sign-On — One authentication serving many systems, and where the session actually lives.
 - SAML — The older federation standard, why it persists in the enterprise, and how it differs in shape.

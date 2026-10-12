@@ -16,8 +16,8 @@ expiry.
 
 - **[JSON Web Tokens](json-web-tokens/)** — what a token contains, how a
   signature makes it verifiable without a lookup, and what it cannot tell you
-- OAuth 2.0 — delegated authorization: acting on another party's behalf
-  without holding their credentials
+- **[OAuth 2.0](oauth-2-0/)** — delegated authorization: acting on another
+  party's behalf without holding their credentials
 - OpenID Connect — authentication layered onto a delegation framework, and why
   that layering was necessary
 - Single Sign-On — one authentication serving many systems, and where the
