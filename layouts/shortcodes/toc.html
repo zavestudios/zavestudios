@@ -1,0 +1,10 @@
+{{- /* Renders the page's own H2 headings as an in-page contents list.
+       Depth comes from [markup.tableOfContents] in hugo.toml, so the list
+       cannot drift from the headings it points at. */ -}}
+{{- $toc := .Page.TableOfContents -}}
+{{- if trim ($toc | plainify) " \n\r\t" -}}
+<div class="study-toc">
+	<p class="study-toc-title">{{ with .Get 0 }}{{ . }}{{ else }}On this page{{ end }}</p>
+	{{ $toc }}
+</div>
+{{- end -}}

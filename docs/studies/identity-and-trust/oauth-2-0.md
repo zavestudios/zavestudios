@@ -23,6 +23,8 @@ number of actors and channels involved. In the authorization code grant, one
 part of the exchange runs through a browser the authorization server does not
 control, so the protocol has to protect the code until the client redeems it.
 
+{{< toc >}}
+
 ## Where Delegation Shows Up in Platform Work
 
 On this platform the arrangement is concrete. Keycloak runs as a platform
