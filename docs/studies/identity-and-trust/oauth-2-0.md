@@ -5,27 +5,21 @@ planes: ["Security"]
 pillars: ["Identity", "Applications and Workloads"]
 ---
 
-An application needs to read something a person owns. The direct way is for the
-person to hand over their password, and every property of that arrangement is
-bad: the application can now do anything the person can, forever, and the person
-cannot withdraw the access without changing the password everywhere.
+OAuth 2.0 answers one question: **How does an authorization decision become
+limited access to another service?** It answers by separating the person or
+system granting authority, the application requesting it, the server issuing a
+credential, and the service deciding whether to accept that credential.
 
-OAuth 2.0 replaces the shared credential with an issued one. The person
-authenticates at a server they already trust, that server issues the
-application a token describing a narrower permission, and the application
-presents the token instead of the password. The password never reaches the
-application.
-
-Everything below follows from that substitution, in the same way that the
-properties of a [JSON Web Token](../json-web-tokens/) follow from replacing a
-lookup with a signature. What makes OAuth harder to hold in the head is the
-number of actors and channels involved. In the authorization code grant, one
-part of the exchange runs through a browser the authorization server does not
-control, so the protocol has to protect the code until the client redeems it.
+The mechanism is easiest to understand as a path. An application requests
+access, an authorization server records a decision, the application receives a
+token, and a protected service evaluates that token. Each boundary adds a
+different control. This study follows that path first, then returns to the
+Keycloak and `panchito` configuration to identify which parts the platform
+actually exercises.
 
 {{< toc >}}
 
-## Where Delegation Shows Up in Platform Work
+## A Login Request at Panchito
 
 On this platform the arrangement is concrete. Keycloak runs as a platform
 service at `sso-on-prem.zavestudios.com/auth`, configured in
@@ -48,13 +42,13 @@ client named `panchito`, which is visible in its deployment manifest at
       key: OIDC_CLIENT_SECRET
 ```
 
-Four of the five things a reader needs are already in that fragment: which
-server issues, which workload consumes, what identifies the consumer, and where
-its secret comes from. The secret is not in Git — `panchito-app` is produced by
-an ExternalSecret that pulls `tenants/panchito/app` from Vault, declared in
-`gitops/tenants/panchito/panchito-app.external-secret.yaml`. The fifth is the
-redirect URI registered in Keycloak, which is not present in the deployment
-fragment or represented by a registration record in Git.
+The fragment identifies the issuing server, the consuming workload, the
+client's identifier, and the Kubernetes Secret holding its credential. The
+secret value is not in Git: `panchito-app` is produced by an ExternalSecret that
+pulls `tenants/panchito/app` from Vault, declared in
+`gitops/tenants/panchito/panchito-app.external-secret.yaml`. The redirect URI
+registered in Keycloak is not present in the deployment fragment or represented
+by a registration record in Git.
 
 What breaks when this is wrong is specific rather than general. A wrong
 `OIDC_CLIENT_ID` or a redirect URL that does not match what Keycloak has
@@ -62,9 +56,28 @@ registered does not degrade the login — the authorization server refuses the
 request before any user sees a password prompt, and it refuses it with an error
 page rather than a redirect. Confirming that is a single unauthenticated
 request, and the results are in
-[Where This Platform Diverges](#where-this-platform-diverges) below.
+[Confirmed Controls and Implementation Gaps](#confirmed-controls-and-implementation-gaps)
+below.
 
-## Four Roles, and Why They Are Worth Separating
+## The Problem OAuth 2.0 Solves
+
+An application sometimes needs to read or change something controlled by a
+person without receiving that person's password. Sharing the password would
+give the application everything the person can access, for as long as the
+password remains valid. Withdrawing access from that one application would
+require changing the credential everywhere it is used.
+
+OAuth replaces that shared credential with an issued credential. The person
+authenticates at a server they already trust, that server authorizes narrower
+access, and the application presents the resulting access token to another
+service. The application never receives the person's password, and the token
+can carry less authority and expire sooner than the person's own credential.
+
+That separation is the purpose of OAuth. The redirects, codes, scopes, and
+token endpoints exist to preserve it across systems that do not all trust one
+another.
+
+## The Four Roles in an OAuth Exchange
 
 RFC 6749 names four roles, and conflating any two of them is the source of most
 confusion about what OAuth is doing.
@@ -86,12 +99,12 @@ compromised and malicious clients, and the protocol avoids giving a client the
 resource owner's credentials so that a compromise exposes delegated
 credentials rather than the owner's password.
 
-## The Authorization Code Grant, Start to Finish
+## How Authorization Becomes API Access
 
-One grant type carries nearly all interactive use, and following it once in
-full is worth more than a tour of all four. The client is `panchito`, the
-authorization server is the `zavestudios` realm, and the endpoints are the ones
-the realm actually advertises at
+The authorization code grant provides the main path for interactive access,
+and following it once in full is worth more than a tour of every grant. The
+client is `panchito`, the authorization server is the `zavestudios` realm, and
+the endpoints are the ones the realm actually advertises at
 `/auth/realms/zavestudios/.well-known/openid-configuration`.
 
 ```mermaid
@@ -100,6 +113,7 @@ sequenceDiagram
   participant UA as Browser
   participant C as panchito (client)
   participant AS as Keycloak (authorization server)
+  participant RS as Protected API (resource server)
 
   RO->>C: Requests a protected page
   C->>UA: Redirect to /protocol/openid-connect/auth<br/>client_id, redirect_uri, scope, state
@@ -111,7 +125,15 @@ sequenceDiagram
   C->>AS: POST /protocol/openid-connect/token<br/>code, redirect_uri, client_id + client secret
   AS->>AS: Verifies code, client, and redirect_uri
   AS->>C: access_token, token_type, id_token, expires_in, optional refresh_token
+  C->>RS: Presents access_token
+  RS->>RS: Validates token and requested operation
+  RS-->>C: Returns or refuses the protected resource
 ```
+
+The final two steps show the resource server's role even though `panchito` does
+not exercise them against an application API. They complete the OAuth path: the
+authorization server issues the credential, but the resource server decides
+whether that credential permits this operation on this resource.
 
 Two channels are in play, and the distinction between them is the reason the
 flow has this shape. The browser carries the authorization request and the
@@ -128,7 +150,15 @@ for confidential clients. A description that does not distinguish the browser
 channel from the direct token request leaves the reader unable to say why the
 implicit grant is weaker.
 
-### What Protects the Code
+## How Each Step Is Protected and Limited
+
+The authorization decision passes through a browser, a direct client-to-server
+request, and finally an API request. No single check protects all three paths.
+Redirect URI validation and `state` protect the browser leg; client
+authentication and PKCE protect the code exchange; scopes, audience, and token
+lifetime limit how the resulting credential can be used.
+
+### Redirect URIs and `state`
 
 The code is protected by four separate checks, each of which the authorization
 server performs and any of which a deployment can weaken.
@@ -150,18 +180,25 @@ it also says the server SHOULD revoke every token already issued from that
 code — a *should*, and only "when possible," so a deployment that cannot do so
 is still conforming.
 
-**The client authenticates.** A confidential client must authenticate at the
-token endpoint, and the `panchito` client does so with the secret pulled from
-Vault. The `client_id` is not part of this: RFC 6749 is explicit that it "is not
-a secret" and "MUST NOT be used alone for client authentication."
-
 **Failures do not redirect.** If the redirect URI is missing, invalid, or
 mismatched, or the client identifier is unknown, the authorization server "MUST
 NOT automatically redirect the user-agent to the invalid redirection URI." This
 is what makes a misconfigured client fail visibly at the authorization server
 instead of quietly delivering a code to whatever host was named in the request.
 
-## PKCE Is Not Only for Mobile Applications
+**The client correlates the response with `state`.** The client sends a value
+that binds the authorization request to its browser session and rejects a
+response that does not return the same value. RFC 6749 recommends `state` for
+preventing cross-site request forgery. It protects the client from accepting a
+response initiated in a different browser context; it does not replace redirect
+URI validation or bind an intercepted code to the client.
+
+### Client Authentication and PKCE
+
+A confidential client must authenticate at the token endpoint, and the
+`panchito` client does so with the secret pulled from Vault. The `client_id` is
+not part of this proof: RFC 6749 states that it "is not a secret" and "MUST NOT
+be used alone for client authentication."
 
 Proof Key for Code Exchange closes the remaining gap: a client that cannot hold
 a secret has nothing to prove with at the token endpoint, so an intercepted
@@ -202,35 +239,7 @@ Support has to be detectable. Authorization servers MUST support PKCE and are
 recommended to publish `code_challenge_methods_supported` in their metadata, so
 a client can tell rather than assume.
 
-## Client Credentials: No User Delegation
-
-Not every caller acts for a person. When a service calls another service on its
-own behalf, the client may also be the resource owner. The authorization server
-and resource server remain separate roles, and access may instead rest on an
-arrangement made with the authorization server. There is no browser and no
-authorization code.
-
-```
-POST /token HTTP/1.1
-Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=client_credentials
-```
-
-The client's authentication *is* the grant. Two constraints follow and are
-worth remembering because violating either is common: the grant "MUST only be
-used by confidential clients," since a public client's credentials are
-extractable and would be the whole authorization; and a refresh token "SHOULD
-NOT be included," because a client that can authenticate can simply ask again.
-
-This is the grant that machine-to-machine access on a platform usually wants,
-and the one that gets replaced by a static API key because it looks like more
-work. The difference is that the token expires and the credential can be
-rotated centrally. The caller must still receive the replacement credential and
-reload it before the old one is retired.
-
-## Scopes Are a Request, Not a Decision
+### Scopes, Audiences, and Resource-Server Enforcement
 
 A scope is a space-delimited string whose values are "defined by the
 authorization server." OAuth itself gives them no meaning. The values that the
@@ -256,7 +265,7 @@ That is the same audience check the JSON Web Tokens study identifies as the one
 most often skipped, stated here as a requirement on the resource server rather
 than a property of the token.
 
-## Refresh Tokens Reintroduce Authorization-Server State
+### Refresh, Rotation, and Revocation
 
 Short access-token lifetimes limit the damage from a leak, but without a refresh
 token the client must obtain another grant when the token expires. The
@@ -290,78 +299,123 @@ to reject a replayed or withdrawn credential. This is the same state trade the
 JSON Web Tokens study describes from the token's side, visible here as a
 protocol feature.
 
-## What OAuth 2.0 Does Not Define
+## How the Flow Changes
 
-Four absences explain most of the ecosystem built on top of it.
+The authorization code sequence is not a universal script. The relationship
+among the actors determines which proof the authorization server can require
+and whether a person participates at all.
 
-**Token format.** Nothing in RFC 6749 says an access token is a JWT. It may be
-an opaque string that means nothing outside the authorization server. A
-resource server cannot validate such a token from the string alone, which is
-why RFC 7662 defines an introspection endpoint — a POST that returns "meta
-information surrounding the token, including whether this token is currently
-active," with the definition of active left to the authorization server.
-Self-contained tokens can remove an authorization-server call from the request
-path, while immediate revocation adds state or another check. Introspection
-provides an authoritative answer at the cost of a network call, although a
-resource server may cache responses. The `zavestudios` realm advertises an
-introspection endpoint; that metadata does not reveal which access-token format
-it issues.
+### When a Client Cannot Keep a Secret
 
-**Authentication of the user.** OAuth authorizes a client; it says nothing
-about who the person was. In a user-mediated flow, a client that receives an
-access token has learned that a request was authorized, not who authenticated;
-in the client-credentials grant, no person is involved at all. Reading identity
-out of a successful OAuth flow is an inference, and the reason
-OpenID Connect exists is to make it a statement instead,
-by adding an ID token with an audience and a subject. That distinction is the
-most consequential one in this study, and it is also where this platform's
-configuration sits: `panchito` is registered as an OIDC client, not a plain
-OAuth client.
+A server-side application that can keep a credential away from its users is a
+confidential client. Code running in a browser or distributed as a native
+application cannot make that guarantee and is a public client. A public client
+therefore cannot rely on a shared client secret at the token endpoint; it uses
+PKCE to bind the code to the authorization request instead. Current guidance
+also recommends PKCE for confidential clients because it addresses attacks that
+client authentication alone does not.
 
-**How a token gets used.** Presenting it is specified separately, in RFC 6750,
-which defines the `Authorization: Bearer` scheme and the term that carries the
-whole risk model: a bearer token is one where "any party in possession of the
-token can use the token in any way that any other party in possession of it
-can," with no proof of key material required.
+### When No User Is Involved
 
-**The authorization server's relationship to the resource server.** Out of
-scope, as noted above. Everything about which tokens a resource server accepts,
-how it learns the signing keys, and what audience value it demands is
-deployment convention or a later specification.
+When a service calls another service on its own behalf, the client may also be
+the resource owner. The authorization server and resource server remain
+separate roles, but there is no browser, resource-owner interaction, or
+authorization code. The client authenticates directly and requests a token:
 
-## The Grants the Specification Left Behind
+```
+POST /token HTTP/1.1
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+```
+
+The client's authentication *is* the grant. Two constraints follow. The grant
+"MUST only be used by confidential clients," since an extractable public-client
+credential would be the whole authorization. A refresh token "SHOULD NOT be
+included," because a client that can authenticate can request another access
+token directly.
+
+This is the grant that machine-to-machine access on a platform usually wants,
+and the one that often gets replaced by a static API key. An access token
+expires and the underlying client credential can be rotated centrally. The
+caller must still receive the replacement credential and reload it before the
+old one is retired.
+
+### Grants That Current Guidance Rejects
 
 RFC 6749 defines four grants. Two are no longer acceptable, and the two
-judgments are not equally strong — a distinction worth keeping straight,
-because the current guidance is a BCP that updates rather than replaces the
-original specification.
+judgments are not equally strong. RFC 9700 is a best current practice document
+that updates rather than replaces the original specification.
 
-The **resource owner password credentials** grant, where the client collects
-the user's password and posts it to the token endpoint, "MUST NOT be used." The
-stated reasons are that it exposes the credential to the client, widens where
-it can leak, trains users to type passwords into applications, and cannot
-accommodate multi-factor or multi-step authentication.
+The **resource owner password credentials** grant has the client collect the
+user's password and post it to the token endpoint. It "MUST NOT be used"
+because it exposes the credential to the client, widens where it can leak,
+trains users to type passwords into applications, and cannot accommodate
+multi-factor or multi-step authentication.
 
-The **implicit** grant, where the authorization server returns an access token
-directly in the redirect, draws a softer verdict: clients "SHOULD NOT" use it
-unless token injection and the leakage vectors are mitigated. The problems are
-that the token travels through the browser in a URL, no standardized way exists
-to sender-constrain a token issued that way, and a leaked one is directly
-usable. The recommended replacement is the authorization code grant, which is
-what PKCE made viable for the public clients implicit was invented for.
+The **implicit** grant returns an access token directly in the redirect. Clients
+"SHOULD NOT" use it unless token injection and leakage vectors are mitigated.
+The token travels through the browser in a URL, no standardized method
+sender-constrains a token issued that way, and a leaked token is immediately
+usable. The recommended replacement is the authorization code grant, which
+PKCE made viable for the public clients implicit was designed to serve.
 
-An authorization server can still advertise both. The `zavestudios` realm, read
-on 2026-10-12, lists `implicit` and `password` in `grant_types_supported`
-alongside `authorization_code`, `client_credentials`, `refresh_token`, and four
-extension grants: device code, token exchange, UMA ticket, and CIBA. Keycloak is
-advertising realm capability, not client policy — which grants a given client
-may use is per-client registration. The distinction is worth internalizing: a
-realm's metadata document is a menu, and reading it as a statement of what is
-in use will mislead anyone auditing the deployment.
+An authorization server can still advertise both. The `zavestudios` realm,
+read on 2026-10-12, lists `implicit` and `password` in
+`grant_types_supported` alongside `authorization_code`, `client_credentials`,
+`refresh_token`, and four extension grants: device code, token exchange, UMA
+ticket, and CIBA. Keycloak is advertising realm capability, not client policy.
+Which grants a given client may use is part of its client registration. A
+realm's metadata document is therefore a menu, not a record of what is in use.
 
----
+## Where OAuth 2.0 Ends
 
-## How This Platform Implements It
+Three boundaries explain most of the ecosystem built around OAuth.
+
+### User Identity and OpenID Connect
+
+OAuth authorizes a client; it does not identify the person to that client. In a
+user-mediated flow, receiving an access token establishes that access was
+authorized, not who authenticated. In the client-credentials grant, no person
+is involved at all.
+
+Reading identity out of a successful OAuth flow is therefore an inference.
+OpenID Connect makes identity an explicit result by adding an ID token with an
+audience and a subject. This boundary is where the platform configuration sits:
+`panchito` is registered as an OIDC client, not a plain OAuth client.
+
+### JWTs and Opaque Access Tokens
+
+Nothing in RFC 6749 requires an access token to be a JWT. It may be an opaque
+string that means nothing outside the authorization server. A resource server
+cannot validate such a token from the string alone, which is why RFC 7662
+defines an introspection endpoint that reports token metadata, including
+whether the token is active.
+
+A self-contained token can remove an authorization-server call from the
+request path, while immediate revocation requires added state or another check.
+Introspection provides an authoritative answer at the cost of a network call,
+although a resource server may cache responses. The `zavestudios` realm
+advertises an introspection endpoint; that metadata does not reveal which
+access-token format it issues.
+
+### Application-Level Authorization
+
+RFC 6750 separately defines how a bearer token is presented with the
+`Authorization: Bearer` scheme. A bearer token is usable by any party that
+possesses it; it requires no proof of separate key material.
+
+OAuth also leaves the authorization server's relationship with the resource
+server out of scope. Which tokens the resource server accepts, how it obtains
+signing keys, and which audience it requires come from deployment policy or
+later specifications. After validating a token, the resource server must still
+decide whether this caller may perform this operation on this object. OAuth
+does not replace that application-level authorization decision.
+
+## What Panchito and Keycloak Actually Implement
+
+### The Configuration
 
 One authorization server, one client visible in repository configuration, and
 no OAuth resource server of its own.
@@ -406,10 +460,40 @@ so the pod must be replaced to load the new value. The callback URL the client
 sends is derived at runtime from forwarded headers, which is the subject of the
 next section.
 
-## Where This Platform Diverges
+### Why the Result Is a Login Session Rather Than Delegated API Access
 
-Six findings: three confirmed by unauthenticated endpoint or metadata requests
-on 2026-10-12, and three read out of the source.
+Authlib normally derives `userinfo` from the OIDC ID token; if it is absent,
+the fallback call to Keycloak's UserInfo endpoint uses the access token. After
+that step, `auth_callback` keeps four user attributes and nothing else:
+
+```python
+session["user"] = {
+    "sub": userinfo.get("sub"),
+    "preferred_username": userinfo.get("preferred_username"),
+    "email": userinfo.get("email"),
+    "name": userinfo.get("name"),
+}
+```
+
+From then on, authorization is a Flask session cookie
+(`SESSION_COOKIE_HTTPONLY`, `SameSite=Lax`, `Secure` in production, per
+`panchito/backend/app/config.py`). The access token is not stored or presented
+to `panchito`'s API; the client and protected application are the same process.
+The platform uses the authorization code flow for authentication, which is
+OIDC's job rather than OAuth's. OIDC carries its authenticated identity result
+through the OAuth flow.
+
+This is a legitimate and common pattern, but it means the platform does not
+exercise OAuth access-token use beyond the optional UserInfo call. There is no
+client-credentials client or application component configured in Git to
+validate a bearer token. The abstract resource-server steps in the earlier
+sequence are therefore part of the protocol explanation, not a claim about
+`panchito`.
+
+### Confirmed Controls and Implementation Gaps
+
+Unauthenticated endpoint and metadata requests on 2026-10-12, combined with a
+source review, established the following controls and gaps.
 
 **The redirect URI registration is strict, and that is confirmed rather than
 assumed.** RFC 9700 requires exact string matching for registered redirect
@@ -457,32 +541,6 @@ a challenge without naming a method gets `plain` by default, which still
 protects against response-only code interception but not an attacker who can
 read the authorization request.
 
-**The access token is discarded after identity is resolved.** This is the
-largest divergence from what the protocol is for. Authlib normally derives
-`userinfo` from the OIDC ID token; if it is absent, the fallback call to
-Keycloak's UserInfo endpoint uses the access token. After that step,
-`auth_callback` keeps four user attributes and nothing else:
-
-```python
-session["user"] = {
-    "sub": userinfo.get("sub"),
-    "preferred_username": userinfo.get("preferred_username"),
-    "email": userinfo.get("email"),
-    "name": userinfo.get("name"),
-}
-```
-
-From then on, authorization is a Flask session cookie
-(`SESSION_COOKIE_HTTPONLY`, `SameSite=Lax`, `Secure` in production, per
-`panchito/backend/app/config.py`). The access token is not stored or presented
-to `panchito`'s API; the client and protected application are the same process.
-What the platform is using the authorization code flow for is authentication,
-which is OIDC's job rather than OAuth's. OIDC carries its authenticated identity
-result through that flow. That is a legitimate and extremely common pattern,
-but it means a reader studying OAuth access-token use beyond the optional
-UserInfo call will not find it exercised here. There is no client-credentials
-client in Git either, and no application component validating a bearer token.
-
 **The redirect URI depends on a reverse proxy being trusted correctly.** The
 client does not have its callback URL configured; it computes one with
 `url_for("auth.auth_callback", _external=True)`. Behind Cloudflare the pod sees
@@ -502,7 +560,7 @@ header values relevant for the security of the application servers." Here that
 obligation sits with the Cloudflare tunnel and the ingress path in front of the
 pod, not with the application, and it was not verified as part of this study.
 
-## What Has Not Been Verified
+### What Remains Unverified
 
 - The `panchito` client's registration as Keycloak holds it — its registered
   redirect URIs, whether it is marked confidential, and its PKCE setting. The
@@ -526,7 +584,7 @@ pod, not with the application, and it was not verified as part of this study.
   repository shows `panchito` configured as a consumer; it does not establish
   the realm's complete client inventory.
 
-## The Choices This Leaves You
+## The Engineering Decisions This Model Supports
 
 Reading a client registration, four fields decide nearly everything. Whether
 the client can hold a secret determines its type, and its type determines
@@ -556,7 +614,7 @@ question rather than a different subject.
 
 ## References
 
-- [RFC 6749: The OAuth 2.0 Authorization Framework](https://www.rfc-editor.org/rfc/rfc6749.txt) — sections 1.1, 2.1, 2.2, 3.3, 4.1, 4.4, 6
+- [RFC 6749: The OAuth 2.0 Authorization Framework](https://www.rfc-editor.org/rfc/rfc6749.txt) — sections 1.1, 2.1, 2.2, 3.3, 4.1, 4.4, 6, 10.12
 - [RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://www.rfc-editor.org/rfc/rfc6750.txt) — sections 1.2, 2.1
 - [RFC 7636: Proof Key for Code Exchange by OAuth Public Clients](https://www.rfc-editor.org/rfc/rfc7636.txt) — sections 4.1 through 4.6
 - [RFC 7662: OAuth 2.0 Token Introspection](https://www.rfc-editor.org/rfc/rfc7662.txt) — section 2
