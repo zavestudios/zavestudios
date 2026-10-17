@@ -95,3 +95,31 @@ a#logo-title,
 #R-homelinks .R-menu-divider {
     display: none;
 }
+
+/* In-page contents list for long studies. Rendered by the toc shortcode from
+   the page's own H2 headings. */
+.study-toc {
+    margin: 1.5rem 0 2rem;
+    padding: 0.75rem 1.25rem 1rem;
+    border-left: 3px solid #176b6f;
+    background-color: #f4f8fc;
+}
+
+.study-toc .study-toc-title {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #176b6f !important;
+}
+
+.study-toc #TableOfContents > ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.study-toc #TableOfContents li {
+    margin: 0.15rem 0;
+    line-height: 1.35;
+}

@@ -17,6 +17,8 @@ lookup, no shared state, and therefore no way to take it back.
 Most of what follows is a consequence of that trade rather than a separate
 fact to memorize.
 
+{{< toc >}}
+
 ## Anatomy
 
 Three parts, dot-separated, each base64url-encoded.

@@ -20,6 +20,8 @@ study covers the protocol and the pipeline. It uses traces as the worked signal,
 and the reason that restriction matters turns out to be the most useful thing
 here.
 
+{{< toc >}}
+
 ## What OTLP Standardizes
 
 OTLP fixes what would otherwise be negotiated between every producer and every
