@@ -21,7 +21,7 @@ The platform work centers on three practice lanes:
 ## Core Repositories
 
 - [platform-docs](https://github.com/zavestudios/platform-docs) - canonical governance, contracts, taxonomy, and operating model
-- [gitops](https://github.com/zavestudios/gitops) - desired runtime state
+- `gitops` (private) - desired runtime state
 - [platform-pipelines](https://github.com/zavestudios/platform-pipelines) - shared CI/CD workflows
 - [pg](https://github.com/zavestudios/pg) - PostgreSQL platform capability
 - [llm-platform](https://github.com/zavestudios/llm-platform) - shared model-access capability
