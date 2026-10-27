@@ -18,7 +18,7 @@ This page is a compact map of the repository estate behind the platform.
 |------------|------|
 | [kubernetes-platform-infrastructure](https://github.com/zavestudios/kubernetes-platform-infrastructure) | Cluster substrate and shared platform configuration |
 | [ansible](https://github.com/zavestudios/ansible) | Environment provisioning and host automation |
-| [gitops](https://github.com/zavestudios/gitops) | Desired runtime state and reconciliation surface |
+| `gitops` (private) | Desired runtime state and reconciliation surface |
 
 ## Platform Services
 
